@@ -8,12 +8,11 @@
 <style>
 body{
   margin:0;
-  font-family:sans-serif;
   background:#111;
-  color:white;
+  font-family:sans-serif;
 }
 
-/* GRID */
+/* grid */
 .grid{
   display:grid;
   grid-template-columns:repeat(auto-fit,minmax(280px,1fr));
@@ -21,7 +20,7 @@ body{
   padding:20px;
 }
 
-/* THUMB */
+/* thumbnail */
 .card{
   cursor:pointer;
   position:relative;
@@ -32,21 +31,15 @@ body{
   aspect-ratio:16/9;
   object-fit:cover;
   border-radius:12px;
-  transition:.25s;
 }
 
-.card:hover img{
-  transform:scale(1.05);
-  opacity:.85;
-}
-
-/* PLAY ICON */
 .play{
   position:absolute;
   top:50%;
   left:50%;
   transform:translate(-50%,-50%);
-  font-size:48px;
+  font-size:50px;
+  color:white;
   background:rgba(0,0,0,.6);
   width:70px;
   height:70px;
@@ -56,7 +49,7 @@ body{
   justify-content:center;
 }
 
-/* POPUP */
+/* popup */
 .modal{
   display:none;
   position:fixed;
@@ -64,7 +57,6 @@ body{
   background:rgba(0,0,0,.9);
   align-items:center;
   justify-content:center;
-  z-index:999;
 }
 
 .modal iframe{
@@ -72,7 +64,6 @@ body{
   max-width:900px;
   aspect-ratio:16/9;
   border:none;
-  border-radius:12px;
 }
 
 .close{
@@ -80,6 +71,7 @@ body{
   top:20px;
   right:30px;
   font-size:40px;
+  color:white;
   cursor:pointer;
 }
 </style>
@@ -89,47 +81,39 @@ body{
 
 <div class="grid" id="videos"></div>
 
-<!-- popup player -->
 <div class="modal" id="modal">
   <span class="close" onclick="closeVideo()">✕</span>
   <iframe id="player" allowfullscreen></iframe>
 </div>
 
 <script>
-/* 🔴 PLAYLIST ID */
-const playlistId = "PLGSPQSXq0_HqfK3Xfir3EEs_Pzy6p9mNG";
+/* 🔴 DÁN DANH SÁCH VIDEO ID Ở ĐÂY */
+const videos = [
+"DpytqzqruAs",
+"kJguBfVeWno",
+"WEah60XpQKA",
+"UXPQarxaXHE",
+"ldqd6XqwKbo",
+"w0Irc2NDviI"
+];
 
-/* LOAD PLAYLIST */
-fetch(`https://www.youtube.com/feeds/videos.xml?playlist_id=${playlistId}`)
-.then(r=>r.text())
-.then(str=>new DOMParser().parseFromString(str,"text/xml"))
-.then(data=>{
+const box = document.getElementById("videos");
 
-  const entries=[...data.querySelectorAll("entry")];
-  const box=document.getElementById("videos");
-
-  entries.forEach(e=>{
-    const id=e.querySelector("yt\\:videoId").textContent;
-    const title=e.querySelector("title").textContent;
-
-    box.innerHTML += `
-      <div class="card" onclick="openVideo('${id}')">
-        <img src="https://img.youtube.com/vi/${id}/mqdefault.jpg">
-        <div class="play">▶</div>
-      </div>
-    `;
-  });
-
+videos.forEach(id=>{
+  box.innerHTML += `
+    <div class="card" onclick="openVideo('${id}')">
+      <img src="https://img.youtube.com/vi/${id}/mqdefault.jpg">
+      <div class="play">▶</div>
+    </div>
+  `;
 });
 
-/* OPEN VIDEO */
 function openVideo(id){
   document.getElementById("modal").style.display="flex";
-  document.getElementById("player").src=
+  document.getElementById("player").src =
     "https://www.youtube.com/embed/"+id+"?autoplay=1";
 }
 
-/* CLOSE VIDEO */
 function closeVideo(){
   document.getElementById("modal").style.display="none";
   document.getElementById("player").src="";
