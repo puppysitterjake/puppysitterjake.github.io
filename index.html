@@ -37,56 +37,43 @@ body { background: var(--bg); color: var(--text); line-height: 1.6; overflow-x: 
 .hero img.active { opacity: 0.6; }
 .hero::after { content: ''; position: absolute; bottom: 0; width: 100%; height: 50%; background: linear-gradient(to top, var(--bg), transparent); }
 
-/* Common Section Style */
+/* Section Style */
 section { max-width: 1200px; margin: auto; padding: 80px 20px; }
 h2 { font-size: 26px; margin-bottom: 40px; display: flex; align-items: center; gap: 12px; }
 h2::before { content: ''; width: 5px; height: 26px; background: var(--primary); border-radius: 10px; }
 
-/* Blog - Smart Scroll (Tiết kiệm diện tích) */
-.blog-wrapper {
-  max-height: 450px; overflow-y: auto; padding-right: 15px;
-}
+/* Blog - Smart Scroll */
+.blog-wrapper { max-height: 450px; overflow-y: auto; padding-right: 15px; }
 .blog-wrapper::-webkit-scrollbar { width: 4px; }
 .blog-wrapper::-webkit-scrollbar-thumb { background: var(--primary); border-radius: 10px; }
-
-.blog-item { 
-  background: rgba(255,255,255,0.03); border: 1px solid rgba(0,212,255,0.1);
-  border-radius: 15px; margin-bottom: 15px; transition: 0.3s;
-}
+.blog-item { background: rgba(255,255,255,0.03); border: 1px solid rgba(0,212,255,0.1); border-radius: 15px; margin-bottom: 15px; transition: 0.3s; }
 .blog-header { padding: 20px; cursor: pointer; display: flex; justify-content: space-between; align-items: center; }
-.blog-content { max-height: 0; overflow: hidden; transition: 0.5s cubic-bezier(0.4, 0, 0.2, 1); background: #fff; color: #333; }
+.blog-content { max-height: 0; overflow: hidden; transition: 0.5s ease; background: #fff; color: #333; }
 .blog-item.active .blog-content { max-height: 2000px; }
 .blog-inner { padding: 25px; }
 
-/* YouTube & Music - Horizontal Scroll */
-.horizontal-scroll {
-  display: flex; gap: 20px; overflow-x: auto; padding-bottom: 20px;
-  scrollbar-width: none; -webkit-overflow-scrolling: touch;
-}
+/* Horizontal Scroll */
+.horizontal-scroll { display: flex; gap: 20px; overflow-x: auto; padding-bottom: 20px; scrollbar-width: none; -webkit-overflow-scrolling: touch; }
 .horizontal-scroll::-webkit-scrollbar { display: none; }
-
 .playlist-group { margin-bottom: 50px; }
 .playlist-label { font-size: 13px; color: var(--primary); font-weight: 700; text-transform: uppercase; margin-bottom: 15px; letter-spacing: 2px; }
 
-/* Cards (Tối ưu hiển thị Stats từ Sheet) */
-.card { 
-  flex: 0 0 300px; background: var(--card-bg); border-radius: 18px; 
-  overflow: hidden; cursor: pointer; transition: 0.3s; border: 1px solid rgba(255,255,255,0.05);
-}
+/* Cards */
+.card { flex: 0 0 300px; background: var(--card-bg); border-radius: 18px; overflow: hidden; cursor: pointer; transition: 0.3s; border: 1px solid rgba(255,255,255,0.05); }
 .card:hover { transform: translateY(-8px); border-color: var(--primary); }
-.thumb { width: 100%; aspect-ratio: 16/9; object-fit: cover; }
+.thumb { width: 100%; aspect-ratio: 16/9; object-fit: cover; display: block; background: #000; }
 .card-info { padding: 15px; }
 .card-title { font-weight: 700; font-size: 14px; margin-bottom: 10px; height: 40px; overflow: hidden; display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; }
 .card-stats { display: flex; justify-content: space-between; font-size: 11px; opacity: 0.6; font-weight: 600; }
 
 /* Music Iframe */
-.embed-item { flex: 0 0 340px; border-radius: 18px; overflow: hidden; background: #000; box-shadow: 0 10px 30px rgba(0,0,0,0.4); }
+.embed-item { flex: 0 0 340px; border-radius: 18px; overflow: hidden; background: #000; }
 
 @media (max-width: 768px) {
   .hero { height: 60vh; }
   .card { flex: 0 0 260px; }
   .embed-item { flex: 0 0 280px; }
-  .nav { display: none; } /* Có thể thêm Hamburger menu sau */
+  .nav { display: none; }
 }
 </style>
 </head>
@@ -122,106 +109,112 @@ h2::before { content: ''; width: 5px; height: 26px; background: var(--primary); 
 const SHEET_ID = "1JbONtH3RWufz3RSgs3EnMV9cYd_37xwBOHgaU2y_yCs";
 const api = s => fetch(`https://opensheet.elk.sh/${SHEET_ID}/${s}`).then(r => r.json());
 
-/* 1. Load Hero Images */
-async function loadHero(){
-  const d = await api("HERO");
-  const box = document.getElementById("hero-box");
-  d.forEach((item, i) => {
-    const img = document.createElement("img");
-    img.src = item.image;
-    if(i === 0) img.classList.add("active");
-    box.appendChild(img);
-  });
-  let imgs = box.querySelectorAll('img'), cur = 0;
-  setInterval(() => {
-    imgs[cur].classList.remove('active');
-    cur = (cur + 1) % imgs.length;
-    imgs[cur].classList.add('active');
-  }, 5000);
+// Hàm quan trọng để lấy thumbnail đúng cách
+function getYoutubeID(url) {
+  if (!url) return '';
+  const regExp = /^.*(youtu.be\/|v\/|u\/\w\/|embed\/|watch\?v=|\&v=)([^#\&\?]*).*/;
+  const match = url.match(regExp);
+  return (match && match[2].length === 11) ? match[2] : null;
 }
 
-/* 2. Load Blog (Smart Scroll) */
+async function loadHero(){
+  try {
+    const d = await api("HERO");
+    const box = document.getElementById("hero-box");
+    d.forEach((item, i) => {
+      const img = document.createElement("img");
+      img.src = item.image;
+      if(i === 0) img.classList.add("active");
+      box.appendChild(img);
+    });
+    let imgs = box.querySelectorAll('img'), cur = 0;
+    if(imgs.length > 1) {
+      setInterval(() => {
+        imgs[cur].classList.remove('active');
+        cur = (cur + 1) % imgs.length;
+        imgs[cur].classList.add('active');
+      }, 5000);
+    }
+  } catch(e) {}
+}
+
 async function loadBlog() {
-  const d = await api("BLOG");
-  const box = document.getElementById("blog-list");
-  d.forEach(r => {
-    const div = document.createElement("div");
-    div.className = "blog-item";
-    div.innerHTML = `
-      <div class="blog-header">
-        <span style="font-weight:700">${r.title}</span>
-        <span style="color:var(--primary); font-size:12px">Read More +</span>
-      </div>
-      <div class="blog-content">
-        <div class="blog-inner">
+  try {
+    const d = await api("BLOG");
+    const box = document.getElementById("blog-list");
+    d.forEach(r => {
+      const div = document.createElement("div");
+      div.className = "blog-item";
+      div.innerHTML = `
+        <div class="blog-header"><span style="font-weight:700">${r.title}</span><span style="color:var(--primary); font-size:12px">Read More +</span></div>
+        <div class="blog-content"><div class="blog-inner">
           ${r.image ? `<img src="${r.image}" style="width:100%; border-radius:12px; margin-bottom:15px">` : ''}
           <p>${r.content ? r.content.replace(/\n/g, '<br>') : ''}</p>
-        </div>
-      </div>`;
-    div.onclick = () => div.classList.toggle('active');
-    box.appendChild(div);
-  });
-}
-
-/* 3. Load YouTube (Phân loại Playlist + Hiển thị Stats từ Apps Script) */
-async function loadYoutube() {
-  const d = await api("YOUTUBE");
-  const container = document.getElementById("youtube-container");
-  
-  const groups = d.reduce((acc, v) => {
-    const p = v.playlist || "General";
-    if(!acc[p]) acc[p] = [];
-    acc[p].push(v);
-    return acc;
-  }, {});
-
-  for (const p in groups) {
-    const group = document.createElement("div");
-    group.className = "playlist-group";
-    group.innerHTML = `<div class="playlist-label">${p}</div><div class="horizontal-scroll"></div>`;
-    const scroll = group.querySelector(".horizontal-scroll");
-    
-    groups[p].forEach(v => {
-      // Tách ID video để lấy thumbnail
-      const vid = v.url.includes('v=') ? v.url.split('v=')[1].split('&')[0] : v.url.split('/').pop();
-      const card = document.createElement("div");
-      card.className = "card";
-      card.innerHTML = `
-        <img class="thumb" src="https://img.youtube.com/vi/${vid}/mqdefault.jpg">
-        <div class="card-info">
-          <div class="card-title">${v.title || 'Loading...'}</div>
-          <div class="card-stats">
-            <span>📅 ${v.date || ''}</span>
-            <span style="color:var(--primary)">👁️ ${Number(v.views || 0).toLocaleString()}</span>
-          </div>
-        </div>`;
-      card.onclick = () => window.open(v.url);
-      scroll.appendChild(card);
-    });
-    container.appendChild(group);
-  }
-}
-
-/* 4. Load Music (Spotify & Apple) */
-async function loadMusic() {
-  const spot = await api("SPOTIFY");
-  const apple = await api("APPLE");
-  const box = document.getElementById("music-list");
-  
-  [...spot, ...apple].forEach(m => {
-    if(m.iframe) {
-      const div = document.createElement("div");
-      div.className = "embed-item";
-      div.innerHTML = m.iframe;
+        </div></div>`;
+      div.onclick = () => div.classList.toggle('active');
       box.appendChild(div);
-    }
-  });
+    });
+  } catch(e) {}
 }
 
-// Hiệu ứng Navbar
+async function loadYoutube() {
+  try {
+    const d = await api("YOUTUBE");
+    const container = document.getElementById("youtube-container");
+    const groups = d.reduce((acc, v) => {
+      const p = v.playlist || "General";
+      if(!acc[p]) acc[p] = [];
+      acc[p].push(v);
+      return acc;
+    }, {});
+
+    for (const p in groups) {
+      const group = document.createElement("div");
+      group.className = "playlist-group";
+      group.innerHTML = `<div class="playlist-label">${p}</div><div class="horizontal-scroll"></div>`;
+      const scroll = group.querySelector(".horizontal-scroll");
+      
+      groups[p].forEach(v => {
+        const vid = getYoutubeID(v.url);
+        const thumbUrl = vid ? `https://img.youtube.com/vi/${vid}/mqdefault.jpg` : 'https://via.placeholder.com/400x225?text=No+Thumbnail';
+        const card = document.createElement("div");
+        card.className = "card";
+        card.innerHTML = `
+          <img class="thumb" src="${thumbUrl}">
+          <div class="card-info">
+            <div class="card-title">${v.title || 'Untitled Video'}</div>
+            <div class="card-stats">
+              <span>📅 ${v.date || ''}</span>
+              <span style="color:var(--primary)">👁️ ${Number(v.views || 0).toLocaleString()}</span>
+            </div>
+          </div>`;
+        card.onclick = () => window.open(v.url);
+        scroll.appendChild(card);
+      });
+      container.appendChild(group);
+    }
+  } catch(e) {}
+}
+
+async function loadMusic() {
+  try {
+    const spot = await api("SPOTIFY");
+    const apple = await api("APPLE");
+    const box = document.getElementById("music-list");
+    [...spot, ...apple].forEach(m => {
+      if(m.iframe) {
+        const div = document.createElement("div");
+        div.className = "embed-item";
+        div.innerHTML = m.iframe;
+        box.appendChild(div);
+      }
+    });
+  } catch(e) {}
+}
+
 window.onscroll = () => document.getElementById('navbar').classList.toggle('scrolled', window.scrollY > 50);
 
-// Khởi chạy
+// Khởi chạy toàn bộ
 loadHero();
 loadBlog();
 loadYoutube();
