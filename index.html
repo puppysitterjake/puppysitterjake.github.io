@@ -3,191 +3,38 @@
 <head>
 <meta charset="UTF-8"/>
 <meta name="viewport" content="width=device-width, initial-scale=1"/>
-
 <title>puppysitter 🐾</title>
-
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;800&display=swap" rel="stylesheet">
 
 <style>
-/* =========================
-   RESET
-========================= */
-*{
-  margin:0;
-  padding:0;
-  box-sizing:border-box;
-  font-family:Inter,sans-serif;
-}
-
-body{
-  background:#0b132b;
-  color:white;
-  scroll-behavior:smooth;
-}
-
-
-/* =========================
-   NAVBAR (TRANSPARENT)
-========================= */
-
-.topbar{
-  position:absolute;
-  top:0;
-  width:100%;
-  height:70px;
-
-  display:flex;
-  align-items:center;
-  justify-content:space-between;
-
-  padding:0 7%;
-  z-index:100;
-}
-
-.logo{
-  font-weight:800;
-  font-size:22px;
-  letter-spacing:1px;
-}
-
-.nav a{
-  margin-left:25px;
-  color:white;
-  text-decoration:none;
-  font-size:14px;
-  opacity:.85;
-  transition:.2s;
-}
-
-.nav a:hover{
-  opacity:1;
-}
-
-
-/* =========================
-   HERO SLIDER
-========================= */
-
-.hero{
-  height:100vh;
-  position:relative;
-  overflow:hidden;
-}
-
-.hero img{
-  position:absolute;
-  width:100%;
-  height:100%;
-  object-fit:cover;
-  opacity:0;
-  transition:1.2s;
-}
-
-.hero img.active{
-  opacity:1;
-}
-
-
-/* =========================
-   SECTION
-========================= */
-
-section{
-  max-width:1200px;
-  margin:auto;
-  padding:100px 20px;
-}
-
-h2{
-  font-size:32px;
-  margin-bottom:35px;
-  font-weight:800;
-}
-
-
-/* =========================
-   GRID
-========================= */
-
-.grid{
-  display:grid;
-  gap:26px;
-  grid-template-columns:repeat(auto-fill,minmax(280px,1fr));
-}
-
-
-/* =========================
-   CARD
-========================= */
-
-.card{
-  background:white;
-  color:#111;
-  border-radius:20px;
-  overflow:hidden;
-  cursor:pointer;
-
-  transition:.25s;
-  box-shadow:0 6px 20px rgba(0,0,0,.25);
-}
-
-.card:hover{
-  transform:translateY(-6px);
-}
-
-.thumb{
-  width:100%;
-  aspect-ratio:16/9;
-  object-fit:cover;
-  background:#ddd;
-}
-
-.content{
-  padding:16px;
-}
-
-.title{
-  font-weight:700;
-  font-size:15px;
-}
-
-.desc{
-  font-size:13px;
-  color:#666;
-  margin-top:6px;
-}
-
-
-/* =========================
-   EMBED MUSIC
-========================= */
-
-.embed{
-  border-radius:18px;
-  overflow:hidden;
-  box-shadow:0 6px 18px rgba(0,0,0,.35);
-}
-
-
-/* =========================
-   SPACING
-========================= */
-
-#spotify,
-#apple{
-  padding-top:70px;
-}
+/* ... (Giữ nguyên phần CSS cũ của bạn) ... */
+*{margin:0;padding:0;box-sizing:border-box;font-family:Inter,sans-serif;}
+body{background:#0b132b;color:white;scroll-behavior:smooth;}
+.topbar{position:absolute;top:0;width:100%;height:70px;display:flex;align-items:center;justify-content:space-between;padding:0 7%;z-index:100;}
+.logo{font-weight:800;font-size:22px;letter-spacing:1px;}
+.nav a{margin-left:25px;color:white;text-decoration:none;font-size:14px;opacity:.85;transition:.2s;}
+.nav a:hover{opacity:1;}
+.hero{height:100vh;position:relative;overflow:hidden;}
+.hero img{position:absolute;width:100%;height:100%;object-fit:cover;opacity:0;transition:1.2s;}
+.hero img.active{opacity:1;}
+section{max-width:1200px;margin:auto;padding:100px 20px;}
+h2{font-size:32px;margin-bottom:35px;font-weight:800;}
+.grid{display:grid;gap:26px;grid-template-columns:repeat(auto-fill,minmax(280px,1fr));}
+.card{background:white;color:#111;border-radius:20px;overflow:hidden;cursor:pointer;transition:.25s;box-shadow:0 6px 20px rgba(0,0,0,.25);}
+.card:hover{transform:translateY(-6px);}
+.thumb{width:100%;aspect-ratio:16/9;object-fit:cover;background:#eee; display: block;}
+.content{padding:16px;}
+.title{font-weight:700;font-size:15px;line-height:1.4;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden;}
+.desc{font-size:13px;color:#666;margin-top:6px;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden;}
+.embed{border-radius:18px;overflow:hidden;box-shadow:0 6px 18px rgba(0,0,0,.35);}
+#spotify,#apple{padding-top:70px;}
 </style>
 </head>
 
-
-
 <body>
 
-<!-- ================= NAVBAR ================= -->
 <header class="topbar">
   <div class="logo">puppysitter 🐾</div>
-
   <nav class="nav">
     <a href="#notice">Notice</a>
     <a href="#youtube">YouTube</a>
@@ -196,155 +43,125 @@ h2{
   </nav>
 </header>
 
-
-
-<!-- ================= HERO ================= -->
 <div id="hero" class="hero"></div>
 
-
-
-<!-- ================= NOTICE ================= -->
 <section id="notice">
-  <h2>Notice</h2>
+  <h2>Notice (Báo chí & Tin tức)</h2>
   <div id="notice-list" class="grid"></div>
 </section>
 
-
-
-<!-- ================= YOUTUBE ================= -->
 <section id="youtube">
   <h2>YouTube</h2>
   <div id="youtube-list" class="grid"></div>
 </section>
 
-
-
-<!-- ================= SPOTIFY ================= -->
 <section id="spotify">
   <h2>Spotify</h2>
   <div id="spotify-list" class="grid"></div>
 </section>
 
-
-
-<!-- ================= APPLE ================= -->
 <section id="apple">
   <h2>Apple Music</h2>
   <div id="apple-list" class="grid"></div>
 </section>
 
-
-
 <script>
-/* ================= CONFIG ================= */
-
 const SHEET="1JbONtH3RWufz3RSgs3EnMV9cYd_37xwBOHgaU2y_yCs";
 const API=s=>`https://opensheet.elk.sh/${SHEET}/${s}`;
 const get=s=>fetch(API(s)).then(r=>r.json());
 
-
-/* ================= YOUTUBE THUMB ================= */
-
+/* 1. XỬ LÝ THUMBNAIL YOUTUBE */
 function ytThumb(url){
   try{
     const u=new URL(url);
-
-    if(u.hostname.includes("youtu.be"))
-      return `https://img.youtube.com/vi/${u.pathname.slice(1)}/maxresdefault.jpg`;
-
-    if(u.searchParams.get("v"))
-      return `https://img.youtube.com/vi/${u.searchParams.get("v")}/maxresdefault.jpg`;
-
+    let id = "";
+    if(u.hostname.includes("youtu.be")) id = u.pathname.slice(1);
+    else if(u.searchParams.get("v")) id = u.searchParams.get("v");
+    if(id) return `https://img.youtube.com/vi/${id}/mqdefault.jpg`;
   }catch{}
-
-  return "";
+  return null;
 }
 
+/* 2. XỬ LÝ PREVIEW BÁO CHÍ (Sử dụng Microlink API miễn phí) */
+function getLinkPreview(url) {
+    // Nếu là link youtube, dùng ảnh youtube
+    let yt = ytThumb(url);
+    if(yt) return yt;
+    
+    // Nếu là link báo, dùng dịch vụ Microlink để lấy ảnh Open Graph
+    // Đây là cách đơn giản nhất để vượt lỗi CORS và lấy ảnh từ link bất kỳ
+    return `https://api.microlink.io/?url=${encodeURIComponent(url)}&embed=image.url`;
+}
 
-
-/* ================= HERO SLIDER ================= */
-
+/* 3. HERO SLIDER */
 async function loadHero(){
-  const d=await get("HERO");
-  const box=document.getElementById("hero");
-
-  d.forEach((r,i)=>{
-    const img=document.createElement("img");
-    img.src=r.image;
-
-    if(i===0) img.classList.add("active");
-
-    box.appendChild(img);
-  });
-
-  const imgs=box.querySelectorAll("img");
-  let i=0;
-
-  setInterval(()=>{
-    imgs[i].classList.remove("active");
-    i=(i+1)%imgs.length;
-    imgs[i].classList.add("active");
-  },4000);
+  try {
+    const d=await get("HERO");
+    const box=document.getElementById("hero");
+    d.forEach((r,i)=>{
+      const img=document.createElement("img");
+      img.src=r.image;
+      if(i===0) img.classList.add("active");
+      box.appendChild(img);
+    });
+    const imgs=box.querySelectorAll("img");
+    let i=0;
+    if(imgs.length > 0) {
+        setInterval(()=>{
+          imgs[i].classList.remove("active");
+          i=(i+1)%imgs.length;
+          imgs[i].classList.add("active");
+        },4000);
+    }
+  } catch(e) {}
 }
 
-
-
-/* ================= CARD LIST ================= */
-
-async function loadList(sheet,id,useYT=true){
+/* 4. CARD LIST (NOTICE & YOUTUBE) */
+async function loadList(sheet, id){
   const d=await get(sheet);
   const box=document.getElementById(id);
 
   d.forEach(r=>{
-
-    const thumb = useYT ? (ytThumb(r.url)||r.image) : r.image;
+    // Lấy ảnh: Ưu tiên ảnh trong cột 'image', nếu không có thì tự tìm preview từ 'url'
+    const thumb = r.image ? r.image : getLinkPreview(r.url);
 
     const div=document.createElement("div");
     div.className="card";
-
     div.innerHTML=`
-      <img class="thumb" src="${thumb}">
+      <img class="thumb" src="${thumb}" onerror="this.src='https://via.placeholder.com/400x225?text=No+Image'">
       <div class="content">
-        <div class="title">${r.title||""}</div>
-        <div class="desc">${r.desc||""}</div>
+        <div class="title">${r.title || "Đang cập nhật..."}</div>
+        <div class="desc">${r.desc || ""}</div>
       </div>
     `;
-
     div.onclick=()=>window.open(r.url);
-
     box.appendChild(div);
   });
 }
 
-
-
-/* ================= IFRAME (SPOTIFY/APPLE) ================= */
-
+/* 5. IFRAME (SPOTIFY/APPLE) */
 async function loadIframe(sheet,id){
-  const d=await get(sheet);
-  const box=document.getElementById(id);
-
-  d.forEach(r=>{
-    const div=document.createElement("div");
-    div.className="embed";
-    div.innerHTML=r.iframe;
-    box.appendChild(div);
-  });
+  try {
+    const d=await get(sheet);
+    const box=document.getElementById(id);
+    d.forEach(r=>{
+      if(r.iframe) {
+          const div=document.createElement("div");
+          div.className="embed";
+          div.innerHTML=r.iframe;
+          box.appendChild(div);
+      }
+    });
+  } catch(e) {}
 }
 
-
-
-/* ================= INIT ================= */
-
+/* KHỞI TẠO */
 loadHero();
-
-loadList("NOTICE","notice-list",true);
-loadList("YOUTUBE","youtube-list",true);
-
+loadList("NOTICE","notice-list"); // Notice giờ sẽ tự nhận diện link báo
+loadList("YOUTUBE","youtube-list");
 loadIframe("SPOTIFY","spotify-list");
 loadIframe("APPLE","apple-list");
 
 </script>
-
 </body>
 </html>
