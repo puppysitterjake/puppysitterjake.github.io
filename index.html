@@ -6,49 +6,43 @@
 
 <title>PUPPYSITTER JAKE</title>
 
-<link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@700&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@700;900&display=swap" rel="stylesheet">
 
 <style>
-:root{
-  --bg:#0f0f0f;
-  --text:#fff;
-  --card:#1a1a1a;
-}
+/* ================= GLOBAL ================= */
+*{margin:0;padding:0;box-sizing:border-box}
 
-.light{
-  --bg:#fff;
-  --text:#111;
-  --card:#f3f3f3;
-}
-
-html{
+body{
+  font-family:'Montserrat',sans-serif;
+  background:#0a0a0a;
+  color:white;
+  overflow-x:hidden;
   scroll-behavior:smooth;
 }
 
-body{
-  margin:0;
-  font-family:'Montserrat',sans-serif;
-  background:var(--bg);
-  color:var(--text);
-  transition:.3s;
-}
-
 /* ================= NAVBAR ================= */
-.navbar{
+nav{
   position:fixed;
   top:0;
   width:100%;
-  backdrop-filter:blur(10px);
-  background:rgba(0,0,0,.5);
-  padding:14px 30px;
+  height:70px;
   display:flex;
-  justify-content:space-between;
   align-items:center;
-  z-index:1000;
+  justify-content:space-between;
+  padding:0 40px;
+  z-index:999;
+  transition:.3s;
 }
 
-.nav-title{
-  font-size:18px;
+nav.scrolled{
+  background:rgba(0,0,0,.85);
+  backdrop-filter:blur(8px);
+  box-shadow:0 4px 20px rgba(0,0,0,.6);
+}
+
+.logo{
+  font-size:22px;
+  font-weight:900;
   letter-spacing:2px;
 }
 
@@ -56,15 +50,13 @@ body{
   cursor:pointer;
 }
 
-/* ================= HERO FULLSCREEN ================= */
+/* ================= HERO ================= */
 .hero{
   height:100vh;
-  background:url("https://pbs.twimg.com/media/G-OLdVMakAA0KwK?format=jpg&name=4096x4096")
-  center/cover no-repeat;
+  background:url("https://pbs.twimg.com/media/G-OLdVMakAA0KwK?format=jpg&name=4096x4096") center top/cover no-repeat;
   display:flex;
-  justify-content:center;
-  align-items:center;
-  text-align:center;
+  align-items:flex-end;
+  padding:120px 80px;
   position:relative;
 }
 
@@ -72,92 +64,75 @@ body{
   content:"";
   position:absolute;
   inset:0;
-  background:linear-gradient(to top,rgba(0,0,0,.85),rgba(0,0,0,.25));
+  background:linear-gradient(to top,#000 0%,rgba(0,0,0,.2) 60%);
 }
 
 .hero h1{
   font-size:70px;
-  letter-spacing:6px;
+  font-weight:900;
+  position:relative;
   z-index:2;
-}
-
-/* scroll arrow */
-.scroll-down{
-  position:absolute;
-  bottom:30px;
-  font-size:30px;
-  animation:bounce 1.5s infinite;
-  z-index:2;
-}
-
-@keyframes bounce{
-  0%,100%{transform:translateY(0)}
-  50%{transform:translateY(10px)}
-}
-
-/* ================= CONTENT ================= */
-.section{
-  padding-top:80px;
-}
-
-/* slider */
-.slider{
-  display:flex;
-  gap:12px;
-  overflow-x:auto;
-  padding:20px;
-  scroll-snap-type:x mandatory;
-}
-
-.slide{
-  flex:0 0 260px;
-  cursor:pointer;
-  scroll-snap-align:center;
-  transition:.3s;
-}
-
-.slide:hover{
-  transform:scale(1.05);
-}
-
-.slide img{
-  width:100%;
-  border-radius:12px;
-}
-
-/* grid */
-.grid{
-  display:grid;
-  grid-template-columns:repeat(auto-fill,minmax(240px,1fr));
-  gap:20px;
-  padding:20px;
-}
-
-.card{
-  background:var(--card);
-  padding:10px;
-  border-radius:14px;
-  cursor:pointer;
-  opacity:0;
-  transform:translateY(20px);
-  animation:fadeUp .6s forwards;
+  animation:fadeUp 1.2s ease;
 }
 
 @keyframes fadeUp{
-  to{
-    opacity:1;
-    transform:none;
-  }
+  from{opacity:0;transform:translateY(60px)}
+  to{opacity:1;transform:translateY(0)}
 }
 
-.card img{
-  width:100%;
-  border-radius:10px;
+/* ================= SECTION ================= */
+.section{
+  padding:90px 60px;
 }
+
+.section h2{
+  margin-bottom:25px;
+}
+
+/* ================= SEARCH ================= */
+.search{
+  width:100%;
+  max-width:350px;
+  padding:12px 18px;
+  border-radius:30px;
+  border:none;
+  margin-bottom:35px;
+  background:#1a1a1a;
+  color:white;
+}
+
+/* ================= GRID ================= */
+.grid{
+  display:grid;
+  grid-template-columns:repeat(auto-fill,minmax(300px,1fr));
+  gap:25px;
+}
+
+/* ================= CARD ================= */
+.card{
+  background:#161616;
+  border-radius:16px;
+  overflow:hidden;
+  cursor:pointer;
+  transition:.3s;
+}
+
+.card:hover{
+  transform:translateY(-8px) scale(1.03);
+  box-shadow:0 15px 35px rgba(0,0,0,.6);
+}
+
+.thumb{
+  width:100%;
+  aspect-ratio:16/9;
+  object-fit:cover;
+}
+
+.content{padding:15px}
 
 .title{
   font-size:14px;
-  margin-top:8px;
+  margin-bottom:6px;
 }
 
 .desc{
@@ -167,153 +142,168 @@ body{
 
 /* ================= SKELETON ================= */
 .skeleton{
-  height:180px;
-  border-radius:12px;
-  background:linear-gradient(90deg,#222,#333,#222);
-  animation:loading 1.2s infinite;
+  height:240px;
+  border-radius:16px;
+  background:linear-gradient(90deg,#222 25%,#333 37%,#222 63%);
+  background-size:400% 100%;
+  animation:shine 1.4s infinite;
 }
 
-@keyframes loading{
-  0%{background-position:-200px 0}
-  100%{background-position:200px 0}
+@keyframes shine{
+  0%{background-position:100% 0}
+  100%{background-position:-100% 0}
 }
 
 /* ================= MODAL ================= */
 .modal{
   position:fixed;
   inset:0;
-  display:none;
   background:rgba(0,0,0,.95);
-  justify-content:center;
+  display:none;
   align-items:center;
+  justify-content:center;
+  z-index:1000;
 }
 
 .modal iframe{
-  width:92%;
-  max-width:900px;
-  aspect-ratio:16/9;
+  width:90%;
+  max-width:1000px;
+  height:70vh;
+  border-radius:12px;
 }
 
-.close{
-  position:absolute;
-  top:20px;
-  right:30px;
-  font-size:38px;
-  cursor:pointer;
+.modal.show{
+  display:flex;
+  animation:fade .4s;
+}
+
+@keyframes fade{
+  from{opacity:0}
+  to{opacity:1}
+}
+
+/* ================= LIGHT MODE ================= */
+.light{
+  background:white;
+  color:black;
+}
+
+.light .card{background:#f3f3f3}
+.light .search{background:#eee;color:black}
+
+/* ================= MOBILE ================= */
+@media(max-width:768px){
+  .hero h1{font-size:40px}
+  .section{padding:70px 20px}
 }
 </style>
 </head>
 
 <body>
 
-<!-- NAVBAR -->
-<div class="navbar">
-  <div class="nav-title">PUPPYSITTER JAKE</div>
-  <div class="theme-btn" onclick="toggleTheme()">🌙</div>
-</div>
+<nav id="nav">
+  <div class="logo">PUPPYSITTER JAKE</div>
+  <div class="theme-btn" onclick="toggleTheme()">🌙/☀️</div>
+</nav>
 
-<!-- HERO -->
 <section class="hero">
   <h1>PUPPYSITTER JAKE</h1>
-  <div class="scroll-down">↓</div>
 </section>
 
-<!-- CONTENT -->
 <section class="section">
+  <h2>Latest Videos</h2>
 
-  <div class="slider" id="slider"></div>
+  <input id="search" class="search" placeholder="Search videos...">
 
-  <div class="grid" id="videos">
-    <!-- skeleton loading -->
-  </div>
-
+  <div id="grid" class="grid"></div>
 </section>
 
-<!-- MODAL -->
-<div class="modal" id="modal">
-  <span class="close" onclick="closeVideo()">✕</span>
+<!-- VIDEO MODAL -->
+<div id="modal" class="modal" onclick="closeVideo()">
   <iframe id="player" allowfullscreen></iframe>
 </div>
 
-
 <script>
 const API_KEY = "AIzaSyAwHBUmv8E34EeXXtavaAcagdMYluNnBew";
-const PLAYLIST = "PLGSPQSXq0_HqfK3Xfir3EEs_Pzy6p9mNG";
+const PLAYLIST_ID = "PLGSPQSXq0_HqfK3Xfir3EEs_Pzy6p9mNG";
 
-const grid = document.getElementById("videos");
-const slider = document.getElementById("slider");
+const grid = document.getElementById("grid");
 
-/* skeleton trước khi load */
-for(let i=0;i<8;i++){
-  const sk=document.createElement("div");
-  sk.className="skeleton";
-  grid.appendChild(sk);
-}
+/* ===== NAVBAR SCROLL ===== */
+window.addEventListener("scroll",()=>{
+  nav.classList.toggle("scrolled",window.scrollY>50);
+});
 
-async function loadVideos(){
-  let next="";
-
-  grid.innerHTML="";
-
-  do{
-    const url =
-      `https://www.googleapis.com/youtube/v3/playlistItems?part=snippet&maxResults=50&playlistId=${PLAYLIST}&pageToken=${next}&key=${API_KEY}`;
-
-    const res = await fetch(url);
-    const data = await res.json();
-
-    data.items.forEach((v,i)=>{
-      const id=v.snippet.resourceId.videoId;
-      if(!id) return;
-
-      const thumb=v.snippet.thumbnails.medium.url;
-      const title=v.snippet.title;
-      const desc=v.snippet.description.slice(0,60)+"...";
-
-      if(i<8){
-        const s=document.createElement("div");
-        s.className="slide";
-        s.innerHTML=`<img src="${thumb}">`;
-        s.onclick=()=>openVideo(id);
-        slider.appendChild(s);
-      }
-
-      const card=document.createElement("div");
-      card.className="card";
-      card.style.animationDelay=(i*0.05)+"s";
-      card.innerHTML=
-      `<img src="${thumb}">
-       <div class="title">${title}</div>
-       <div class="desc">${desc}</div>`;
-      card.onclick=()=>openVideo(id);
-
-      grid.appendChild(card);
-    });
-
-    next=data.nextPageToken;
-
-  }while(next);
-}
-
-function openVideo(id){
-  document.getElementById("modal").style.display="flex";
-  document.getElementById("player").src=
-  `https://www.youtube.com/embed/${id}?autoplay=1`;
-}
-
-function closeVideo(){
-  document.getElementById("modal").style.display="none";
-  document.getElementById("player").src="";
-}
-
+/* ===== THEME ===== */
 function toggleTheme(){
   document.body.classList.toggle("light");
 }
 
-/* slider auto */
-setInterval(()=>{
-  slider.scrollBy({left:280,behavior:"smooth"});
-},3000);
+/* ===== SKELETON ===== */
+for(let i=0;i<8;i++){
+  const s=document.createElement("div");
+  s.className="skeleton";
+  grid.appendChild(s);
+}
+
+/* ===== LOAD VIDEOS ===== */
+let allVideos=[];
+
+async function loadVideos(){
+  const url=`https://www.googleapis.com/youtube/v3/playlistItems?part=snippet&maxResults=50&playlistId=${PLAYLIST_ID}&key=${API_KEY}`;
+  const res=await fetch(url);
+  const data=await res.json();
+
+  allVideos=data.items;
+  renderVideos(allVideos);
+}
+
+function renderVideos(list){
+  grid.innerHTML="";
+  list.forEach(v=>{
+    const id=v.snippet.resourceId.videoId;
+
+    const card=document.createElement("div");
+    card.className="card";
+
+    card.innerHTML=`
+      <img class="thumb" src="${v.snippet.thumbnails.high.url}">
+      <div class="content">
+        <div class="title">${v.snippet.title}</div>
+        <div class="desc">${v.snippet.channelTitle}</div>
+      </div>
+    `;
+
+    card.onclick=()=>openVideo(id);
+    grid.appendChild(card);
+  });
+}
+
+/* ===== SEARCH ===== */
+search.oninput=()=>{
+  const q=search.value.toLowerCase();
+  renderVideos(allVideos.filter(v=>
+    v.snippet.title.toLowerCase().includes(q)
+  ));
+};
+
+/* ===== MODAL PLAYER ===== */
+function openVideo(id){
+  player.src=`https://www.youtube.com/embed/${id}?autoplay=1`;
+  modal.classList.add("show");
+}
+
+function closeVideo(){
+  player.src="";
+  modal.classList.remove("show");
+}
+
+document.addEventListener("keydown",e=>{
+  if(e.key==="Escape") closeVideo();
+});
+
+/* ===== AUTO REFRESH PLAYLIST EVERY 10 MIN ===== */
+setInterval(loadVideos,600000);
 
 loadVideos();
 </script>
