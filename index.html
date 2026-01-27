@@ -3,345 +3,229 @@
 <head>
 <meta charset="UTF-8"/>
 <meta name="viewport" content="width=device-width, initial-scale=1"/>
-<title>puppysitter 🐾</title>
+<title>puppysitter 🐾 | Official Studio</title>
 <link href="https://fonts.googleapis.com/css2?family=Quicksand:wght@400;600;700&display=swap" rel="stylesheet">
 
 <style>
 :root {
   --primary: #00d4ff;
   --bg: #0b132b;
+  --card-bg: #16213e;
   --text: #ffffff;
-  --card-bg: #ffffff;
   --font: 'Quicksand', sans-serif;
 }
 
-/* Reset & Cơ bản */
+/* Reset & Base */
 * { margin:0; padding:0; box-sizing:border-box; font-family: var(--font); }
 html { scroll-behavior: smooth; }
 body { background: var(--bg); color: var(--text); line-height: 1.6; overflow-x: hidden; }
 
-/* =========================
-   1. NAVBAR & MOBILE MENU
-========================= */
+/* Navbar */
 .topbar {
   position: fixed; top: 0; width: 100%; height: 70px;
   display: flex; align-items: center; justify-content: space-between;
-  padding: 0 5%; z-index: 1000; transition: 0.3s ease;
+  padding: 0 5%; z-index: 1000; transition: 0.3s;
 }
-.topbar.scrolled { 
-  background: rgba(11, 19, 43, 0.95); 
-  backdrop-filter: blur(10px); 
-  height: 60px;
-  box-shadow: 0 4px 20px rgba(0,0,0,0.2);
-}
-.logo { font-weight: 700; font-size: 22px; color: var(--text); text-decoration: none; }
-
-.nav { display: flex; gap: 25px; }
-.nav a { 
-  color: #fff; text-decoration: none; font-weight: 600; 
-  font-size: 14px; opacity: 0.8; transition: 0.3s;
-}
+.topbar.scrolled { background: rgba(11, 19, 43, 0.95); backdrop-filter: blur(15px); border-bottom: 1px solid rgba(0,212,255,0.1); }
+.logo { font-weight: 700; font-size: 20px; letter-spacing: 1px; }
+.nav a { color: #fff; text-decoration: none; margin-left: 20px; font-size: 13px; font-weight: 600; opacity: 0.7; transition: 0.3s; }
 .nav a:hover { opacity: 1; color: var(--primary); }
 
-/* Hamburger Icon */
-.menu-btn { display: none; cursor: pointer; z-index: 1001; padding: 10px; }
-.menu-btn div { width: 25px; height: 2px; background: #fff; margin: 6px 0; transition: 0.3s; }
+/* Hero Section */
+.hero { height: 80vh; position: relative; overflow: hidden; background: #000; }
+.hero img { position: absolute; width: 100%; height: 100%; object-fit: cover; opacity: 0; transition: 1.5s ease-in-out; }
+.hero img.active { opacity: 0.6; }
+.hero::after { content: ''; position: absolute; bottom: 0; width: 100%; height: 50%; background: linear-gradient(to top, var(--bg), transparent); }
 
-/* =========================
-   2. HERO FULL SCREEN
-========================= */
-.hero { height: 100vh; width: 100%; position: relative; overflow: hidden; background: #000; }
-.hero img { 
-  position: absolute; width: 100%; height: 100%; 
-  object-fit: cover; opacity: 0; transition: 1.5s ease-in-out; 
-}
-.hero img.active { opacity: 1; }
-.hero::after { 
-  content: ''; position: absolute; bottom: 0; left: 0; 
-  width: 100%; height: 40%; 
-  background: linear-gradient(to top, var(--bg), transparent); 
-}
-
-/* =========================
-   3. CẤU TRÚC LAYOUT
-========================= */
+/* Common Section Style */
 section { max-width: 1200px; margin: auto; padding: 80px 20px; }
-h2 { 
-  font-size: 28px; margin-bottom: 35px; 
-  border-left: 5px solid var(--primary); padding-left: 15px; 
-}
+h2 { font-size: 26px; margin-bottom: 40px; display: flex; align-items: center; gap: 12px; }
+h2::before { content: ''; width: 5px; height: 26px; background: var(--primary); border-radius: 10px; }
 
-/* Horizontal Scroll (Cho YouTube & Music) */
+/* Blog - Smart Scroll (Tiết kiệm diện tích) */
+.blog-wrapper {
+  max-height: 450px; overflow-y: auto; padding-right: 15px;
+}
+.blog-wrapper::-webkit-scrollbar { width: 4px; }
+.blog-wrapper::-webkit-scrollbar-thumb { background: var(--primary); border-radius: 10px; }
+
+.blog-item { 
+  background: rgba(255,255,255,0.03); border: 1px solid rgba(0,212,255,0.1);
+  border-radius: 15px; margin-bottom: 15px; transition: 0.3s;
+}
+.blog-header { padding: 20px; cursor: pointer; display: flex; justify-content: space-between; align-items: center; }
+.blog-content { max-height: 0; overflow: hidden; transition: 0.5s cubic-bezier(0.4, 0, 0.2, 1); background: #fff; color: #333; }
+.blog-item.active .blog-content { max-height: 2000px; }
+.blog-inner { padding: 25px; }
+
+/* YouTube & Music - Horizontal Scroll */
 .horizontal-scroll {
   display: flex; gap: 20px; overflow-x: auto; padding-bottom: 20px;
-  scrollbar-width: none; -ms-overflow-style: none; /* Ẩn scrollbar Firefox/IE */
-  -webkit-overflow-scrolling: touch;
+  scrollbar-width: none; -webkit-overflow-scrolling: touch;
 }
-.horizontal-scroll::-webkit-scrollbar { display: none; } /* Ẩn scrollbar Chrome/Safari */
+.horizontal-scroll::-webkit-scrollbar { display: none; }
 
-/* Playlist Sub-section */
-.playlist-group { margin-bottom: 45px; }
-.playlist-title { 
-  font-size: 15px; color: var(--primary); margin-bottom: 15px; 
-  font-weight: 700; text-transform: uppercase; letter-spacing: 2px;
-  display: flex; align-items: center; gap: 15px;
+.playlist-group { margin-bottom: 50px; }
+.playlist-label { font-size: 13px; color: var(--primary); font-weight: 700; text-transform: uppercase; margin-bottom: 15px; letter-spacing: 2px; }
+
+/* Cards (Tối ưu hiển thị Stats từ Sheet) */
+.card { 
+  flex: 0 0 300px; background: var(--card-bg); border-radius: 18px; 
+  overflow: hidden; cursor: pointer; transition: 0.3s; border: 1px solid rgba(255,255,255,0.05);
 }
-.playlist-title::after { content: ''; flex: 1; height: 1px; background: rgba(255,255,255,0.1); }
+.card:hover { transform: translateY(-8px); border-color: var(--primary); }
+.thumb { width: 100%; aspect-ratio: 16/9; object-fit: cover; }
+.card-info { padding: 15px; }
+.card-title { font-weight: 700; font-size: 14px; margin-bottom: 10px; height: 40px; overflow: hidden; display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; }
+.card-stats { display: flex; justify-content: space-between; font-size: 11px; opacity: 0.6; font-weight: 600; }
 
-/* =========================
-   4. THẺ CARD (COZY STYLE)
-========================= */
-.card-item { 
-  flex: 0 0 300px; /* Độ rộng thẻ YouTube */
-  background: var(--card-bg); color: #222; 
-  border-radius: 20px; overflow: hidden; 
-  cursor: pointer; transition: 0.3s ease; 
-  box-shadow: 0 10px 25px rgba(0,0,0,0.2);
-}
-.card-item:hover { transform: translateY(-8px); }
-.thumb { width: 100%; aspect-ratio: 16/9; object-fit: cover; display: block; }
-.card-content { padding: 15px; }
-.card-title { 
-  font-weight: 700; font-size: 15px; line-height: 1.4; 
-  display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden; 
-}
+/* Music Iframe */
+.embed-item { flex: 0 0 340px; border-radius: 18px; overflow: hidden; background: #000; box-shadow: 0 10px 30px rgba(0,0,0,0.4); }
 
-/* Grid cho Notice */
-.grid-notice { display: grid; gap: 20px; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); }
-
-/* =========================
-   5. BLOG & MUSIC
-========================= */
-.blog-item { background: rgba(255,255,255,0.05); border-radius: 15px; margin-bottom: 15px; overflow: hidden; border: 1px solid rgba(255,255,255,0.05); }
-.blog-header { padding: 22px; cursor: pointer; display: flex; justify-content: space-between; align-items: center; }
-.blog-header:hover { background: rgba(255,255,255,0.02); }
-.blog-content { max-height: 0; overflow: hidden; transition: 0.5s ease; background: #fff; color: #333; }
-.blog-item.active .blog-content { max-height: 3000px; }
-.blog-inner { padding: 25px; font-size: 16px; }
-
-.embed-item { flex: 0 0 350px; border-radius: 20px; overflow: hidden; background: #000; }
-
-/* =========================
-   6. MOBILE RESPONSIVE
-========================= */
 @media (max-width: 768px) {
-  .menu-btn { display: block; }
-  .nav {
-    position: fixed; top: 0; right: -100%; width: 80%; height: 100vh;
-    background: #0b132b; flex-direction: column; align-items: center; 
-    justify-content: center; transition: 0.5s cubic-bezier(0.4, 0, 0.2, 1); 
-    z-index: 1000; box-shadow: -10px 0 30px rgba(0,0,0,0.5);
-  }
-  .nav.open { right: 0; }
-  .nav a { font-size: 24px; margin: 15px 0; }
-  
-  /* X cho Menu */
-  .menu-btn.open .line1 { transform: rotate(45deg) translate(5px, 6px); }
-  .menu-btn.open .line2 { opacity: 0; }
-  .menu-btn.open .line3 { transform: rotate(-45deg) translate(5px, -7px); }
-
-  .hero { height: 75vh; }
-  section { padding: 60px 20px; }
-  .card-item { flex: 0 0 260px; }
+  .hero { height: 60vh; }
+  .card { flex: 0 0 260px; }
   .embed-item { flex: 0 0 280px; }
+  .nav { display: none; } /* Có thể thêm Hamburger menu sau */
 }
 </style>
 </head>
 <body>
 
 <header class="topbar" id="navbar">
-  <a href="#" class="logo">PUPPYSITTER 🐾</a>
-  <div class="menu-btn" id="menu-toggle">
-    <div class="line1"></div><div class="line2"></div><div class="line3"></div>
-  </div>
-  <nav class="nav" id="nav-menu">
-    <a href="#notice" onclick="toggleMenu()">Notice</a>
-    <a href="#blog" onclick="toggleMenu()">Blog</a>
-    <a href="#youtube" onclick="toggleMenu()">YouTube</a>
-    <a href="#spotify" onclick="toggleMenu()">Spotify</a>
-    <a href="#apple" onclick="toggleMenu()">Apple</a>
+  <div class="logo">PUPPYSITTER 🐾</div>
+  <nav class="nav">
+    <a href="#blog">BLOG</a>
+    <a href="#youtube">YOUTUBE</a>
+    <a href="#music">MUSIC</a>
   </nav>
 </header>
 
 <div class="hero" id="hero-box"></div>
 
-<section id="notice">
-  <h2>Notice</h2>
-  <div id="notice-list" class="grid-notice"></div>
-</section>
-
 <section id="blog">
-  <h2>Blog</h2>
-  <div id="blog-list"></div>
+  <h2>Inside My Stories</h2>
+  <div class="blog-wrapper" id="blog-list"></div>
 </section>
 
 <section id="youtube">
-  <h2>YouTube Content</h2>
+  <h2>Creative Studio</h2>
   <div id="youtube-container"></div>
 </section>
 
-<section id="spotify">
-  <h2>Spotify</h2>
-  <div id="spotify-list" class="horizontal-scroll"></div>
-</section>
-
-<section id="apple">
-  <h2>Apple Music</h2>
-  <div id="apple-list" class="horizontal-scroll"></div>
+<section id="music">
+  <h2>Streaming Everywhere</h2>
+  <div class="horizontal-scroll" id="music-list"></div>
 </section>
 
 <script>
 const SHEET_ID = "1JbONtH3RWufz3RSgs3EnMV9cYd_37xwBOHgaU2y_yCs";
 const api = s => fetch(`https://opensheet.elk.sh/${SHEET_ID}/${s}`).then(r => r.json());
 
-/* --- UI CONTROLS --- */
-const menuToggle = document.getElementById('menu-toggle');
-const navMenu = document.getElementById('nav-menu');
-
-function toggleMenu() {
-  menuToggle.classList.toggle('open');
-  navMenu.classList.toggle('open');
-}
-menuToggle.onclick = toggleMenu;
-
-window.onscroll = () => {
-  document.getElementById('navbar').classList.toggle('scrolled', window.scrollY > 50);
-};
-
-/* --- DATA LOADING --- */
-
-// 1. Load Hero
+/* 1. Load Hero Images */
 async function loadHero(){
-  try {
-    const data = await api("HERO");
-    const box = document.getElementById("hero-box");
-    data.forEach((item, i) => {
-      const img = document.createElement("img");
-      img.src = item.image;
-      if(i === 0) img.classList.add("active");
-      box.appendChild(img);
-    });
-    let imgs = box.querySelectorAll('img'), cur = 0;
-    if(imgs.length > 1) {
-      setInterval(() => {
-        imgs[cur].classList.remove('active');
-        cur = (cur + 1) % imgs.length;
-        imgs[cur].classList.add('active');
-      }, 5000);
-    }
-  } catch(e) { console.error("Hero error:", e); }
-}
-
-// 2. Helper lấy ảnh preview
-function getPreview(url, manualImg) {
-  if(manualImg && manualImg.trim() !== "") return manualImg;
-  try {
-    const u = new URL(url);
-    if(u.hostname.includes("youtu")) {
-      const vid = u.searchParams.get("v") || u.pathname.slice(1);
-      return `https://img.youtube.com/vi/${vid}/mqdefault.jpg`;
-    }
-    return `https://api.microlink.io/?url=${encodeURIComponent(url)}&embed=image.url`;
-  } catch(e) { return 'https://via.placeholder.com/400x225?text=No+Image'; }
-}
-
-// 3. Load Notice (Dạng Grid)
-async function loadNotice() {
-  const data = await api("NOTICE");
-  const box = document.getElementById("notice-list");
-  data.forEach(r => {
-    const card = document.createElement("div");
-    card.className = "card-item";
-    card.style.flex = "unset"; // Grid không cần flex-basis
-    card.innerHTML = `
-      <img class="thumb" src="${getPreview(r.url, r.image)}">
-      <div class="card-content"><div class="card-title">${r.title || ''}</div></div>
-    `;
-    card.onclick = () => window.open(r.url);
-    box.appendChild(card);
+  const d = await api("HERO");
+  const box = document.getElementById("hero-box");
+  d.forEach((item, i) => {
+    const img = document.createElement("img");
+    img.src = item.image;
+    if(i === 0) img.classList.add("active");
+    box.appendChild(img);
   });
+  let imgs = box.querySelectorAll('img'), cur = 0;
+  setInterval(() => {
+    imgs[cur].classList.remove('active');
+    cur = (cur + 1) % imgs.length;
+    imgs[cur].classList.add('active');
+  }, 5000);
 }
 
-// 4. Load Blog (Dạng Collapse)
+/* 2. Load Blog (Smart Scroll) */
 async function loadBlog() {
-  const data = await api("BLOG");
+  const d = await api("BLOG");
   const box = document.getElementById("blog-list");
-  data.forEach(r => {
-    const item = document.createElement("div");
-    item.className = "blog-item";
-    item.innerHTML = `
+  d.forEach(r => {
+    const div = document.createElement("div");
+    div.className = "blog-item";
+    div.innerHTML = `
       <div class="blog-header">
-        <div class="blog-title" style="font-weight:600">${r.title}</div>
-        <span style="font-size:20px">+</span>
+        <span style="font-weight:700">${r.title}</span>
+        <span style="color:var(--primary); font-size:12px">Read More +</span>
       </div>
       <div class="blog-content">
         <div class="blog-inner">
-          ${r.image ? `<img src="${r.image}" style="width:100%;border-radius:12px;margin-bottom:20px">` : ''}
+          ${r.image ? `<img src="${r.image}" style="width:100%; border-radius:12px; margin-bottom:15px">` : ''}
           <p>${r.content ? r.content.replace(/\n/g, '<br>') : ''}</p>
         </div>
       </div>`;
-    item.querySelector('.blog-header').onclick = () => item.classList.toggle('active');
-    box.appendChild(item);
+    div.onclick = () => div.classList.toggle('active');
+    box.appendChild(div);
   });
 }
 
-// 5. Load YouTube (Chia Playlist & Cuộn ngang)
+/* 3. Load YouTube (Phân loại Playlist + Hiển thị Stats từ Apps Script) */
 async function loadYoutube() {
-  const data = await api("YOUTUBE");
+  const d = await api("YOUTUBE");
   const container = document.getElementById("youtube-container");
   
-  // Nhóm theo playlist (Album, Vlog, Show...)
-  const groups = data.reduce((acc, vid) => {
-    const p = vid.playlist || "Others";
-    if (!acc[p]) acc[p] = [];
-    acc[p].push(vid);
+  const groups = d.reduce((acc, v) => {
+    const p = v.playlist || "General";
+    if(!acc[p]) acc[p] = [];
+    acc[p].push(v);
     return acc;
   }, {});
 
-  for (const pName in groups) {
-    const groupDiv = document.createElement("div");
-    groupDiv.className = "playlist-group";
-    groupDiv.innerHTML = `
-      <div class="playlist-title">${pName}</div>
-      <div class="horizontal-scroll"></div>
-    `;
-    const scrollBox = groupDiv.querySelector(".horizontal-scroll");
-
-    groups[pName].forEach(r => {
+  for (const p in groups) {
+    const group = document.createElement("div");
+    group.className = "playlist-group";
+    group.innerHTML = `<div class="playlist-label">${p}</div><div class="horizontal-scroll"></div>`;
+    const scroll = group.querySelector(".horizontal-scroll");
+    
+    groups[p].forEach(v => {
+      // Tách ID video để lấy thumbnail
+      const vid = v.url.includes('v=') ? v.url.split('v=')[1].split('&')[0] : v.url.split('/').pop();
       const card = document.createElement("div");
-      card.className = "card-item";
+      card.className = "card";
       card.innerHTML = `
-        <img class="thumb" src="${getPreview(r.url, r.image)}">
-        <div class="card-content"><div class="card-title">${r.title || ''}</div></div>
-      `;
-      card.onclick = () => window.open(r.url);
-      scrollBox.appendChild(card);
+        <img class="thumb" src="https://img.youtube.com/vi/${vid}/mqdefault.jpg">
+        <div class="card-info">
+          <div class="card-title">${v.title || 'Loading...'}</div>
+          <div class="card-stats">
+            <span>📅 ${v.date || ''}</span>
+            <span style="color:var(--primary)">👁️ ${Number(v.views || 0).toLocaleString()}</span>
+          </div>
+        </div>`;
+      card.onclick = () => window.open(v.url);
+      scroll.appendChild(card);
     });
-    container.appendChild(groupDiv);
+    container.appendChild(group);
   }
 }
 
-// 6. Load Music Iframe (Spotify & Apple)
-async function loadMusic(sheet, id) {
-  const data = await api(sheet);
-  const box = document.getElementById(id);
-  data.forEach(r => { 
-    if(r.iframe) {
+/* 4. Load Music (Spotify & Apple) */
+async function loadMusic() {
+  const spot = await api("SPOTIFY");
+  const apple = await api("APPLE");
+  const box = document.getElementById("music-list");
+  
+  [...spot, ...apple].forEach(m => {
+    if(m.iframe) {
       const div = document.createElement("div");
       div.className = "embed-item";
-      div.innerHTML = r.iframe;
+      div.innerHTML = m.iframe;
       box.appendChild(div);
     }
   });
 }
 
-/* --- INIT --- */
+// Hiệu ứng Navbar
+window.onscroll = () => document.getElementById('navbar').classList.toggle('scrolled', window.scrollY > 50);
+
+// Khởi chạy
 loadHero();
-loadNotice();
 loadBlog();
 loadYoutube();
-loadMusic("SPOTIFY", "spotify-list");
-loadMusic("APPLE", "apple-list");
+loadMusic();
 </script>
 </body>
 </html>
