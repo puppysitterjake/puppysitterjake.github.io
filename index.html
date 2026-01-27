@@ -29,10 +29,9 @@ body { background: var(--bg); color: #fff; line-height: 1.6; overflow-x: hidden;
 }
 
 .topbar.scrolled {
-  background: rgba(11, 19, 43, 0.9);
+  background: rgba(11, 19, 43, 0.95);
   backdrop-filter: blur(15px);
   height: 60px;
-  box-shadow: 0 4px 20px rgba(0,0,0,0.3);
 }
 
 .logo { font-weight: 800; font-size: 24px; color: #fff; z-index: 1001; }
@@ -95,9 +94,10 @@ h2 {
 /* =========================
    4. BLOG
 ========================= */
+#blog-list { display: flex; flex-direction: column; gap: 15px; }
 .blog-item {
   background: var(--glass); border: 1px solid rgba(255,255,255,0.1);
-  border-radius: 20px; margin-bottom: 15px; overflow: hidden;
+  border-radius: 20px; overflow: hidden;
 }
 .blog-header { padding: 20px; cursor: pointer; display: flex; justify-content: space-between; align-items: center; }
 .blog-content { 
@@ -108,15 +108,19 @@ h2 {
 .blog-inner { padding: 25px; }
 
 /* =========================
-   5. MUSIC EMBEDS
+   5. MUSIC EMBEDS (NHƯ CŨ)
 ========================= */
-.music-grid {
-  display: grid; gap: 20px;
-  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+.music-list {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
 }
-.embed-container {
-  border-radius: 20px; overflow: hidden; background: #000;
-  box-shadow: 0 10px 25px rgba(0,0,0,0.5);
+.embed-item {
+  border-radius: 18px;
+  overflow: hidden;
+  box-shadow: 0 6px 18px rgba(0,0,0,0.35);
+  background: #000;
+  line-height: 0; /* Khử khoảng trắng thừa dưới iframe */
 }
 
 /* =========================
@@ -139,6 +143,7 @@ h2 {
 
   h2 { font-size: 26px; }
   section { padding: 60px 20px; }
+  .grid { grid-template-columns: 1fr; }
 }
 </style>
 </head>
@@ -180,13 +185,13 @@ h2 {
 </section>
 
 <section id="spotify">
-  <h2>Spotify Music</h2>
-  <div id="spotify-list" class="music-grid"></div>
+  <h2>Spotify</h2>
+  <div id="spotify-list" class="music-list"></div>
 </section>
 
 <section id="apple">
   <h2>Apple Music</h2>
-  <div id="apple-list" class="music-grid"></div>
+  <div id="apple-list" class="music-list"></div>
 </section>
 
 <script>
@@ -209,7 +214,7 @@ window.onscroll = () => {
   else nav.classList.remove('scrolled');
 };
 
-/* HERO */
+/* HERO FULLSCREEN */
 async function loadHero(){
   try {
     const d = await get("HERO");
@@ -239,7 +244,7 @@ function getPreview(url, manualImg) {
     if(u.hostname.includes("youtu.be")) return `https://img.youtube.com/vi/${u.pathname.slice(1)}/maxresdefault.jpg`;
     if(u.searchParams.get("v")) return `https://img.youtube.com/vi/${u.searchParams.get("v")}/maxresdefault.jpg`;
     return `https://api.microlink.io/?url=${encodeURIComponent(url)}&embed=image.url`;
-  } catch(e) { return 'https://via.placeholder.com/600x340?text=Preview'; }
+  } catch(e) { return 'https://via.placeholder.com/600x340?text=Puppy+News'; }
 }
 
 async function loadCards(sheet, id) {
@@ -290,7 +295,7 @@ async function loadBlog() {
   } catch(e){}
 }
 
-/* IFRAME (SPOTIFY & APPLE) */
+/* IFRAME MUSIC NHƯ CŨ (FULL WIDTH) */
 async function loadIframe(sheet, id) {
   try {
     const d = await get(sheet);
@@ -298,7 +303,7 @@ async function loadIframe(sheet, id) {
     d.forEach(r => { 
       if(r.iframe) {
         const div = document.createElement("div");
-        div.className = "embed-container";
+        div.className = "embed-item";
         div.innerHTML = r.iframe; 
         box.appendChild(div);
       }
@@ -306,7 +311,7 @@ async function loadIframe(sheet, id) {
   } catch(e){}
 }
 
-/* KHỞI CHẠY */
+/* INIT */
 loadHero();
 loadCards("NOTICE", "notice-list");
 loadBlog();
