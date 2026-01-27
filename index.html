@@ -1,15 +1,18 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="UTF-8"/>
+<meta charset="UTF-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
 
-<title>Puppysitter 🐾</title>
+<title>puppysitter 🐾</title>
 
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;800&display=swap" rel="stylesheet"/>
 
 <style>
-/* ================= RESET ================= */
+/* =================================================
+   GLOBAL
+================================================= */
+
 *{
   margin:0;
   padding:0;
@@ -21,12 +24,19 @@ html{
   scroll-behavior:smooth;
 }
 
+/* 🎨 Pastel gradient background (inspired by hero) */
 body{
-  background:#f6f7f9;
+  background:
+  linear-gradient(180deg,
+    #ffeef4 0%,
+    #f7f3ff 40%,
+    #eef7ff 100%);
   color:#111;
 }
 
-/* ================= NAVBAR ================= */
+/* =================================================
+   TRANSPARENT NAVBAR (GLASS)
+================================================= */
 
 .topbar{
   position:fixed;
@@ -35,15 +45,17 @@ body{
   width:100%;
   height:64px;
 
-  background:rgba(255,255,255,.9);
-  backdrop-filter:blur(10px);
-
   display:flex;
-  justify-content:space-between;
   align-items:center;
+  justify-content:space-between;
 
   padding:0 7%;
-  box-shadow:0 2px 12px rgba(0,0,0,.05);
+
+  background:rgba(255,255,255,.25);
+  backdrop-filter:blur(14px);
+  -webkit-backdrop-filter:blur(14px);
+
+  border-bottom:1px solid rgba(255,255,255,.3);
 
   z-index:1000;
 }
@@ -51,18 +63,19 @@ body{
 .logo{
   font-size:22px;
   font-weight:800;
+  letter-spacing:.5px;
 }
 
 .nav{
   display:flex;
-  gap:28px;
+  gap:26px;
 }
 
 .nav a{
   text-decoration:none;
-  color:#444;
-  font-weight:500;
   font-size:14px;
+  font-weight:500;
+  color:#333;
   transition:.25s;
 }
 
@@ -71,7 +84,9 @@ body{
   transform:translateY(-2px);
 }
 
-/* ================= HERO ================= */
+/* =================================================
+   HERO (FULL SCREEN)
+================================================= */
 
 .hero{
   margin-top:64px;
@@ -86,18 +101,20 @@ body{
   height:100%;
   object-fit:cover;
   opacity:0;
-  transition:opacity 1.2s;
+  transition:opacity 1.3s ease;
 }
 
 .hero img.active{
   opacity:1;
 }
 
-/* ================= SECTION ================= */
+/* =================================================
+   SECTIONS
+================================================= */
 
 section{
-  padding:90px 7%;
-  scroll-margin-top:80px;
+  padding:95px 7%;
+  scroll-margin-top:90px;
 }
 
 h2{
@@ -106,30 +123,36 @@ h2{
   margin-bottom:35px;
 }
 
-/* ================= GRID ================= */
+/* =================================================
+   GRID
+================================================= */
 
 .grid{
   display:grid;
-  gap:26px;
+  gap:28px;
   grid-template-columns:repeat(auto-fill,minmax(260px,1fr));
 }
 
-/* ================= CARD ================= */
+/* =================================================
+   CARD (SOFT STYLE)
+================================================= */
 
 .card{
-  background:#fff;
-  border-radius:22px;
+  background:rgba(255,255,255,.85);
+  backdrop-filter:blur(8px);
+
+  border-radius:24px;
   overflow:hidden;
 
-  box-shadow:0 8px 24px rgba(0,0,0,.07);
+  box-shadow:0 10px 28px rgba(0,0,0,.08);
 
-  transition:.28s;
+  transition:.3s;
   cursor:pointer;
 }
 
 .card:hover{
-  transform:translateY(-8px) scale(1.02);
-  box-shadow:0 18px 40px rgba(0,0,0,.18);
+  transform:translateY(-10px) scale(1.03);
+  box-shadow:0 22px 55px rgba(0,0,0,.18);
 }
 
 .thumb{
@@ -139,7 +162,7 @@ h2{
 }
 
 .content{
-  padding:16px;
+  padding:18px;
 }
 
 .title{
@@ -149,21 +172,26 @@ h2{
 
 .desc{
   font-size:14px;
-  color:#666;
+  color:#555;
 }
 
-/* ================= EMBED ================= */
+/* =================================================
+   EMBED
+================================================= */
 
 .embed{
-  border-radius:20px;
+  border-radius:24px;
   overflow:hidden;
+  box-shadow:0 12px 30px rgba(0,0,0,.12);
 }
 
-/* ================= ANIMATION ================= */
+/* =================================================
+   ANIMATION
+================================================= */
 
 .fade{
   opacity:0;
-  transform:translateY(25px);
+  transform:translateY(30px);
   transition:.6s;
 }
 
@@ -172,10 +200,12 @@ h2{
   transform:none;
 }
 
-/* ================= MOBILE ================= */
+/* =================================================
+   MOBILE
+================================================= */
 
 @media(max-width:768px){
-  .nav{gap:16px;font-size:13px}
+  .nav{gap:14px;font-size:13px}
   section{padding:70px 5%}
 }
 </style>
@@ -184,8 +214,12 @@ h2{
 
 <body>
 
+<!-- =================================================
+   NAVBAR
+================================================= -->
+
 <header class="topbar">
-  <div class="logo">🐾 Puppysitter</div>
+  <div class="logo"> puppysitter 🐾 </div>
 
   <nav class="nav">
     <a href="#notice">Notice</a>
@@ -197,39 +231,32 @@ h2{
 </header>
 
 
-<!-- HERO -->
+<!-- =================================================
+   HERO
+================================================= -->
 <div id="hero" class="hero"></div>
 
 
-<!-- NOTICE -->
 <section id="notice">
 <h2>📢 Notice</h2>
 <div id="notice-list" class="grid"></div>
 </section>
 
-
-<!-- YOUTUBE -->
 <section id="youtube">
 <h2>🎬 YouTube</h2>
 <div id="youtube-list" class="grid"></div>
 </section>
 
-
-<!-- YTMUSIC -->
 <section id="ytmusic">
 <h2>🎵 YouTube Music</h2>
 <div id="ytmusic-list" class="grid"></div>
 </section>
 
-
-<!-- SPOTIFY -->
 <section id="spotify">
 <h2>🟢 Spotify</h2>
 <div id="spotify-list" class="grid"></div>
 </section>
 
-
-<!-- APPLE -->
 <section id="apple">
 <h2>🍎 Apple Music</h2>
 <div id="apple-list" class="grid"></div>
@@ -237,12 +264,18 @@ h2{
 
 
 <script>
-/* ================= CONFIG ================= */
+/* =================================================
+   CONFIG
+================================================= */
+
 const SHEET_ID="1JbONtH3RWufz3RSgs3EnMV9cYd_37xwBOHgaU2y_yCs";
 const API=s=>`https://opensheet.elk.sh/${SHEET_ID}/${s}`;
 const get=s=>fetch(API(s)).then(r=>r.json());
 
-/* ================= HELPERS ================= */
+
+/* =================================================
+   HELPERS
+================================================= */
 
 function ytThumb(url){
   try{
@@ -269,10 +302,12 @@ function reveal(){
     if(top<window.innerHeight-60) el.classList.add("show");
   });
 }
-
 window.addEventListener("scroll",reveal);
 
-/* ================= HERO ================= */
+
+/* =================================================
+   HERO SLIDER
+================================================= */
 
 async function loadHero(){
   const d=await get("HERO");
@@ -295,7 +330,10 @@ async function loadHero(){
   },4000);
 }
 
-/* ================= CARD ================= */
+
+/* =================================================
+   CARD
+================================================= */
 
 async function createCard(r,auto=false){
   const div=document.createElement("div");
@@ -323,7 +361,10 @@ async function createCard(r,auto=false){
   return div;
 }
 
-/* ================= LOADERS ================= */
+
+/* =================================================
+   LOADERS
+================================================= */
 
 async function loadList(sheet,id,auto=false){
   const d=await get(sheet);
@@ -348,7 +389,10 @@ async function loadIframe(sheet,id){
   reveal();
 }
 
-/* ================= INIT ================= */
+
+/* =================================================
+   INIT
+================================================= */
 
 loadHero();
 loadList("NOTICE","notice-list",true);
@@ -356,8 +400,8 @@ loadList("YOUTUBE","youtube-list",true);
 loadList("YT MUSIC","ytmusic-list",true);
 loadIframe("SPOTIFY","spotify-list");
 loadIframe("APPLE","apple-list");
-
 reveal();
+
 </script>
 
 </body>
