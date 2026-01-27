@@ -2,22 +2,56 @@
 <html>
 <head>
 <meta charset="UTF-8">
-<title>Puppy Sitter Jake</title>
+<title>Puppy Sitter Jake Videos</title>
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
 <style>
 body{
   margin:0;
-  background:#111;
-  color:white;
-  display:flex;
-  justify-content:center;
-  align-items:center;
-  height:100vh;
   font-family:sans-serif;
+  background:#111;
+}
+
+.grid{
+  display:grid;
+  grid-template-columns:repeat(auto-fit,minmax(280px,1fr));
+  gap:16px;
+  padding:20px;
+}
+
+iframe{
+  width:100%;
+  aspect-ratio:16/9;
+  border:none;
+  border-radius:12px;
+  box-shadow:0 4px 12px rgba(0,0,0,.4);
 }
 </style>
 </head>
+
 <body>
-<h1>Website is LIVE 🚀</h1>
+
+<div class="grid" id="videos"></div>
+
+<script>
+/* 🔴 DÁN PLAYLIST ID CỦA BẠN Ở ĐÂY */
+const playlistId = "PLGSPQSXq0_HqfK3Xfir3EEs_Pzy6p9mNG";
+
+/* Tự động load toàn bộ video */
+fetch(`https://www.youtube.com/feeds/videos.xml?playlist_id=${playlistId}`)
+.then(r=>r.text())
+.then(str=>new DOMParser().parseFromString(str,"text/xml"))
+.then(data=>{
+  const ids=[...data.querySelectorAll("entry")].map(e=>e.querySelector("yt\\:videoId").textContent);
+  const box=document.getElementById("videos");
+
+  ids.forEach(id=>{
+    box.innerHTML += `
+      <iframe src="https://www.youtube.com/embed/${id}" allowfullscreen></iframe>
+    `;
+  });
+});
+</script>
+
 </body>
 </html>
