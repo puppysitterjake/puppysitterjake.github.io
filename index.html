@@ -1,285 +1,33 @@
 <!DOCTYPE html>
-<html lang="en">
+<html>
 <head>
-<meta charset="UTF-8" />
-<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-
-<title>PUPPYSITTER JAKE</title>
-
-<!-- Font -->
-<link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@700;900&display=swap" rel="stylesheet"/>
-
-<style>
-:root{
-  --bg:#0b0b0b;
-  --card:#181818;
-  --text:#fff;
-  --accent:#ffcc00;
-}
-
-.light{
-  --bg:#ffffff;
-  --card:#f4f4f4;
-  --text:#111;
-}
-
-*{
-  margin:0;
-  padding:0;
-  box-sizing:border-box;
-  font-family:'Montserrat',sans-serif;
-}
-
-body{
-  background:var(--bg);
-  color:var(--text);
-  overflow-x:hidden;
-}
-
-/* ================= NAVBAR ================= */
-nav{
-  position:fixed;
-  top:0;
-  width:100%;
-  padding:18px 40px;
-  display:flex;
-  justify-content:space-between;
-  align-items:center;
-  backdrop-filter:blur(12px);
-  background:rgba(0,0,0,.45);
-  z-index:999;
-}
-
-.logo{
-  font-weight:900;
-  font-size:22px;
-  letter-spacing:2px;
-}
-
-.toggle{
-  cursor:pointer;
-  padding:8px 14px;
-  border-radius:30px;
-  background:var(--card);
-}
-
-/* ================= HERO ================= */
-.hero{
-  height:100vh;
-  width:100%;
-  background:url("https://pbs.twimg.com/media/G-OLdVMakAA0KwK?format=jpg&name=4096x4096") center/cover no-repeat;
-  display:flex;
-  justify-content:center;
-  align-items:center;
-  position:relative;
-}
-
-.hero::after{
-  content:"";
-  position:absolute;
-  inset:0;
-  background:linear-gradient(to bottom,transparent 40%, var(--bg));
-}
-
-.hero h1{
-  font-size:70px;
-  font-weight:900;
-  text-align:center;
-  letter-spacing:6px;
-  z-index:2;
-  animation:fadeUp 1.2s ease;
-}
-
-/* ================= SECTION ================= */
-section{
-  padding:80px 6%;
-}
-
-h2{
-  font-size:30px;
-  margin-bottom:25px;
-}
-
-/* ================= SLIDER ================= */
-.slider{
-  display:flex;
-  gap:20px;
-  overflow-x:auto;
-  scroll-behavior:smooth;
-}
-
-.slider::-webkit-scrollbar{display:none;}
-
-.card{
-  min-width:280px;
-  background:var(--card);
-  border-radius:16px;
-  overflow:hidden;
-  transition:.3s;
-}
-
-.card:hover{
-  transform:scale(1.05);
-}
-
-.card img{
-  width:100%;
-  aspect-ratio:16/9;
-  object-fit:cover;
-}
-
-.card h3{
-  padding:12px;
-  font-size:15px;
-}
-
-/* ================= EMBED ================= */
-.embed iframe{
-  width:100%;
-  height:380px;
-  border:none;
-  border-radius:18px;
-}
-
-/* ================= INFO ================= */
-.info{
-  background:var(--card);
-  padding:25px;
-  border-radius:16px;
-  line-height:1.6;
-}
-
-/* ================= LOADING ================= */
-.skeleton{
-  height:180px;
-  border-radius:16px;
-  background:linear-gradient(90deg,#222 25%,#333 50%,#222 75%);
-  background-size:200% 100%;
-  animation:load 1.4s infinite;
-}
-
-/* ================= ANIMATION ================= */
-@keyframes load{
-  0%{background-position:200% 0}
-  100%{background-position:-200% 0}
-}
-
-@keyframes fadeUp{
-  from{opacity:0; transform:translateY(40px)}
-  to{opacity:1; transform:translateY(0)}
-}
-
-/* responsive */
-@media(max-width:768px){
-  .hero h1{font-size:40px}
-}
-</style>
+  <meta charset="UTF-8" />
+  <title>Puppysitter Jake</title>
+  <link rel="stylesheet" href="style.css" />
+  <script defer src="script.js"></script>
 </head>
 
 <body>
 
-<!-- NAV -->
-<nav>
-  <div class="logo">PUPPYSITTER JAKE</div>
-  <div class="toggle" onclick="toggleTheme()">🌙</div>
+<!-- NAVBAR -->
+<nav class="nav">
+  <div class="logo">puppysitter 🐾</div>
+  <div class="menu">
+    <a href="#">Home</a>
+    <a href="#news">News & Updates</a>
+    <a href="#vote">Vote</a>
+    <a href="#archives">Archives</a>
+    <a href="#about">About</a>
+  </div>
 </nav>
 
 <!-- HERO -->
-<div class="hero">
-  <h1>PUPPYSITTER<br>JAKE</h1>
-</div>
-
-<!-- YOUTUBE -->
-<section>
-  <h2>Videos</h2>
-  <div id="youtube" class="slider"></div>
+<section class="hero" id="hero">
+  <div class="hero-text">
+    <h1 id="heroTitle"></h1>
+    <p id="heroSub"></p>
+  </div>
 </section>
 
-<!-- MUSIC -->
-<section>
-  <h2>Music</h2>
-  <div id="music" class="embed"></div>
-</section>
-
-<!-- INFO -->
-<section>
-  <h2>About</h2>
-  <div id="info" class="info"></div>
-</section>
-
-<script>
-/* ================= SETTINGS ================= */
-
-const CSV_URL =
-"https://docs.google.com/spreadsheets/d/e/2PACX-1vTnbWy8lWX2JP9KMLGZ2afpHPZcTeEgkCTeB397NtyMqcB5YtF1hD4vXht0YxYoFWiqFLPNnhvGgfMK/pub?output=csv";
-
-/* ================= THEME ================= */
-function toggleTheme(){
-  document.body.classList.toggle("light");
-}
-
-/* ================= YOUTUBE ID ================= */
-function getId(url){
-  if(url.includes("watch?v="))
-    return url.split("watch?v=")[1].split("&")[0];
-  if(url.includes("youtu.be/"))
-    return url.split("youtu.be/")[1];
-  return "";
-}
-
-/* ================= LOAD DATA ================= */
-fetch(CSV_URL)
-.then(r=>r.text())
-.then(text=>{
-
-  const rows = text.trim().split("\n").slice(1);
-
-  const youtube = document.getElementById("youtube");
-  const music = document.getElementById("music");
-  const info = document.getElementById("info");
-
-  rows.forEach(row=>{
-    const [type,title,url,desc] = row.split(",");
-
-    /* ---------- YOUTUBE ---------- */
-    if(type==="youtube"){
-      const id = getId(url);
-      const thumb = `https://img.youtube.com/vi/${id}/maxresdefault.jpg`;
-
-      youtube.innerHTML+=`
-        <a href="${url}" target="_blank" class="card">
-          <img src="${thumb}">
-          <h3>${title}</h3>
-        </a>`;
-    }
-
-    /* ---------- SPOTIFY ---------- */
-    if(type==="spotify"){
-      music.innerHTML+=`
-      <iframe src="https://open.spotify.com/embed/playlist/${url.split("playlist/")[1]}"></iframe>`;
-    }
-
-    /* ---------- APPLE MUSIC ---------- */
-    if(type==="apple"){
-      music.innerHTML+=`
-      <iframe src="${url}"></iframe>`;
-    }
-
-    /* ---------- INFO ---------- */
-    if(type==="info"){
-      info.innerHTML = desc;
-    }
-
-  });
-
-});
-
-/* ================= AUTO SLIDER ================= */
-setInterval(()=>{
-  const el=document.getElementById("youtube");
-  el.scrollBy({left:320,behavior:"smooth"});
-},3500);
-
-</script>
-</body>
-</html>
+<!-- NOTICE -->
+<s
