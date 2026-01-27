@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="UTF-8" />
+<meta charset="UTF-8"/>
 <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
 
 <title>puppysitter 🐾</title>
@@ -24,38 +24,37 @@ html{
   scroll-behavior:smooth;
 }
 
-/* 🎨 Pastel gradient background (inspired by hero) */
+/* 🌌 DARK BLUE HERO INSPIRED BACKGROUND */
 body{
   background:
   linear-gradient(180deg,
-    #ffeef4 0%,
-    #f7f3ff 40%,
-    #eef7ff 100%);
-  color:#111;
+    #0f172a 0%,
+    #16213e 45%,
+    #1e293b 100%);
+  color:#fff;
 }
 
 /* =================================================
-   TRANSPARENT NAVBAR (GLASS)
+   GLASS NAVBAR (OVER HERO)
 ================================================= */
 
 .topbar{
-  position:fixed;
+  position:absolute;   /* 🔥 đè lên hero */
   top:0;
-  left:0;
   width:100%;
   height:64px;
 
   display:flex;
-  align-items:center;
   justify-content:space-between;
+  align-items:center;
 
   padding:0 7%;
 
-  background:rgba(255,255,255,.25);
-  backdrop-filter:blur(14px);
-  -webkit-backdrop-filter:blur(14px);
+  background:rgba(255,255,255,.08);
+  backdrop-filter:blur(18px);
+  -webkit-backdrop-filter:blur(18px);
 
-  border-bottom:1px solid rgba(255,255,255,.3);
+  border-bottom:1px solid rgba(255,255,255,.15);
 
   z-index:1000;
 }
@@ -73,24 +72,22 @@ body{
 
 .nav a{
   text-decoration:none;
+  color:#e2e8f0;
   font-size:14px;
-  font-weight:500;
-  color:#333;
   transition:.25s;
 }
 
 .nav a:hover{
-  color:#000;
+  color:#fff;
   transform:translateY(-2px);
 }
 
 /* =================================================
-   HERO (FULL SCREEN)
+   HERO FULLSCREEN
 ================================================= */
 
 .hero{
-  margin-top:64px;
-  height:calc(100vh - 64px);
+  height:100vh;  /* 🔥 full screen, không margin */
   position:relative;
   overflow:hidden;
 }
@@ -101,7 +98,7 @@ body{
   height:100%;
   object-fit:cover;
   opacity:0;
-  transition:opacity 1.3s ease;
+  transition:opacity 1.3s;
 }
 
 .hero img.active{
@@ -113,8 +110,8 @@ body{
 ================================================= */
 
 section{
-  padding:95px 7%;
-  scroll-margin-top:90px;
+  padding:100px 7%;
+  scroll-margin-top:80px;
 }
 
 h2{
@@ -134,25 +131,25 @@ h2{
 }
 
 /* =================================================
-   CARD (SOFT STYLE)
+   DARK GLASS CARD
 ================================================= */
 
 .card{
-  background:rgba(255,255,255,.85);
-  backdrop-filter:blur(8px);
+  background:rgba(255,255,255,.06);
+  backdrop-filter:blur(10px);
 
-  border-radius:24px;
+  border-radius:22px;
   overflow:hidden;
 
-  box-shadow:0 10px 28px rgba(0,0,0,.08);
+  border:1px solid rgba(255,255,255,.08);
 
   transition:.3s;
   cursor:pointer;
 }
 
 .card:hover{
-  transform:translateY(-10px) scale(1.03);
-  box-shadow:0 22px 55px rgba(0,0,0,.18);
+  transform:translateY(-10px);
+  box-shadow:0 0 25px rgba(255,255,255,.15);
 }
 
 .thumb{
@@ -167,12 +164,12 @@ h2{
 
 .title{
   font-weight:700;
-  margin-bottom:6px;
 }
 
 .desc{
   font-size:14px;
-  color:#555;
+  color:#cbd5e1;
+  margin-top:6px;
 }
 
 /* =================================================
@@ -180,9 +177,9 @@ h2{
 ================================================= */
 
 .embed{
-  border-radius:24px;
+  border-radius:20px;
   overflow:hidden;
-  box-shadow:0 12px 30px rgba(0,0,0,.12);
+  box-shadow:0 0 20px rgba(0,0,0,.4);
 }
 
 /* =================================================
@@ -205,7 +202,7 @@ h2{
 ================================================= */
 
 @media(max-width:768px){
-  .nav{gap:14px;font-size:13px}
+  .nav{gap:14px}
   section{padding:70px 5%}
 }
 </style>
@@ -213,10 +210,6 @@ h2{
 
 
 <body>
-
-<!-- =================================================
-   NAVBAR
-================================================= -->
 
 <header class="topbar">
   <div class="logo"> puppysitter 🐾 </div>
@@ -230,12 +223,7 @@ h2{
   </nav>
 </header>
 
-
-<!-- =================================================
-   HERO
-================================================= -->
 <div id="hero" class="hero"></div>
-
 
 <section id="notice">
 <h2>📢 Notice</h2>
@@ -262,20 +250,10 @@ h2{
 <div id="apple-list" class="grid"></div>
 </section>
 
-
 <script>
-/* =================================================
-   CONFIG
-================================================= */
-
 const SHEET_ID="1JbONtH3RWufz3RSgs3EnMV9cYd_37xwBOHgaU2y_yCs";
 const API=s=>`https://opensheet.elk.sh/${SHEET_ID}/${s}`;
 const get=s=>fetch(API(s)).then(r=>r.json());
-
-
-/* =================================================
-   HELPERS
-================================================= */
 
 function ytThumb(url){
   try{
@@ -288,65 +266,12 @@ function ytThumb(url){
   return "";
 }
 
-async function ogImage(url){
-  try{
-    const r=await fetch("https://api.microlink.io?url="+encodeURIComponent(url));
-    const d=await r.json();
-    return d.data.image?.url||"";
-  }catch{return "";}
-}
-
-function reveal(){
-  document.querySelectorAll(".fade").forEach(el=>{
-    const top=el.getBoundingClientRect().top;
-    if(top<window.innerHeight-60) el.classList.add("show");
-  });
-}
-window.addEventListener("scroll",reveal);
-
-
-/* =================================================
-   HERO SLIDER
-================================================= */
-
-async function loadHero(){
-  const d=await get("HERO");
-  const box=document.getElementById("hero");
-
-  d.forEach((r,i)=>{
-    const img=document.createElement("img");
-    img.src=r.image;
-    if(i===0) img.classList.add("active");
-    box.appendChild(img);
-  });
-
-  const imgs=box.querySelectorAll("img");
-  let i=0;
-
-  setInterval(()=>{
-    imgs[i].classList.remove("active");
-    i=(i+1)%imgs.length;
-    imgs[i].classList.add("active");
-  },4000);
-}
-
-
-/* =================================================
-   CARD
-================================================= */
-
 async function createCard(r,auto=false){
   const div=document.createElement("div");
   div.className="card fade";
 
   let img=r.image||"";
-
-  if(auto && r.url){
-    img=ytThumb(r.url);
-    if(!img) img=await ogImage(r.url);
-  }
-
-  if(!img) img="https://via.placeholder.com/600x400?text=No+Image";
+  if(auto && r.url) img=ytThumb(r.url);
 
   div.innerHTML=`
     <img class="thumb" src="${img}">
@@ -355,44 +280,37 @@ async function createCard(r,auto=false){
       <div class="desc">${r.desc||""}</div>
     </div>
   `;
-
   if(r.url) div.onclick=()=>window.open(r.url);
-
   return div;
 }
-
-
-/* =================================================
-   LOADERS
-================================================= */
 
 async function loadList(sheet,id,auto=false){
   const d=await get(sheet);
   const box=document.getElementById(id);
-
-  for(const r of d){
-    box.appendChild(await createCard(r,auto));
-  }
-  reveal();
+  for(const r of d) box.appendChild(await createCard(r,auto));
 }
 
 async function loadIframe(sheet,id){
   const d=await get(sheet);
   const box=document.getElementById(id);
-
   d.forEach(r=>{
     const div=document.createElement("div");
-    div.className="embed fade";
+    div.className="embed";
     div.innerHTML=r.iframe;
     box.appendChild(div);
   });
-  reveal();
 }
 
-
-/* =================================================
-   INIT
-================================================= */
+async function loadHero(){
+  const d=await get("HERO");
+  const box=document.getElementById("hero");
+  d.forEach((r,i)=>{
+    const img=document.createElement("img");
+    img.src=r.image;
+    if(i===0) img.classList.add("active");
+    box.appendChild(img);
+  });
+}
 
 loadHero();
 loadList("NOTICE","notice-list",true);
@@ -400,8 +318,6 @@ loadList("YOUTUBE","youtube-list",true);
 loadList("YT MUSIC","ytmusic-list",true);
 loadIframe("SPOTIFY","spotify-list");
 loadIframe("APPLE","apple-list");
-reveal();
-
 </script>
 
 </body>
