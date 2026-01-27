@@ -7,14 +7,12 @@ const spotifyAPI = `https://opensheet.elk.sh/${SHEET_ID}/SPOTIFY`;
 const appleAPI   = `https://opensheet.elk.sh/${SHEET_ID}/APPLE`;
 const ytmAPI     = `https://opensheet.elk.sh/${SHEET_ID}/YTMUSIC`;
 
-
-// load all
 loadHero();
 loadNotice();
 loadYoutube();
 loadEmbed(spotifyAPI,"spotifyBoard");
 loadEmbed(appleAPI,"appleBoard");
-loadEmbed(ytmAPI,"ytmusicBoard");
+loadYTMusic();   // NEW
 
 
 
@@ -41,6 +39,28 @@ function loadHero(){
 
 
 
+// ================= YOUTUBE THUMB =================
+
+function getYoutubeID(link){
+  if(!link) return "";
+
+  const reg=/(?:v=|\/)([0-9A-Za-z_-]{11}).*/;
+  const m=link.match(reg);
+  return m?m[1]:"";
+}
+
+function getYoutubeThumb(link){
+  const id=getYoutubeID(link);
+
+  if(!id){
+    return "https://via.placeholder.com/480x360?text=No+Thumbnail";
+  }
+
+  return `https://img.youtube.com/vi/${id}/hqdefault.jpg`;
+}
+
+
+
 // ================= NOTICE =================
 
 function loadNotice(){
@@ -51,9 +71,7 @@ function loadNotice(){
     const box=document.getElementById("noticeBoard");
 
     data.forEach(row=>{
-      const id=getYoutubeID(row.url);
-      const thumb=`https://img.youtube.com/vi/${id}/hqdefault.jpg`;
-
+      const thumb=getYoutubeThumb(row.url);
       box.innerHTML+=card(thumb,row.title,row.desc,row.url);
     });
 
@@ -73,9 +91,7 @@ function loadYoutube(){
     const box=document.getElementById("youtubeBoard");
 
     data.forEach(row=>{
-      const id=getYoutubeID(row.url);
-      const thumb=`https://img.youtube.com/vi/${id}/hqdefault.jpg`;
-
+      const thumb=getYoutubeThumb(row.url);
       box.innerHTML+=card(thumb,row.title,"",row.url);
     });
 
@@ -85,7 +101,28 @@ function loadYoutube(){
 
 
 
-// ================= EMBED =================
+// ================= YTMUSIC (NO EMBED) =================
+
+function loadYTMusic(){
+  fetch(ytmAPI)
+  .then(r=>r.json())
+  .then(data=>{
+
+    const box=document.getElementById("ytmusicBoard");
+
+    data.forEach(row=>{
+      const img=row.image || "https://via.placeholder.com/480x360?text=YouTube+Music";
+
+      box.innerHTML+=card(img,row.title,"Open in YouTube Music",row.url);
+    });
+
+    reveal();
+  });
+}
+
+
+
+// ================= EMBED (spotify/apple) =================
 
 function loadEmbed(api,target){
   fetch(api)
@@ -106,7 +143,7 @@ function loadEmbed(api,target){
 
 
 
-// ================= COMPONENTS =================
+// ================= CARD =================
 
 function card(img,title,desc,link){
   return `
@@ -122,18 +159,9 @@ function card(img,title,desc,link){
 
 
 
-function getYoutubeID(link){
-  const reg=/(?:youtube\.com.*v=|youtu\.be\/)([^&]+)/;
-  const m=link.match(reg);
-  return m?m[1]:"";
-}
-
-
-
 // ================= SLIDER =================
 
 function startSlider(){
-
   const slides=document.querySelectorAll(".slide");
   if(!slides.length) return;
 
@@ -141,36 +169,16 @@ function startSlider(){
 
   slides[0].classList.add("active");
 
-  const dots=document.createElement("div");
-  dots.className="dots";
-
-  slides.forEach((_,i)=>{
-    const d=document.createElement("div");
-    d.className="dot";
-    d.onclick=()=>show(i);
-    dots.appendChild(d);
-  });
-
-  document.getElementById("slider").appendChild(dots);
-
-  function show(i){
-    slides.forEach(s=>s.classList.remove("active"));
-    dots.children[index].classList.remove("active");
-
-    slides[i].classList.add("active");
-    dots.children[i].classList.add("active");
-
-    index=i;
-  }
-
-  setInterval(()=>show((index+1)%slides.length),4000);
-
-  show(0);
+  setInterval(()=>{
+    slides[index].classList.remove("active");
+    index=(index+1)%slides.length;
+    slides[index].classList.add("active");
+  },4000);
 }
 
 
 
-// ================= SCROLL ANIMATION =================
+// ================= ANIMATION =================
 
 function reveal(){
   const els=document.querySelectorAll(".reveal");
@@ -181,7 +189,7 @@ function reveal(){
         e.target.classList.add("show");
       }
     });
-  },{threshold:.15});
+  });
 
   els.forEach(el=>obs.observe(el));
 }
