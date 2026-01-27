@@ -1,30 +1,57 @@
+/* =========================
+   RESET
+========================= */
+
 *{
   margin:0;
   padding:0;
   box-sizing:border-box;
-  font-family: Arial, Helvetica, sans-serif;
 }
 
-body{
+html,body{
+  font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Arial;
   background:#f6f7fb;
+  color:#111;
+  scroll-behavior:smooth;
 }
 
 
-/* ================= HERO ================= */
+
+/* =========================
+   SECTION LAYOUT
+========================= */
+
+section{
+  padding:70px 8%;
+}
+
+h2{
+  font-size:28px;
+  font-weight:700;
+  margin-bottom:30px;
+  display:flex;
+  align-items:center;
+  gap:10px;
+}
+
+
+
+/* =========================
+   HERO SLIDER (FULLSCREEN)
+========================= */
 
 .slider{
-  position:relative;
   width:100%;
-  height:420px;
+  height:100vh;   /* ⭐ FULL SCREEN */
+  position:relative;
   overflow:hidden;
 }
 
 .slide{
   position:absolute;
-  width:100%;
-  height:100%;
+  inset:0;
   opacity:0;
-  transition:opacity 1s ease;
+  transition:opacity 1.2s ease;
 }
 
 .slide.active{
@@ -38,108 +65,164 @@ body{
 }
 
 
-/* dots */
 
-.dots{
-  position:absolute;
-  bottom:16px;
-  left:50%;
-  transform:translateX(-50%);
-  display:flex;
-  gap:8px;
-}
-
-.dot{
-  width:10px;
-  height:10px;
-  border-radius:50%;
-  background:white;
-  opacity:.5;
-  cursor:pointer;
-}
-
-.dot.active{
-  opacity:1;
-}
-
-
-
-/* ================= LAYOUT ================= */
-
-.container{
-  max-width:1200px;
-  margin:auto;
-  padding:60px 20px;
-}
-
-h2{
-  margin-bottom:28px;
-  font-size:26px;
-}
+/* =========================
+   CARD GRID
+========================= */
 
 .grid{
   display:grid;
   grid-template-columns:repeat(auto-fill,minmax(260px,1fr));
-  gap:24px;
+  gap:28px;
 }
 
 
 
-/* ================= CARD ================= */
+/* =========================
+   CARD STYLE (Google Sites look)
+========================= */
 
 .card{
   background:white;
-  border-radius:20px;
+  border-radius:22px;
   overflow:hidden;
   text-decoration:none;
-  color:black;
-  box-shadow:0 6px 18px rgba(0,0,0,.08);
+  color:inherit;
 
-  transition:.3s;
-  opacity:0;
-  transform:translateY(30px);
-}
+  box-shadow:
+    0 6px 20px rgba(0,0,0,0.08);
 
-.card.show{
-  opacity:1;
-  transform:translateY(0);
+  transition:all .25s ease;
+
+  display:flex;
+  flex-direction:column;
 }
 
 .card:hover{
   transform:translateY(-6px);
-  box-shadow:0 12px 30px rgba(0,0,0,.15);
+  box-shadow:
+    0 12px 28px rgba(0,0,0,0.14);
 }
+
+
+
+/* thumbnail */
 
 .card img{
   width:100%;
-  height:170px;
+  height:180px;
   object-fit:cover;
-  transition:.4s;
+  background:#ddd;
 }
 
-.card:hover img{
-  transform:scale(1.05);
-}
+
+
+/* content */
 
 .card-body{
-  padding:14px;
+  padding:18px;
 }
 
 .card h3{
   font-size:16px;
-  margin-bottom:6px;
+  font-weight:600;
+  line-height:1.4;
+  margin-bottom:8px;
 }
 
 .card p{
-  font-size:14px;
+  font-size:13px;
   color:#666;
 }
 
 
-/* iframe */
+
+/* =========================
+   EMBED (spotify/apple)
+========================= */
 
 .card iframe{
   width:100%;
-  border:0;
-  border-radius:14px;
+  border-radius:16px;
+}
+
+
+
+/* =========================
+   SECTION BACKGROUNDS
+========================= */
+
+#noticeBoard .card{
+  border-left:6px solid #ffcc00;
+}
+
+#youtubeBoard .card{
+  border-left:6px solid #ff0000;
+}
+
+#spotifyBoard .card{
+  border-left:6px solid #1db954;
+}
+
+#appleBoard .card{
+  border-left:6px solid #111;
+}
+
+#ytmusicBoard .card{
+  border-left:6px solid #ff3d00;
+}
+
+
+
+/* =========================
+   REVEAL ANIMATION
+========================= */
+
+.reveal{
+  opacity:0;
+  transform:translateY(40px);
+  transition:all .7s ease;
+}
+
+.reveal.show{
+  opacity:1;
+  transform:none;
+}
+
+
+
+/* =========================
+   HEADER TITLE STYLE (optional)
+========================= */
+
+.section-title{
+  font-size:30px;
+  font-weight:800;
+  margin-bottom:32px;
+}
+
+
+
+/* =========================
+   RESPONSIVE
+========================= */
+
+@media(max-width:768px){
+
+  section{
+    padding:50px 6%;
+  }
+
+  .slider{
+    height:60vh;
+  }
+
+  .card img{
+    height:160px;
+  }
+
+  h2{
+    font-size:22px;
+  }
+
 }
