@@ -1,0 +1,62 @@
+body{
+  margin:0;
+  font-family:Arial;
+  background:#000;
+  color:#fff;
+}
+
+.nav{
+  display:flex;
+  justify-content:space-between;
+  padding:20px 40px;
+  background:#111;
+  position:fixed;
+  width:100%;
+  z-index:10;
+}
+
+.menu a{
+  color:white;
+  margin-left:20px;
+  text-decoration:none;
+}
+
+.hero{
+  height:100vh;
+  background-size:cover;
+  background-position:center;
+  display:flex;
+  align-items:center;
+  padding:80px;
+}
+
+.hero h1{
+  font-size:64px;
+}
+
+.section{
+  padding:80px 60px;
+}
+
+.cards{
+  display:flex;
+  gap:20px;
+  flex-wrap:wrap;
+}
+
+.card{
+  background:#111;
+  border-radius:16px;
+  width:320px;
+  overflow:hidden;
+}
+
+.card img{
+  width:100%;
+}
+
+.videos iframe{
+  width:560px;
+  height:315px;
+  margin:10px;
+}
