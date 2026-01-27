@@ -1,172 +1,284 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
-<meta charset="UTF-8">
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+
 <title>PUPPYSITTER JAKE</title>
-<link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@700;900&display=swap" rel="stylesheet">
+
+<!-- Font -->
+<link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@700;900&display=swap" rel="stylesheet"/>
 
 <style>
-body{
-  margin:0;
-  font-family:'Montserrat',sans-serif;
-  background:#0b0b0b;
-  color:white;
+:root{
+  --bg:#0b0b0b;
+  --card:#181818;
+  --text:#fff;
+  --accent:#ffcc00;
 }
 
+.light{
+  --bg:#ffffff;
+  --card:#f4f4f4;
+  --text:#111;
+}
+
+*{
+  margin:0;
+  padding:0;
+  box-sizing:border-box;
+  font-family:'Montserrat',sans-serif;
+}
+
+body{
+  background:var(--bg);
+  color:var(--text);
+  overflow-x:hidden;
+}
+
+/* ================= NAVBAR ================= */
 nav{
   position:fixed;
   top:0;
   width:100%;
-  background:#000;
   padding:18px 40px;
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+  backdrop-filter:blur(12px);
+  background:rgba(0,0,0,.45);
   z-index:999;
 }
 
+.logo{
+  font-weight:900;
+  font-size:22px;
+  letter-spacing:2px;
+}
+
+.toggle{
+  cursor:pointer;
+  padding:8px 14px;
+  border-radius:30px;
+  background:var(--card);
+}
+
+/* ================= HERO ================= */
 .hero{
   height:100vh;
-  background-size:cover;
-  background-position:center;
+  width:100%;
+  background:url("https://pbs.twimg.com/media/G-OLdVMakAA0KwK?format=jpg&name=4096x4096") center/cover no-repeat;
   display:flex;
-  align-items:center;
   justify-content:center;
+  align-items:center;
+  position:relative;
+}
+
+.hero::after{
+  content:"";
+  position:absolute;
+  inset:0;
+  background:linear-gradient(to bottom,transparent 40%, var(--bg));
 }
 
 .hero h1{
   font-size:70px;
-  background:rgba(0,0,0,.6);
-  padding:20px 40px;
-  border-radius:14px;
+  font-weight:900;
+  text-align:center;
+  letter-spacing:6px;
+  z-index:2;
+  animation:fadeUp 1.2s ease;
 }
 
+/* ================= SECTION ================= */
 section{
-  padding:80px 10%;
+  padding:80px 6%;
 }
 
-.grid{
-  display:grid;
-  grid-template-columns:repeat(auto-fill,minmax(300px,1fr));
-  gap:25px;
+h2{
+  font-size:30px;
+  margin-bottom:25px;
 }
+
+/* ================= SLIDER ================= */
+.slider{
+  display:flex;
+  gap:20px;
+  overflow-x:auto;
+  scroll-behavior:smooth;
+}
+
+.slider::-webkit-scrollbar{display:none;}
 
 .card{
-  background:#161616;
-  border-radius:14px;
+  min-width:280px;
+  background:var(--card);
+  border-radius:16px;
   overflow:hidden;
+  transition:.3s;
+}
+
+.card:hover{
+  transform:scale(1.05);
 }
 
 .card img{
   width:100%;
-  height:200px;
+  aspect-ratio:16/9;
   object-fit:cover;
 }
 
 .card h3{
   padding:12px;
+  font-size:15px;
 }
 
-iframe{
+/* ================= EMBED ================= */
+.embed iframe{
   width:100%;
-  height:350px;
+  height:380px;
   border:none;
+  border-radius:18px;
+}
+
+/* ================= INFO ================= */
+.info{
+  background:var(--card);
+  padding:25px;
+  border-radius:16px;
+  line-height:1.6;
+}
+
+/* ================= LOADING ================= */
+.skeleton{
+  height:180px;
+  border-radius:16px;
+  background:linear-gradient(90deg,#222 25%,#333 50%,#222 75%);
+  background-size:200% 100%;
+  animation:load 1.4s infinite;
+}
+
+/* ================= ANIMATION ================= */
+@keyframes load{
+  0%{background-position:200% 0}
+  100%{background-position:-200% 0}
+}
+
+@keyframes fadeUp{
+  from{opacity:0; transform:translateY(40px)}
+  to{opacity:1; transform:translateY(0)}
+}
+
+/* responsive */
+@media(max-width:768px){
+  .hero h1{font-size:40px}
 }
 </style>
 </head>
 
 <body>
 
-<nav>PUPPYSITTER JAKE</nav>
+<!-- NAV -->
+<nav>
+  <div class="logo">PUPPYSITTER JAKE</div>
+  <div class="toggle" onclick="toggleTheme()">🌙</div>
+</nav>
 
-<div id="hero" class="hero"></div>
+<!-- HERO -->
+<div class="hero">
+  <h1>PUPPYSITTER<br>JAKE</h1>
+</div>
 
+<!-- YOUTUBE -->
 <section>
-<h2>YouTube</h2>
-<div id="youtube" class="grid"></div>
+  <h2>Videos</h2>
+  <div id="youtube" class="slider"></div>
 </section>
 
+<!-- MUSIC -->
 <section>
-<h2>Music</h2>
-<div id="music"></div>
+  <h2>Music</h2>
+  <div id="music" class="embed"></div>
 </section>
 
+<!-- INFO -->
 <section>
-<h2>News</h2>
-<div id="news" class="grid"></div>
-</section>
-
-<section>
-<h2>About</h2>
-<p id="about"></p>
+  <h2>About</h2>
+  <div id="info" class="info"></div>
 </section>
 
 <script>
+/* ================= SETTINGS ================= */
 
-/* 🔥 DÁN LINK CSV CỦA BẠN */
-const SHEET_URL = "https://docs.google.com/spreadsheets/d/e/2PACX-1vTnbWy8lWX2JP9KMLGZ2afpHPZcTeEgkCTeB397NtyMqcB5YtF1hD4vXht0YxYoFWiqFLPNnhvGgfMK/pub?output=csv";
+const CSV_URL =
+"https://docs.google.com/spreadsheets/d/e/2PACX-1vTnbWy8lWX2JP9KMLGZ2afpHPZcTeEgkCTeB397NtyMqcB5YtF1hD4vXht0YxYoFWiqFLPNnhvGgfMK/pub?output=csv";
 
-
-/* ===== CSV PARSER XỊN (FIX DẤU PHẨY) ===== */
-function parseCSV(str){
-  const rows=[];
-  let quote=false, col='', row=[];
-
-  for(let c of str){
-    if(c === '"'){ quote=!quote; continue; }
-
-    if(c===',' && !quote){
-      row.push(col); col=''; continue;
-    }
-
-    if(c==='\n' && !quote){
-      row.push(col); rows.push(row);
-      row=[]; col=''; continue;
-    }
-
-    col+=c;
-  }
-  return rows;
+/* ================= THEME ================= */
+function toggleTheme(){
+  document.body.classList.toggle("light");
 }
 
+/* ================= YOUTUBE ID ================= */
+function getId(url){
+  if(url.includes("watch?v="))
+    return url.split("watch?v=")[1].split("&")[0];
+  if(url.includes("youtu.be/"))
+    return url.split("youtu.be/")[1];
+  return "";
+}
 
-fetch(SHEET_URL)
+/* ================= LOAD DATA ================= */
+fetch(CSV_URL)
 .then(r=>r.text())
 .then(text=>{
-  const data=parseCSV(text);
-  data.shift();
 
-  data.forEach(([type,title,url,image,desc])=>{
+  const rows = text.trim().split("\n").slice(1);
 
-    if(type==="hero"){
-      hero.style.backgroundImage=`url(${url})`;
-      hero.innerHTML=`<h1>${title}</h1>`;
-    }
+  const youtube = document.getElementById("youtube");
+  const music = document.getElementById("music");
+  const info = document.getElementById("info");
 
-    if(type==="about"){
-      about.innerText=desc;
-    }
+  rows.forEach(row=>{
+    const [type,title,url,desc] = row.split(",");
 
+    /* ---------- YOUTUBE ---------- */
     if(type==="youtube"){
+      const id = getId(url);
+      const thumb = `https://img.youtube.com/vi/${id}/maxresdefault.jpg`;
+
       youtube.innerHTML+=`
         <a href="${url}" target="_blank" class="card">
-          <img src="${image}">
+          <img src="${thumb}">
           <h3>${title}</h3>
         </a>`;
     }
 
-    if(type==="spotify"||type==="apple"){
-      music.innerHTML+=`<iframe src="${url}"></iframe>`;
+    /* ---------- SPOTIFY ---------- */
+    if(type==="spotify"){
+      music.innerHTML+=`
+      <iframe src="https://open.spotify.com/embed/playlist/${url.split("playlist/")[1]}"></iframe>`;
     }
 
-    if(type==="news"){
-      news.innerHTML+=`
-        <a href="${url}" target="_blank" class="card">
-          <img src="${image}">
-          <h3>${title}</h3>
-          <p style="padding:0 12px 12px">${desc}</p>
-        </a>`;
+    /* ---------- APPLE MUSIC ---------- */
+    if(type==="apple"){
+      music.innerHTML+=`
+      <iframe src="${url}"></iframe>`;
+    }
+
+    /* ---------- INFO ---------- */
+    if(type==="info"){
+      info.innerHTML = desc;
     }
 
   });
+
 });
+
+/* ================= AUTO SLIDER ================= */
+setInterval(()=>{
+  const el=document.getElementById("youtube");
+  el.scrollBy({left:320,behavior:"smooth"});
+},3500);
 
 </script>
 </body>
