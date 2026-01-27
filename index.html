@@ -1,306 +1,231 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="UTF-8"/>
+<meta charset="UTF-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
 
 <title>puppysitter 🐾</title>
 
-<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;800&display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700&display=swap" rel="stylesheet">
 
 <style>
-/* =================================================
-   GLOBAL
-================================================= */
+:root{
+  --bg:#071427;
+  --card:#0e1d33;
+  --glass:rgba(255,255,255,0.05);
+  --text:#fff;
+}
 
+/* ========= GLOBAL ========= */
 *{
   margin:0;
   padding:0;
   box-sizing:border-box;
-  font-family:Inter,sans-serif;
+  font-family:Poppins,sans-serif;
 }
-
-html{scroll-behavior:smooth;}
 
 body{
-  background:linear-gradient(180deg,#0b1220,#0f1b34 60%,#16213e);
-  color:#fff;
+  background:var(--bg);
+  color:white;
+  overflow-x:hidden;
 }
 
-/* =================================================
-   NAVBAR — FULL GLASS (NO COLOR)
-================================================= */
-
-.topbar{
-  position:absolute;
+/* ========= NAVBAR ========= */
+nav{
+  position:fixed;
   top:0;
   width:100%;
-  height:64px;
+  z-index:999;
+
+  background:rgba(0,0,0,0.25);
+  backdrop-filter:blur(18px);
 
   display:flex;
   justify-content:space-between;
   align-items:center;
 
-  padding:0 7%;
-
-  backdrop-filter:blur(18px);
-  -webkit-backdrop-filter:blur(18px);
-
-  background:transparent; /* 🔥 trong suốt hẳn */
-
-  z-index:1000;
+  padding:18px 50px;
 }
 
 .logo{
+  font-weight:700;
   font-size:22px;
-  font-weight:800;
 }
 
-.nav{
-  display:flex;
-  gap:26px;
-}
-
-.nav a{
+nav a{
+  color:white;
   text-decoration:none;
-  color:#e2e8f0;
-  font-size:14px;
+  margin-left:28px;
   transition:.25s;
 }
 
-.nav a:hover{
-  color:#fff;
+nav a:hover{
+  text-shadow:0 0 10px #6bbcff;
 }
 
-/* =================================================
-   HERO + PARALLAX
-================================================= */
-
+/* ========= HERO ========= */
 .hero{
   height:100vh;
-  overflow:hidden;
-  position:relative;
+  background-size:cover;
+  background-position:center;
+  background-attachment:fixed;
 }
 
-.hero img{
-  position:absolute;
-  width:110%;
-  height:110%;
-  object-fit:cover;
-  opacity:0;
-  transition:opacity 1.2s, transform .1s linear;
-}
-
-.hero img.active{
-  opacity:1;
-}
-
-/* =================================================
-   SECTION
-================================================= */
-
+/* ========= SECTION ========= */
 section{
-  padding:100px 7%;
+  padding:90px 70px;
 }
 
 h2{
-  font-size:30px;
-  margin-bottom:30px;
-  font-weight:800;
+  font-size:32px;
+  margin-bottom:35px;
 }
 
-/* =================================================
-   GRID
-================================================= */
-
+/* ========= GRID ========= */
 .grid{
   display:grid;
-  gap:26px;
   grid-template-columns:repeat(auto-fill,minmax(260px,1fr));
+  gap:28px;
 }
 
-/* =================================================
-   CARD + GLOW
-================================================= */
-
+/* ========= CARD ========= */
 .card{
-  background:rgba(255,255,255,.05);
-  backdrop-filter:blur(10px);
-
-  border-radius:20px;
+  background:var(--card);
+  border-radius:18px;
   overflow:hidden;
-
-  border:1px solid rgba(255,255,255,.08);
-
-  transition:.3s;
+  transition:.35s;
   cursor:pointer;
 }
 
 .card:hover{
-  transform:translateY(-10px) scale(1.03);
-
-  /* ✨ GLOW EFFECT */
-  box-shadow:
-    0 0 20px rgba(255,255,255,.15),
-    0 0 40px rgba(99,102,241,.35),
-    0 0 80px rgba(99,102,241,.25);
+  transform:translateY(-6px);
+  box-shadow:0 0 25px #3ba7ff55;
 }
 
-.thumb{
+.card img{
   width:100%;
-  aspect-ratio:16/9;
+  height:160px;
   object-fit:cover;
 }
 
-.content{
+.card .content{
   padding:16px;
 }
 
-.title{
-  font-weight:700;
-}
-
-.desc{
-  font-size:14px;
-  color:#cbd5e1;
-  margin-top:6px;
-}
-
-/* =================================================
-   EMBED
-================================================= */
-
-.embed{
-  border-radius:18px;
-  overflow:hidden;
-}
-
-/* =================================================
-   ANIMATION
-================================================= */
-
-.fade{
-  opacity:0;
-  transform:translateY(25px);
-  transition:.6s;
-}
-
-.fade.show{
-  opacity:1;
-  transform:none;
+iframe{
+  border-radius:16px;
 }
 </style>
 </head>
 
 <body>
 
-<header class="topbar">
-  <div class="logo"> puppysitter 🐾 </div>
-  <nav class="nav">
+<!-- ========= NAV ========= -->
+<nav>
+  <div class="logo">puppysitter 🐾</div>
+  <div>
     <a href="#notice">Notice</a>
     <a href="#youtube">YouTube</a>
-    <a href="#ytmusic">Music</a>
+    <a href="#music">Music</a>
     <a href="#spotify">Spotify</a>
     <a href="#apple">Apple</a>
-  </nav>
-</header>
+  </div>
+</nav>
 
+<!-- ========= HERO ========= -->
 <div id="hero" class="hero"></div>
 
-<section id="notice"><h2>📢 Notice</h2><div id="notice-list" class="grid"></div></section>
-<section id="youtube"><h2>🎬 YouTube</h2><div id="youtube-list" class="grid"></div></section>
-<section id="ytmusic"><h2>🎵 YouTube Music</h2><div id="ytmusic-list" class="grid"></div></section>
-<section id="spotify"><h2>🟢 Spotify</h2><div id="spotify-list" class="grid"></div></section>
-<section id="apple"><h2>🍎 Apple Music</h2><div id="apple-list" class="grid"></div></section>
+<section id="notice">
+  <h2>📢 Notice</h2>
+  <div class="grid" id="noticeList"></div>
+</section>
+
+<section id="youtube">
+  <h2>🎬 YouTube</h2>
+  <div class="grid" id="youtubeList"></div>
+</section>
+
+<section id="music">
+  <h2>🎵 YouTube Music</h2>
+  <div class="grid" id="ytmusicList"></div>
+</section>
+
+<section id="spotify">
+  <h2>🟢 Spotify</h2>
+  <div class="grid" id="spotifyList"></div>
+</section>
+
+<section id="apple">
+  <h2>🍎 Apple</h2>
+  <div class="grid" id="appleList"></div>
+</section>
 
 <script>
 const SHEET_ID="1JbONtH3RWufz3RSgs3EnMV9cYd_37xwBOHgaU2y_yCs";
-const API=s=>`https://opensheet.elk.sh/${SHEET_ID}/${s}`;
-const get=s=>fetch(API(s)).then(r=>r.json());
 
-/* ================= YT THUMB ================= */
+const api = sheet =>
+`https://opensheet.elk.sh/${SHEET_ID}/${sheet}`;
+
+/* ===== helpers ===== */
 function ytThumb(url){
-  try{
-    const u=new URL(url);
-    if(u.hostname.includes("youtu.be"))
-      return `https://img.youtube.com/vi/${u.pathname.slice(1)}/hqdefault.jpg`;
-    if(u.searchParams.get("v"))
-      return `https://img.youtube.com/vi/${u.searchParams.get("v")}/hqdefault.jpg`;
-  }catch{}
-  return "";
+  const id = url.match(/(?:v=|\.be\/)([^&]+)/);
+  return id ? `https://img.youtube.com/vi/${id[1]}/hqdefault.jpg` : "";
 }
 
-/* ================= PARALLAX ================= */
-window.addEventListener("scroll",()=>{
-  const hero=document.querySelector(".hero img.active");
-  if(hero){
-    hero.style.transform=`translateY(${window.scrollY*0.25}px)`;
-  }
+function card(title,url,img,desc=""){
+  return `
+  <div class="card" onclick="window.open('${url}','_blank')">
+    <img src="${img}">
+    <div class="content">
+      <b>${title}</b>
+      <p>${desc}</p>
+    </div>
+  </div>`;
+}
+
+async function load(sheet, cb){
+  const r = await fetch(api(sheet));
+  const d = await r.json();
+  cb(d);
+}
+
+/* ===== HERO ===== */
+load("HERO", d=>{
+  if(d[0]) document.getElementById("hero").style.backgroundImage=
+    `url(${d[0].image})`;
 });
 
-/* ================= HERO ================= */
-async function loadHero(){
-  const d=await get("HERO");
-  const box=document.getElementById("hero");
+/* ===== NOTICE ===== */
+load("NOTICE", d=>{
+  noticeList.innerHTML =
+    d.map(x=>{
+      const img = x.image || ytThumb(x.url);
+      return card(x.title,x.url,img,x.desc);
+    }).join("");
+});
 
-  d.forEach((r,i)=>{
-    const img=document.createElement("img");
-    img.src=r.image;
-    if(i===0) img.classList.add("active");
-    box.appendChild(img);
-  });
+/* ===== YOUTUBE ===== */
+load("YOUTUBE", d=>{
+  youtubeList.innerHTML =
+    d.map(x=>card(x.title,x.url,ytThumb(x.url))).join("");
+});
 
-  const imgs=box.querySelectorAll("img");
-  let i=0;
-  setInterval(()=>{
-    imgs[i].classList.remove("active");
-    i=(i+1)%imgs.length;
-    imgs[i].classList.add("active");
-  },4000);
-}
+/* ===== YT MUSIC ===== */
+load("YT MUSIC", d=>{
+  ytmusicList.innerHTML =
+    d.map(x=>card(x.title,x.url,ytThumb(x.url))).join("");
+});
 
-/* ================= CARD ================= */
-function createCard(r,auto=false){
-  const div=document.createElement("div");
-  div.className="card fade";
+/* ===== SPOTIFY / APPLE ===== */
+load("SPOTIFY", d=>{
+  spotifyList.innerHTML =
+    d.map(x=>x.embed).join("");
+});
 
-  let img=r.image||"";
-  if(auto && r.url) img=ytThumb(r.url);
-
-  div.innerHTML=`
-    <img class="thumb" src="${img}">
-    <div class="content">
-      <div class="title">${r.title||""}</div>
-      <div class="desc">${r.desc||""}</div>
-    </div>
-  `;
-  if(r.url) div.onclick=()=>window.open(r.url);
-  return div;
-}
-
-async function loadList(sheet,id,auto=false){
-  const d=await get(sheet);
-  const box=document.getElementById(id);
-  d.forEach(r=>box.appendChild(createCard(r,auto)));
-}
-
-async function loadIframe(sheet,id){
-  const d=await get(sheet);
-  const box=document.getElementById(id);
-  d.forEach(r=>{
-    const div=document.createElement("div");
-    div.className="embed";
-    div.innerHTML=r.iframe;
-    box.appendChild(div);
-  });
-}
-
-loadHero();
-loadList("NOTICE","notice-list",true);
-loadList("YOUTUBE","youtube-list",true);
-loadList("YT MUSIC","ytmusic-list",true);
-loadIframe("SPOTIFY","spotify-list");
-loadIframe("APPLE","apple-list");
+load("APPLE", d=>{
+  appleList.innerHTML =
+    d.map(x=>x.embed).join("");
+});
 </script>
 
 </body>
