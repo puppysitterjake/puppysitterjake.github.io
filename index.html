@@ -19,7 +19,7 @@
 body { background: var(--bg); color: #fff; line-height: 1.6; overflow-x: hidden; }
 
 /* =========================
-   NAVBAR & HAMBURGER
+   1. NAVBAR & HAMBURGER
 ========================= */
 .topbar {
   position: fixed; top: 0; width: 100%; height: 70px;
@@ -29,22 +29,21 @@ body { background: var(--bg); color: #fff; line-height: 1.6; overflow-x: hidden;
 }
 
 .topbar.scrolled {
-  background: rgba(11, 19, 43, 0.85);
-  backdrop-filter: blur(10px);
+  background: rgba(11, 19, 43, 0.9);
+  backdrop-filter: blur(15px);
   height: 60px;
+  box-shadow: 0 4px 20px rgba(0,0,0,0.3);
 }
 
 .logo { font-weight: 800; font-size: 24px; color: #fff; z-index: 1001; }
 
-/* Desktop Nav */
-.nav { display: flex; gap: 30px; }
+.nav { display: flex; gap: 25px; }
 .nav a { 
   color: #fff; text-decoration: none; font-weight: 600; 
-  font-size: 15px; transition: 0.3s; 
+  font-size: 14px; transition: 0.3s; text-transform: uppercase;
 }
 .nav a:hover { color: var(--primary); }
 
-/* Hamburger Button */
 .menu-btn {
   display: none; cursor: pointer; z-index: 1001;
   flex-direction: column; gap: 5px;
@@ -55,7 +54,7 @@ body { background: var(--bg); color: #fff; line-height: 1.6; overflow-x: hidden;
 }
 
 /* =========================
-   HERO FULLSCREEN
+   2. HERO FULLSCREEN
 ========================= */
 .hero { height: 100vh; width: 100%; position: relative; overflow: hidden; }
 .hero img {
@@ -64,15 +63,14 @@ body { background: var(--bg); color: #fff; line-height: 1.6; overflow-x: hidden;
 }
 .hero img.active { opacity: 1; transform: scale(1.05); }
 
-/* Overlay gradient cho Hero */
 .hero::after {
   content: ''; position: absolute; bottom: 0; left: 0;
-  width: 100%; height: 40%;
+  width: 100%; height: 50%;
   background: linear-gradient(to top, var(--bg), transparent);
 }
 
 /* =========================
-   SECTIONS & CARDS
+   3. SECTIONS & CARDS
 ========================= */
 section { max-width: 1200px; margin: auto; padding: 100px 20px; }
 h2 { 
@@ -82,7 +80,7 @@ h2 {
 
 .grid { 
   display: grid; gap: 25px; 
-  grid-template-columns: repeat(auto-fill, minmax(300px, 1fr)); 
+  grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); 
 }
 
 .card {
@@ -95,7 +93,7 @@ h2 {
 .content { padding: 20px; }
 
 /* =========================
-   BLOG
+   4. BLOG
 ========================= */
 .blog-item {
   background: var(--glass); border: 1px solid rgba(255,255,255,0.1);
@@ -103,36 +101,44 @@ h2 {
 }
 .blog-header { padding: 20px; cursor: pointer; display: flex; justify-content: space-between; align-items: center; }
 .blog-content { 
-  max-height: 0; overflow: hidden; transition: 0.5s cubic-bezier(0,1,0,1); 
+  max-height: 0; overflow: hidden; transition: 0.5s ease; 
   background: #fff; color: #222; 
 }
-.blog-item.active .blog-content { max-height: 3000px; transition: 0.5s cubic-bezier(1,0,1,0); }
+.blog-item.active .blog-content { max-height: 3000px; }
 .blog-inner { padding: 25px; }
 
 /* =========================
-   MOBILE RESPONSIVE
+   5. MUSIC EMBEDS
+========================= */
+.music-grid {
+  display: grid; gap: 20px;
+  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+}
+.embed-container {
+  border-radius: 20px; overflow: hidden; background: #000;
+  box-shadow: 0 10px 25px rgba(0,0,0,0.5);
+}
+
+/* =========================
+   6. MOBILE RESPONSIVE
 ========================= */
 @media (max-width: 768px) {
   .menu-btn { display: flex; }
-  
   .nav {
-    position: fixed; top: 0; right: -100%; width: 80%; height: 100vh;
+    position: fixed; top: 0; right: -100%; width: 100%; height: 100vh;
     background: rgba(11, 19, 43, 0.98); backdrop-filter: blur(15px);
     flex-direction: column; align-items: center; justify-content: center;
     transition: 0.5s; z-index: 1000;
   }
-  
   .nav.open { right: 0; }
   .nav a { font-size: 24px; margin: 15px 0; }
 
-  /* Animation cho nút menu */
   .menu-btn.open span:nth-child(1) { transform: rotate(45deg) translate(5px, 6px); }
   .menu-btn.open span:nth-child(2) { opacity: 0; }
   .menu-btn.open span:nth-child(3) { transform: rotate(-45deg) translate(5px, -7px); }
 
   h2 { font-size: 26px; }
   section { padding: 60px 20px; }
-  .grid { grid-template-columns: 1fr; }
 }
 </style>
 </head>
@@ -151,7 +157,8 @@ h2 {
     <a href="#notice" onclick="toggleMenu()">NOTICE</a>
     <a href="#blog" onclick="toggleMenu()">BLOG</a>
     <a href="#youtube" onclick="toggleMenu()">YOUTUBE</a>
-    <a href="#spotify" onclick="toggleMenu()">PLAYLIST</a>
+    <a href="#spotify" onclick="toggleMenu()">SPOTIFY</a>
+    <a href="#apple" onclick="toggleMenu()">APPLE</a>
   </nav>
 </header>
 
@@ -163,7 +170,7 @@ h2 {
 </section>
 
 <section id="blog">
-  <h2>Blog & Life</h2>
+  <h2>Blog & Stories</h2>
   <div id="blog-list"></div>
 </section>
 
@@ -173,122 +180,139 @@ h2 {
 </section>
 
 <section id="spotify">
-  <h2>Playlist</h2>
-  <div id="spotify-list" class="grid"></div>
+  <h2>Spotify Music</h2>
+  <div id="spotify-list" class="music-grid"></div>
+</section>
+
+<section id="apple">
+  <h2>Apple Music</h2>
+  <div id="apple-list" class="music-grid"></div>
 </section>
 
 <script>
 const SHEET = "1JbONtH3RWufz3RSgs3EnMV9cYd_37xwBOHgaU2y_yCs";
 const get = s => fetch(`https://opensheet.elk.sh/${SHEET}/${s}`).then(r => r.json());
 
-/* 1. MOBILE MENU LOGIC */
+/* MENU MOBILE */
 const menuBtn = document.getElementById('menu-btn');
 const navLinks = document.getElementById('nav-links');
-
 function toggleMenu() {
   menuBtn.classList.toggle('open');
   navLinks.classList.toggle('open');
 }
 menuBtn.addEventListener('click', toggleMenu);
 
-/* 2. NAVBAR SCROLL EFFECT */
+/* NAVBAR SCROLL */
 window.onscroll = () => {
   const nav = document.getElementById('navbar');
   if (window.scrollY > 50) nav.classList.add('scrolled');
   else nav.classList.remove('scrolled');
 };
 
-/* 3. HERO FULLSCREEN LOGIC */
+/* HERO */
 async function loadHero(){
-  const d = await get("HERO");
-  const box = document.getElementById("hero-box");
-  d.forEach((r, i) => {
-    const img = document.createElement("img");
-    img.src = r.image;
-    if(i === 0) img.classList.add("active");
-    box.appendChild(img);
-  });
-  let imgs = box.querySelectorAll('img'), cur = 0;
-  if(imgs.length > 1) {
-    setInterval(() => {
-      imgs[cur].classList.remove('active');
-      cur = (cur + 1) % imgs.length;
-      imgs[cur].classList.add('active');
-    }, 5000);
-  }
+  try {
+    const d = await get("HERO");
+    const box = document.getElementById("hero-box");
+    d.forEach((r, i) => {
+      const img = document.createElement("img");
+      img.src = r.image;
+      if(i === 0) img.classList.add("active");
+      box.appendChild(img);
+    });
+    let imgs = box.querySelectorAll('img'), cur = 0;
+    if(imgs.length > 1) {
+      setInterval(() => {
+        imgs[cur].classList.remove('active');
+        cur = (cur + 1) % imgs.length;
+        imgs[cur].classList.add('active');
+      }, 5000);
+    }
+  } catch(e){}
 }
 
-/* 4. PREVIEW & CARDS */
+/* CARDS & PREVIEW */
 function getPreview(url, manualImg) {
-  if(manualImg) return manualImg;
+  if(manualImg && manualImg.trim() !== "") return manualImg;
   try {
     const u = new URL(url);
     if(u.hostname.includes("youtu.be")) return `https://img.youtube.com/vi/${u.pathname.slice(1)}/maxresdefault.jpg`;
     if(u.searchParams.get("v")) return `https://img.youtube.com/vi/${u.searchParams.get("v")}/maxresdefault.jpg`;
     return `https://api.microlink.io/?url=${encodeURIComponent(url)}&embed=image.url`;
-  } catch(e) { return 'https://via.placeholder.com/600x340'; }
+  } catch(e) { return 'https://via.placeholder.com/600x340?text=Preview'; }
 }
 
 async function loadCards(sheet, id) {
-  const d = await get(sheet);
-  const box = document.getElementById(id);
-  d.forEach(r => {
-    const div = document.createElement("div");
-    div.className = "card";
-    div.innerHTML = `
-      <img class="thumb" src="${getPreview(r.url, r.image)}" onerror="this.src='https://via.placeholder.com/600x340'">
-      <div class="content">
-        <div class="title" style="font-weight:700">${r.title || ''}</div>
-        <div class="desc" style="font-size:14px;color:#666">${r.desc || ''}</div>
-      </div>`;
-    div.onclick = () => window.open(r.url);
-    box.appendChild(div);
-  });
+  try {
+    const d = await get(sheet);
+    const box = document.getElementById(id);
+    d.forEach(r => {
+      const div = document.createElement("div");
+      div.className = "card";
+      div.innerHTML = `
+        <img class="thumb" src="${getPreview(r.url, r.image)}" onerror="this.src='https://via.placeholder.com/600x340'">
+        <div class="content">
+          <div class="title" style="font-weight:700">${r.title || ''}</div>
+          <div class="desc" style="font-size:14px;color:#666">${r.desc || ''}</div>
+        </div>`;
+      div.onclick = () => window.open(r.url);
+      box.appendChild(div);
+    });
+  } catch(e){}
 }
 
-/* 5. BLOG LOGIC */
+/* BLOG */
 async function loadBlog() {
-  const d = await get("BLOG");
-  const box = document.getElementById("blog-list");
-  d.forEach(r => {
-    const item = document.createElement("div");
-    item.className = "blog-item";
-    item.innerHTML = `
-      <div class="blog-header">
-        <div class="blog-title">${r.title}</div>
-        <div class="arrow" style="width:10px;height:10px;border-right:2px solid #fff;border-bottom:2px solid #fff;transform:rotate(45deg)"></div>
-      </div>
-      <div class="blog-content">
-        <div class="blog-inner">
-          ${r.image ? `<img src="${r.image}" style="width:100%;border-radius:15px;margin-bottom:15px">` : ''}
-          <p>${r.content.replace(/\n/g, '<br>')}</p>
+  try {
+    const d = await get("BLOG");
+    const box = document.getElementById("blog-list");
+    d.forEach(r => {
+      const item = document.createElement("div");
+      item.className = "blog-item";
+      item.innerHTML = `
+        <div class="blog-header">
+          <div class="blog-title">${r.title}</div>
+          <div class="arrow" style="width:10px;height:10px;border-right:2px solid #fff;border-bottom:2px solid #fff;transform:rotate(45deg);transition:0.3s"></div>
         </div>
-      </div>`;
-    item.querySelector('.blog-header').onclick = () => {
-      item.classList.toggle('active');
-      const arrow = item.querySelector('.arrow');
-      arrow.style.transform = item.classList.contains('active') ? 'rotate(-135deg)' : 'rotate(45deg)';
-    };
-    box.appendChild(item);
-  });
+        <div class="blog-content">
+          <div class="blog-inner">
+            ${r.image ? `<img src="${r.image}" style="width:100%;border-radius:15px;margin-bottom:15px">` : ''}
+            <p>${r.content.replace(/\n/g, '<br>')}</p>
+          </div>
+        </div>`;
+      item.querySelector('.blog-header').onclick = () => {
+        item.classList.toggle('active');
+        const arrow = item.querySelector('.arrow');
+        arrow.style.transform = item.classList.contains('active') ? 'rotate(-135deg)' : 'rotate(45deg)';
+      };
+      box.appendChild(item);
+    });
+  } catch(e){}
 }
 
+/* IFRAME (SPOTIFY & APPLE) */
 async function loadIframe(sheet, id) {
-  const d = await get(sheet);
-  const box = document.getElementById(id);
-  d.forEach(r => { if(r.iframe) {
-    const div = document.createElement("div");
-    div.style.borderRadius="20px"; div.style.overflow="hidden";
-    div.innerHTML = r.iframe; box.appendChild(div);
-  }});
+  try {
+    const d = await get(sheet);
+    const box = document.getElementById(id);
+    d.forEach(r => { 
+      if(r.iframe) {
+        const div = document.createElement("div");
+        div.className = "embed-container";
+        div.innerHTML = r.iframe; 
+        box.appendChild(div);
+      }
+    });
+  } catch(e){}
 }
 
-/* INIT */
+/* KHỞI CHẠY */
 loadHero();
 loadCards("NOTICE", "notice-list");
 loadBlog();
 loadCards("YOUTUBE", "youtube-list");
 loadIframe("SPOTIFY", "spotify-list");
+loadIframe("APPLE", "apple-list");
 </script>
 </body>
 </html>
