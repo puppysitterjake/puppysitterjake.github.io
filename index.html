@@ -1,27 +1,30 @@
 <!DOCTYPE html>
 <html>
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
 
-<title>Puppysitter Jake</title>
+<title>PUPPYSITTER JAKE</title>
+
+<!-- Google Font -->
+<link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@700&display=swap" rel="stylesheet">
 
 <style>
 :root{
   --bg:#0f0f0f;
-  --text:white;
+  --text:#fff;
   --card:#1a1a1a;
 }
 
 .light{
   --bg:#ffffff;
   --text:#111;
-  --card:#f2f2f2;
+  --card:#f3f3f3;
 }
 
 body{
   margin:0;
-  font-family:system-ui;
+  font-family:'Montserrat',sans-serif;
   background:var(--bg);
   color:var(--text);
   transition:.3s;
@@ -29,57 +32,65 @@ body{
 
 /* ===== HERO ===== */
 .hero{
-  height:50vh;
-  background:url("https://images.unsplash.com/photo-1548199973-03cce0bbc87b") center/cover;
+  height:65vh;
+  background:url("https://pbs.twimg.com/media/G-OLdVMakAA0KwK?format=jpg&name=4096x4096") center top/cover no-repeat;
   display:flex;
-  flex-direction:column;
+  align-items:flex-end;
   justify-content:center;
-  align-items:center;
-  text-align:center;
+  padding-bottom:60px;
+  position:relative;
+}
+
+.hero::after{
+  content:"";
+  position:absolute;
+  inset:0;
+  background:linear-gradient(to top, rgba(0,0,0,.85), rgba(0,0,0,.2));
 }
 
 .hero h1{
-  font-size:40px;
-  margin:10px 0;
+  position:relative;
+  font-size:52px;
+  letter-spacing:4px;
+  font-weight:700;
+  margin:0;
+  z-index:2;
 }
 
-.logo{
-  font-size:60px;
-}
-
-/* ===== THEME BTN ===== */
+/* ===== THEME BUTTON ===== */
 .theme-btn{
   position:fixed;
-  top:15px;
-  right:15px;
-  cursor:pointer;
+  top:18px;
+  right:20px;
   font-size:22px;
+  cursor:pointer;
+  z-index:5;
 }
 
-/* ===== SLIDER ===== */
+/* ===== SLIDER (NHỎ LẠI) ===== */
 .slider{
   display:flex;
   overflow-x:auto;
-  gap:15px;
-  padding:20px;
+  gap:12px;
+  padding:18px;
   scroll-snap-type:x mandatory;
 }
 
 .slide{
-  flex:0 0 85%;
+  flex:0 0 260px;
   scroll-snap-align:center;
   cursor:pointer;
 }
 
 .slide img{
   width:100%;
-  border-radius:14px;
+  border-radius:12px;
 }
 
 /* ===== GRID ===== */
 .grid{
   display:grid;
-  grid-template-columns:repeat(auto-fill,minmax(260px,1fr));
+  grid-template-columns:repeat(auto-fill,minmax(240px,1fr));
   gap:20px;
   padding:20px;
 }
@@ -93,7 +104,7 @@ body{
 }
 
 .card:hover{
-  transform:translateY(-5px);
+  transform:translateY(-6px);
 }
 
 .card img{
@@ -102,13 +113,13 @@ body{
 }
 
 .title{
-  font-weight:bold;
+  font-size:14px;
   margin-top:8px;
 }
 
 .desc{
-  font-size:13px;
-  opacity:.7;
+  font-size:12px;
+  opacity:.65;
 }
 
 /* ===== MODAL ===== */
@@ -122,7 +133,7 @@ body{
 }
 
 .modal iframe{
-  width:90%;
+  width:92%;
   max-width:900px;
   aspect-ratio:16/9;
 }
@@ -131,7 +142,7 @@ body{
   position:absolute;
   top:20px;
   right:30px;
-  font-size:40px;
+  font-size:38px;
   cursor:pointer;
 }
 </style>
@@ -143,15 +154,13 @@ body{
 
 <!-- HERO -->
 <section class="hero">
-  <div class="logo">🐶</div>
-  <h1>PuppySitter Jake</h1>
-  <p>Fun • Care • Play • Love</p>
+  <h1>PUPPYSITTER JAKE</h1>
 </section>
 
-<!-- AUTOPLAY SLIDER -->
+<!-- SLIDER -->
 <div class="slider" id="slider"></div>
 
-<!-- VIDEO GRID -->
+<!-- GRID -->
 <div class="grid" id="videos"></div>
 
 <!-- MODAL -->
@@ -161,7 +170,7 @@ body{
 </div>
 
 <script>
-/* ========= PASTE API KEY ========= */
+/* ===== YOUR API KEY (đã gắn sẵn) ===== */
 const API_KEY = "AIzaSyAwHBUmv8E34EeXXtavaAcagdMYluNnBew";
 const PLAYLIST = "PLGSPQSXq0_HqfK3Xfir3EEs_Pzy6p9mNG";
 
@@ -169,7 +178,7 @@ const grid = document.getElementById("videos");
 const slider = document.getElementById("slider");
 
 async function loadVideos(){
-  let next = "";
+  let next="";
 
   do{
     const url =
@@ -179,16 +188,15 @@ async function loadVideos(){
     const data = await res.json();
 
     data.items.forEach((v,i)=>{
-
       const id = v.snippet.resourceId.videoId;
       if(!id) return;
 
       const thumb = v.snippet.thumbnails.medium.url;
       const title = v.snippet.title;
-      const desc = v.snippet.description.slice(0,80)+"...";
+      const desc = v.snippet.description.slice(0,70)+"...";
 
-      /* slider 5 video đầu */
-      if(i < 5){
+      /* slider */
+      if(i < 8){
         const s = document.createElement("div");
         s.className="slide";
         s.innerHTML=`<img src="${thumb}">`;
@@ -208,8 +216,7 @@ async function loadVideos(){
       grid.appendChild(card);
     });
 
-    next = data.nextPageToken;
-
+    next=data.nextPageToken;
   }while(next);
 }
 
@@ -224,14 +231,13 @@ function closeVideo(){
   document.getElementById("player").src="";
 }
 
-/* theme */
 function toggleTheme(){
   document.body.classList.toggle("light");
 }
 
-/* autoplay slider */
+/* slider auto scroll */
 setInterval(()=>{
-  slider.scrollBy({left:350,behavior:"smooth"});
+  slider.scrollBy({left:280,behavior:"smooth"});
 },3000);
 
 loadVideos();
