@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html>
+<html lang="vi">
 <head>
 <meta charset="UTF-8"/>
 <meta name="viewport" content="width=device-width, initial-scale=1"/>
@@ -9,6 +9,9 @@
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;800&display=swap" rel="stylesheet">
 
 <style>
+/* =========================
+   RESET
+========================= */
 *{
   margin:0;
   padding:0;
@@ -16,17 +19,15 @@
   font-family:Inter,sans-serif;
 }
 
-/* =========================
-   BODY
-========================= */
-
 body{
   background:#0b132b;
   color:white;
+  scroll-behavior:smooth;
 }
 
+
 /* =========================
-   NAVBAR (OVER HERO)
+   NAVBAR (TRANSPARENT)
 ========================= */
 
 .topbar{
@@ -46,6 +47,7 @@ body{
 .logo{
   font-weight:800;
   font-size:22px;
+  letter-spacing:1px;
 }
 
 .nav a{
@@ -53,10 +55,17 @@ body{
   color:white;
   text-decoration:none;
   font-size:14px;
+  opacity:.85;
+  transition:.2s;
 }
 
+.nav a:hover{
+  opacity:1;
+}
+
+
 /* =========================
-   HERO
+   HERO SLIDER
 ========================= */
 
 .hero{
@@ -71,12 +80,13 @@ body{
   height:100%;
   object-fit:cover;
   opacity:0;
-  transition:1s;
+  transition:1.2s;
 }
 
 .hero img.active{
   opacity:1;
 }
+
 
 /* =========================
    SECTION
@@ -85,23 +95,26 @@ body{
 section{
   max-width:1200px;
   margin:auto;
-  padding:90px 20px;
+  padding:100px 20px;
 }
 
 h2{
-  font-size:30px;
-  margin-bottom:30px;
+  font-size:32px;
+  margin-bottom:35px;
+  font-weight:800;
 }
 
+
 /* =========================
-   GRID CENTERED
+   GRID
 ========================= */
 
 .grid{
   display:grid;
-  gap:25px;
+  gap:26px;
   grid-template-columns:repeat(auto-fill,minmax(280px,1fr));
 }
+
 
 /* =========================
    CARD
@@ -110,10 +123,12 @@ h2{
 .card{
   background:white;
   color:#111;
-  border-radius:18px;
+  border-radius:20px;
   overflow:hidden;
   cursor:pointer;
-  transition:.2s;
+
+  transition:.25s;
+  box-shadow:0 6px 20px rgba(0,0,0,.25);
 }
 
 .card:hover{
@@ -128,93 +143,127 @@ h2{
 }
 
 .content{
-  padding:14px;
+  padding:16px;
 }
 
 .title{
   font-weight:700;
+  font-size:15px;
 }
 
 .desc{
-  font-size:14px;
+  font-size:13px;
   color:#666;
   margin-top:6px;
 }
 
+
 /* =========================
-   EMBED
+   EMBED MUSIC
 ========================= */
 
 .embed{
-  border-radius:16px;
+  border-radius:18px;
   overflow:hidden;
+  box-shadow:0 6px 18px rgba(0,0,0,.35);
+}
+
+
+/* =========================
+   SPACING
+========================= */
+
+#spotify,
+#apple{
+  padding-top:70px;
 }
 </style>
 </head>
 
+
+
 <body>
 
+<!-- ================= NAVBAR ================= -->
 <header class="topbar">
-  <div class="logo"> puppysitter 🐾 </div>
+  <div class="logo">puppysitter 🐾</div>
+
   <nav class="nav">
     <a href="#notice">Notice</a>
     <a href="#youtube">YouTube</a>
-    <a href="#ytmusic">Music</a>
     <a href="#spotify">Spotify</a>
     <a href="#apple">Apple</a>
   </nav>
 </header>
 
 
+
+<!-- ================= HERO ================= -->
 <div id="hero" class="hero"></div>
 
 
+
+<!-- ================= NOTICE ================= -->
 <section id="notice">
-<h2>Notice</h2>
-<div id="notice-list" class="grid"></div>
+  <h2>Notice</h2>
+  <div id="notice-list" class="grid"></div>
 </section>
 
+
+
+<!-- ================= YOUTUBE ================= -->
 <section id="youtube">
-<h2>YouTube</h2>
-<div id="youtube-list" class="grid"></div>
+  <h2>YouTube</h2>
+  <div id="youtube-list" class="grid"></div>
 </section>
 
-<section id="ytmusic">
-<h2>YouTube Music</h2>
-<div id="ytmusic-list" class="grid"></div>
-</section>
 
+
+<!-- ================= SPOTIFY ================= -->
 <section id="spotify">
-<h2>Spotify</h2>
-<div id="spotify-list" class="grid"></div>
+  <h2>Spotify</h2>
+  <div id="spotify-list" class="grid"></div>
 </section>
 
+
+
+<!-- ================= APPLE ================= -->
 <section id="apple">
-<h2>Apple Music</h2>
-<div id="apple-list" class="grid"></div>
+  <h2>Apple Music</h2>
+  <div id="apple-list" class="grid"></div>
 </section>
+
 
 
 <script>
+/* ================= CONFIG ================= */
+
 const SHEET="1JbONtH3RWufz3RSgs3EnMV9cYd_37xwBOHgaU2y_yCs";
 const API=s=>`https://opensheet.elk.sh/${SHEET}/${s}`;
 const get=s=>fetch(API(s)).then(r=>r.json());
 
 
-/* YOUTUBE THUMB */
+/* ================= YOUTUBE THUMB ================= */
+
 function ytThumb(url){
   try{
     const u=new URL(url);
+
     if(u.hostname.includes("youtu.be"))
       return `https://img.youtube.com/vi/${u.pathname.slice(1)}/maxresdefault.jpg`;
+
     if(u.searchParams.get("v"))
       return `https://img.youtube.com/vi/${u.searchParams.get("v")}/maxresdefault.jpg`;
+
   }catch{}
+
   return "";
 }
 
 
-/* HERO */
+
+/* ================= HERO SLIDER ================= */
+
 async function loadHero(){
   const d=await get("HERO");
   const box=document.getElementById("hero");
@@ -222,7 +271,9 @@ async function loadHero(){
   d.forEach((r,i)=>{
     const img=document.createElement("img");
     img.src=r.image;
+
     if(i===0) img.classList.add("active");
+
     box.appendChild(img);
   });
 
@@ -237,16 +288,20 @@ async function loadHero(){
 }
 
 
-/* CARD LIST */
+
+/* ================= CARD LIST ================= */
+
 async function loadList(sheet,id,useYT=true){
   const d=await get(sheet);
   const box=document.getElementById(id);
 
   d.forEach(r=>{
-    const thumb= useYT ? (ytThumb(r.url)||r.image) : r.image;
+
+    const thumb = useYT ? (ytThumb(r.url)||r.image) : r.image;
 
     const div=document.createElement("div");
     div.className="card";
+
     div.innerHTML=`
       <img class="thumb" src="${thumb}">
       <div class="content">
@@ -256,15 +311,19 @@ async function loadList(sheet,id,useYT=true){
     `;
 
     div.onclick=()=>window.open(r.url);
+
     box.appendChild(div);
   });
 }
 
 
-/* IFRAME */
+
+/* ================= IFRAME (SPOTIFY/APPLE) ================= */
+
 async function loadIframe(sheet,id){
   const d=await get(sheet);
   const box=document.getElementById(id);
+
   d.forEach(r=>{
     const div=document.createElement("div");
     div.className="embed";
@@ -274,7 +333,18 @@ async function loadIframe(sheet,id){
 }
 
 
-/* INIT */
+
+/* ================= INIT ================= */
+
 loadHero();
-loadList("NOTICE","notice-list");
-loadList("YOUTUBE","youtube
+
+loadList("NOTICE","notice-list",true);
+loadList("YOUTUBE","youtube-list",true);
+
+loadIframe("SPOTIFY","spotify-list");
+loadIframe("APPLE","apple-list");
+
+</script>
+
+</body>
+</html>
