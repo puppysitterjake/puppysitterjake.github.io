@@ -2,82 +2,85 @@
 <html>
 <head>
 <meta charset="UTF-8">
-<title>Puppy Sitter Jake Videos</title>
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
+<title>PuppySitter Jake</title>
+
 <style>
+/* ====== GENERAL ====== */
 body{
   margin:0;
-  background:#111;
-  font-family:sans-serif;
+  font-family: Arial, sans-serif;
+  background:#0f0f0f;
+  color:white;
 }
 
-/* grid */
+h1{
+  text-align:center;
+  padding:25px 10px;
+  font-size:28px;
+  letter-spacing:1px;
+}
+
+/* ====== GRID GALLERY ====== */
 .grid{
   display:grid;
-  grid-template-columns:repeat(auto-fit,minmax(280px,1fr));
-  gap:18px;
+  grid-template-columns:repeat(auto-fill,minmax(260px,1fr));
+  gap:20px;
   padding:20px;
 }
 
-/* thumbnail */
 .card{
   cursor:pointer;
-  position:relative;
+  transition:.25s;
+}
+
+.card:hover{
+  transform:scale(1.05);
 }
 
 .card img{
   width:100%;
-  aspect-ratio:16/9;
-  object-fit:cover;
-  border-radius:12px;
+  border-radius:14px;
+  box-shadow:0 4px 12px rgba(0,0,0,.6);
 }
 
-.play{
-  position:absolute;
-  top:50%;
-  left:50%;
-  transform:translate(-50%,-50%);
-  font-size:50px;
-  color:white;
-  background:rgba(0,0,0,.6);
-  width:70px;
-  height:70px;
-  border-radius:50%;
-  display:flex;
-  align-items:center;
-  justify-content:center;
-}
-
-/* popup */
+/* ====== MODAL PLAYER ====== */
 .modal{
-  display:none;
   position:fixed;
   inset:0;
-  background:rgba(0,0,0,.9);
-  align-items:center;
+  background:rgba(0,0,0,.95);
+  display:none;
   justify-content:center;
+  align-items:center;
+  z-index:999;
 }
 
 .modal iframe{
   width:90%;
   max-width:900px;
   aspect-ratio:16/9;
-  border:none;
+  border-radius:12px;
 }
 
 .close{
   position:absolute;
   top:20px;
-  right:30px;
-  font-size:40px;
-  color:white;
+  right:35px;
+  font-size:42px;
   cursor:pointer;
+}
+
+/* mobile */
+@media(max-width:600px){
+  h1{font-size:20px;}
 }
 </style>
 </head>
 
 <body>
+
+<h1>PuppySitter Jake</h1>
 
 <div class="grid" id="videos"></div>
 
@@ -86,38 +89,65 @@ body{
   <iframe id="player" allowfullscreen></iframe>
 </div>
 
+
 <script>
-/* 🔴 DÁN DANH SÁCH VIDEO ID Ở ĐÂY */
-const videos = [
-"DpytqzqruAs",
-"kJguBfVeWno",
-"WEah60XpQKA",
-"UXPQarxaXHE",
-"ldqd6XqwKbo",
-"w0Irc2NDviI"
-];
+/* =========================
+   👉 DÁN API KEY VÀO ĐÂY
+========================= */
+const API_KEY = "AIzaSyAwHBUmv8E34EeXXtavaAcagdMYluNnBew";
 
-const box = document.getElementById("videos");
+/* playlist của bạn */
+const PLAYLIST = "PLGSPQSXq0_HqfK3Xfir3EEs_Pzy6p9mNG";
 
-videos.forEach(id=>{
-  box.innerHTML += `
-    <div class="card" onclick="openVideo('${id}')">
-      <img src="https://img.youtube.com/vi/${id}/mqdefault.jpg">
-      <div class="play">▶</div>
-    </div>
-  `;
-});
+
+async function loadVideos(){
+
+  let nextPage = "";
+  const container = document.getElementById("videos");
+
+  do{
+    const url =
+      `https://www.googleapis.com/youtube/v3/playlistItems` +
+      `?part=snippet&maxResults=50` +
+      `&playlistId=${PLAYLIST}` +
+      `&pageToken=${nextPage}` +
+      `&key=${API_KEY}`;
+
+    const res = await fetch(url);
+    const data = await res.json();
+
+    data.items.forEach(v=>{
+      if(!v.snippet.resourceId.videoId) return;
+
+      const id = v.snippet.resourceId.videoId;
+      const thumb = v.snippet.thumbnails.medium.url;
+
+      const div = document.createElement("div");
+      div.className = "card";
+      div.innerHTML = `<img src="${thumb}">`;
+      div.onclick = () => openVideo(id);
+
+      container.appendChild(div);
+    });
+
+    nextPage = data.nextPageToken;
+
+  }while(nextPage);
+}
+
 
 function openVideo(id){
   document.getElementById("modal").style.display="flex";
   document.getElementById("player").src =
-    "https://www.youtube.com/embed/"+id+"?autoplay=1";
+    `https://www.youtube.com/embed/${id}?autoplay=1`;
 }
 
 function closeVideo(){
   document.getElementById("modal").style.display="none";
   document.getElementById("player").src="";
 }
+
+loadVideos();
 </script>
 
 </body>
