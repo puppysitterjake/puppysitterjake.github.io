@@ -68,6 +68,5 @@ async function loadEmbed(sheet,id){
 loadHero();
 loadCards("NOTICE","notice-list");
 loadCards("YOUTUBE","youtube-list");
-loadCards("YTMUSIC","ytmusic-list");
 loadEmbed("SPOTIFY","spotify-list");
 loadEmbed("APPLE","apple-list");
