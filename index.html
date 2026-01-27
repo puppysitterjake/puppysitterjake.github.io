@@ -9,9 +9,9 @@
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;800&display=swap" rel="stylesheet"/>
 
 <style>
-/* =================================================
+/* =========================================
    GLOBAL
-================================================= */
+========================================= */
 
 *{
   margin:0;
@@ -22,16 +22,14 @@
 
 html{scroll-behavior:smooth;}
 
-/* 🔵 NAVY BACKGROUND */
 body{
-  background:
-  linear-gradient(180deg,#0b132b 0%,#121c3a 50%,#1c2541 100%);
+  background:#0b132b; /* navy phẳng */
   color:#fff;
 }
 
-/* =================================================
-   NAVBAR (OVERLAY HERO)
-================================================= */
+/* =========================================
+   NAVBAR (NO BACKGROUND / NO EFFECT)
+========================================= */
 
 .topbar{
   position:fixed;
@@ -41,22 +39,18 @@ body{
   height:70px;
 
   display:flex;
-  justify-content:space-between;
   align-items:center;
+  justify-content:space-between;
 
   padding:0 7%;
 
-  /* transparent overlay */
-  background:rgba(10,15,30,.35);
-  backdrop-filter:blur(12px);
-
+  background:none; /* ❌ không nền */
   z-index:1000;
 }
 
 .logo{
   font-size:22px;
   font-weight:800;
-  letter-spacing:1px;
 }
 
 .nav{
@@ -66,23 +60,17 @@ body{
 
 .nav a{
   text-decoration:none;
+  color:#fff;
   font-size:14px;
   font-weight:500;
-  color:#e5e7ff;
-  transition:.25s;
 }
 
-.nav a:hover{
-  color:#fff;
-  transform:translateY(-2px);
-}
-
-/* =================================================
-   HERO (FULLSCREEN + NAV OVERLAY)
-================================================= */
+/* =========================================
+   HERO (NORMAL IMAGE ONLY)
+========================================= */
 
 .hero{
-  height:100vh;   /* 🔥 full screen */
+  height:100vh;
   position:relative;
   overflow:hidden;
 }
@@ -93,66 +81,54 @@ body{
   height:100%;
   object-fit:cover;
   opacity:0;
-  transition:opacity 1.2s ease;
+  transition:opacity 1s;
 }
 
 .hero img.active{
   opacity:1;
 }
 
-/* dark overlay */
-.hero::after{
-  content:"";
-  position:absolute;
-  inset:0;
-  background:linear-gradient(to bottom,rgba(0,0,0,.5),rgba(0,0,0,.65));
-}
-
-/* =================================================
-   SECTIONS
-================================================= */
+/* =========================================
+   SECTION
+========================================= */
 
 section{
-  padding:100px 7%;
+  padding:90px 7%;
 }
 
 h2{
-  font-size:30px;
-  font-weight:800;
-  margin-bottom:35px;
+  font-size:28px;
+  margin-bottom:30px;
+  font-weight:700;
 }
 
-/* =================================================
+/* =========================================
    GRID
-================================================= */
+========================================= */
 
 .grid{
   display:grid;
-  gap:26px;
+  gap:24px;
   grid-template-columns:repeat(auto-fill,minmax(260px,1fr));
 }
 
-/* =================================================
-   CARD (DARK GLASS)
-================================================= */
+/* =========================================
+   CARD (LIGHT FOR READABILITY)
+========================================= */
 
 .card{
-  background:rgba(255,255,255,.06);
-  backdrop-filter:blur(10px);
+  background:#ffffff;
+  color:#111;
 
-  border-radius:22px;
+  border-radius:16px;
   overflow:hidden;
 
-  border:1px solid rgba(255,255,255,.08);
-
-  transition:.3s;
   cursor:pointer;
+  transition:.2s;
 }
 
 .card:hover{
-  transform:translateY(-10px) scale(1.03);
-  background:rgba(255,255,255,.12);
-  box-shadow:0 20px 50px rgba(0,0,0,.5);
+  transform:translateY(-6px);
 }
 
 .thumb{
@@ -162,50 +138,34 @@ h2{
 }
 
 .content{
-  padding:18px;
+  padding:14px;
 }
 
 .title{
   font-weight:700;
+  margin-bottom:6px;
 }
 
 .desc{
   font-size:14px;
-  color:#bfc7ff;
+  color:#555;
 }
 
-/* =================================================
+/* =========================================
    EMBED
-================================================= */
+========================================= */
 
 .embed{
-  border-radius:22px;
+  border-radius:16px;
   overflow:hidden;
-  box-shadow:0 12px 40px rgba(0,0,0,.6);
 }
 
-/* =================================================
-   ANIMATION
-================================================= */
-
-.fade{
-  opacity:0;
-  transform:translateY(30px);
-  transition:.6s;
-}
-
-.fade.show{
-  opacity:1;
-  transform:none;
-}
-
-/* =================================================
+/* =========================================
    MOBILE
-================================================= */
+========================================= */
 
 @media(max-width:768px){
-  section{padding:70px 5%}
-  .nav{gap:14px}
+  section{padding:60px 5%}
 }
 </style>
 </head>
@@ -230,40 +190,44 @@ h2{
 
 
 <section id="notice">
-<h2>📢 Notice</h2>
+<h2>Notice</h2>
 <div id="notice-list" class="grid"></div>
 </section>
 
 <section id="youtube">
-<h2>🎬 YouTube</h2>
+<h2>YouTube</h2>
 <div id="youtube-list" class="grid"></div>
 </section>
 
 <section id="ytmusic">
-<h2>🎵 YouTube Music</h2>
+<h2>YouTube Music</h2>
 <div id="ytmusic-list" class="grid"></div>
 </section>
 
 <section id="spotify">
-<h2>🟢 Spotify</h2>
+<h2>Spotify</h2>
 <div id="spotify-list" class="grid"></div>
 </section>
 
 <section id="apple">
-<h2>🍎 Apple Music</h2>
+<h2>Apple Music</h2>
 <div id="apple-list" class="grid"></div>
 </section>
 
 
 <script>
-/* ================= CONFIG ================= */
+/* =========================================
+   CONFIG
+========================================= */
 
 const SHEET_ID="1JbONtH3RWufz3RSgs3EnMV9cYd_37xwBOHgaU2y_yCs";
 const API=s=>`https://opensheet.elk.sh/${SHEET_ID}/${s}`;
 const get=s=>fetch(API(s)).then(r=>r.json());
 
 
-/* ================= HELPERS ================= */
+/* =========================================
+   YT THUMB
+========================================= */
 
 function ytThumb(url){
   try{
@@ -276,16 +240,10 @@ function ytThumb(url){
   return "";
 }
 
-function reveal(){
-  document.querySelectorAll(".fade").forEach(el=>{
-    const top=el.getBoundingClientRect().top;
-    if(top<window.innerHeight-60) el.classList.add("show");
-  });
-}
-window.addEventListener("scroll",reveal);
 
-
-/* ================= HERO SLIDER ================= */
+/* =========================================
+   HERO
+========================================= */
 
 async function loadHero(){
   const d=await get("HERO");
@@ -309,7 +267,9 @@ async function loadHero(){
 }
 
 
-/* ================= LOADERS ================= */
+/* =========================================
+   LIST
+========================================= */
 
 async function loadList(sheet,id){
   const d=await get(sheet);
@@ -317,9 +277,9 @@ async function loadList(sheet,id){
 
   d.forEach(r=>{
     const div=document.createElement("div");
-    div.className="card fade";
+    div.className="card";
 
-    const img=ytThumb(r.url)||r.image||"https://via.placeholder.com/600x400";
+    const img=ytThumb(r.url)||r.image||"";
 
     div.innerHTML=`
       <img class="thumb" src="${img}">
@@ -328,26 +288,28 @@ async function loadList(sheet,id){
         <div class="desc">${r.desc||""}</div>
       </div>
     `;
+
     div.onclick=()=>window.open(r.url);
     box.appendChild(div);
   });
-  reveal();
 }
 
 async function loadIframe(sheet,id){
   const d=await get(sheet);
   const box=document.getElementById(id);
+
   d.forEach(r=>{
     const div=document.createElement("div");
-    div.className="embed fade";
+    div.className="embed";
     div.innerHTML=r.iframe;
     box.appendChild(div);
   });
-  reveal();
 }
 
 
-/* ================= INIT ================= */
+/* =========================================
+   INIT
+========================================= */
 
 loadHero();
 loadList("NOTICE","notice-list");
