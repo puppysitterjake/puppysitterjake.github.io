@@ -1,49 +1,108 @@
-const SHEET =
-  "https://opensheet.elk.sh/1JbONtH3RWufz3RSgs3EnMV9cYd_37xwBOHgaU2y_yCs/CONTENT";
+// =====================
+// CONFIG
+// =====================
 
-fetch(SHEET)
+const SHEET_ID = "1JbONtH3RWufz3RSgs3EnMV9cYd_37xwBOHgaU2y_yCs";
+const SHEET_NAME = "CONTENT";
+
+const API = `https://opensheet.elk.sh/${SHEET_ID}/${SHEET_NAME}`;
+
+const slider = document.getElementById("slider");
+const board = document.getElementById("noticeBoard");
+
+
+// =====================
+// LOAD DATA
+// =====================
+
+fetch(API)
   .then(res => res.json())
-  .then(rows => {
+  .then(data => {
 
-    rows.forEach(row => {
+    data.forEach(row => {
 
-      const type = row.type?.toLowerCase();
-      const title = row.title;
-      const content = row.content || row.link || row.embed || row.url;
+      const type = (row.type || "").toLowerCase();
+      const title = row.title || "";
+      const url = row.url || "";
+      const desc = row.desc || "";
 
-      // HERO
+
+      // ========= HERO =========
       if(type === "hero"){
-        const hero = document.getElementById("hero");
-        hero.innerText = title;
-        hero.style.backgroundImage =
-          `url(https://images.unsplash.com/photo-1517849845537-4d257902454a)`;
+        const slide = document.createElement("div");
+        slide.className = "slide";
+        slide.innerHTML = `<img src="${url}">`;
+        slider.appendChild(slide);
       }
 
-      // ABOUT
-      if(type === "about"){
-        document.getElementById("about").innerHTML =
-          `<h2>${title}</h2>`;
+
+      // ========= NOTICE (youtube thumbnail auto) =========
+      else if(type === "notice"){
+        const id = getYoutubeID(url);
+        const thumb = `https://img.youtube.com/vi/${id}/hqdefault.jpg`;
+
+        board.innerHTML += `
+          <a class="card" href="${url}" target="_blank">
+            <img src="${thumb}">
+            <div class="card-body">
+              <h3>${title}</h3>
+              <p>${desc}</p>
+            </div>
+          </a>
+        `;
       }
 
-      // YOUTUBE
-      if(type === "youtube"){
-        document.getElementById("youtube").innerHTML += `
-          <iframe src="https://www.youtube.com/embed/${content}"
-          allowfullscreen></iframe>`;
+
+      // ========= SPOTIFY (iframe directly) =========
+      else if(type === "spotify"){
+        board.innerHTML += `
+          <div class="card">
+            ${url}
+          </div>
+        `;
       }
 
-      // SPOTIFY
-      if(type === "spotify"){
-        document.getElementById("spotify").innerHTML += `
-          <iframe src="https://open.spotify.com/embed/playlist/${content}">
-          </iframe>`;
-      }
 
-      // APPLE (iframe nguyên)
-      if(type === "apple"){
-        document.getElementById("apple").innerHTML += content;
+      // ========= APPLE / ANY EMBED =========
+      else if(type === "apple" || type === "embed"){
+        board.innerHTML += `
+          <div class="card">
+            ${url}
+          </div>
+        `;
       }
 
     });
 
+    startSlider();
+
   });
+
+
+// =====================
+// YOUTUBE HELPER
+// =====================
+
+function getYoutubeID(link){
+  const reg = /(?:youtube\.com.*v=|youtu\.be\/)([^&]+)/;
+  const match = link.match(reg);
+  return match ? match[1] : "";
+}
+
+
+// =====================
+// SIMPLE SLIDER
+// =====================
+
+function startSlider(){
+  const slides = document.querySelectorAll(".slide");
+  let i = 0;
+
+  slides[0].style.display = "block";
+
+  setInterval(()=>{
+    slides.forEach(s => s.style.display="none");
+    slides[i].style.display="block";
+    i = (i+1) % slides.length;
+  },3000);
+}
