@@ -1,92 +1,296 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+
+<title>puppysitter 🐾</title>
+
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700&display=swap" rel="stylesheet">
+
+<style>
+*{
+  margin:0;
+  padding:0;
+  box-sizing:border-box;
+  font-family:Poppins,sans-serif;
+}
+
+body{
+  background:linear-gradient(180deg,#071a36,#0c2146 60%,#0e244d);
+  color:white;
+}
+
+/* ================= NAVBAR ================= */
+nav{
+  position:fixed;
+  top:0;
+  width:100%;
+  display:flex;
+  justify-content:space-between;
+  padding:22px 60px;
+  z-index:999;
+}
+
+.logo{
+  font-size:26px;
+  font-weight:700;
+}
+
+nav a{
+  margin-left:28px;
+  color:white;
+  text-decoration:none;
+  font-weight:500;
+}
+
+/* ================= HERO ================= */
+.hero{
+  height:100vh;
+  position:relative;
+  overflow:hidden;
+}
+
+.hero img{
+  position:absolute;
+  width:100%;
+  height:100%;
+  object-fit:cover;
+  opacity:0;
+  transition:1.4s;
+}
+
+.hero img.active{
+  opacity:1;
+}
+
+/* ================= SECTIONS ================= */
+section{
+  padding:90px 70px;
+}
+
+h2{
+  font-size:32px;
+  margin-bottom:28px;
+}
+
+/* ================= GRID CARDS ================= */
+.grid{
+  display:grid;
+  grid-template-columns:repeat(auto-fill,minmax(260px,1fr));
+  gap:26px;
+}
+
+.card{
+  background:white;
+  color:black;
+  border-radius:22px;
+  overflow:hidden;
+  cursor:pointer;
+  transition:.3s;
+  box-shadow:0 12px 25px rgba(0,0,0,.25);
+}
+
+.card:hover{
+  transform:translateY(-8px);
+}
+
+.thumb{
+  width:100%;
+  height:180px;
+  object-fit:cover;
+}
+
+.content{
+  padding:14px 18px;
+}
+
+.title{
+  font-weight:600;
+  font-size:14px;
+}
+
+/* ================= APPLE MUSIC ================= */
+.apple iframe{
+  border-radius:18px;
+  width:100%;
+  height:160px;
+}
+
+/* ================= NEWS ================= */
+.news-item{
+  background:white;
+  color:black;
+  padding:16px 20px;
+  border-radius:18px;
+  margin-bottom:16px;
+  cursor:pointer;
+  transition:.2s;
+}
+
+.news-item:hover{
+  transform:translateX(6px);
+}
+</style>
+</head>
+
+<body>
+
+<!-- NAV -->
+<nav>
+  <div class="logo">puppysitter 🐾</div>
+  <div>
+    <a href="#notice">Notice</a>
+    <a href="#youtube">YouTube</a>
+    <a href="#spotify">Spotify</a>
+    <a href="#apple">Apple</a>
+    <a href="#news">News</a>
+  </div>
+</nav>
+
+<!-- HERO -->
+<div class="hero" id="hero"></div>
+
+<!-- NOTICE -->
+<section id="notice">
+<h2>📢 Notice</h2>
+<div class="grid" id="notice-list"></div>
+</section>
+
+<!-- YOUTUBE -->
+<section id="youtube">
+<h2>▶ YouTube</h2>
+<div class="grid" id="youtube-list"></div>
+</section>
+
+<!-- SPOTIFY -->
+<section id="spotify">
+<h2>🎵 Spotify</h2>
+<div class="grid" id="spotify-list"></div>
+</section>
+
+<!-- APPLE -->
+<section id="apple">
+<h2>🍎 Apple Music</h2>
+<div class="grid apple" id="apple-list"></div>
+</section>
+
+<!-- NEWS -->
+<section id="news">
+<h2>📰 News</h2>
+<div id="news-list"></div>
+</section>
+
 <script>
-const SHEET_ID="1JbONtH3RWufz3RSgs3EnMV9cYd_37xwBOHgaU2y_yCs";
-const API=s=>`https://opensheet.elk.sh/${SHEET_ID}/${s}`;
+/* ================= CONFIG ================= */
+const SHEET="YOUR_SHEET_ID";
+const API=s=>`https://opensheet.elk.sh/${SHEET}/${s}`;
+const get=s=>fetch(API(s)).then(r=>r.json());
 
-async function fetchSheet(name){
-  try{
-    const r=await fetch(API(name));
-    return await r.json();
-  }catch{
-    return [];
-  }
-}
-
-function card(title,img,url){
-  const div=document.createElement("div");
-  div.className="card";
-  div.innerHTML=`
-    ${img?`<img class="thumb" src="${img}">`:''}
-    <div class="content"><div class="title">${title||''}</div></div>
-  `;
-  if(url) div.onclick=()=>window.open(url);
-  return div;
-}
-
+/* ================= YOUTUBE THUMB ================= */
 function ytThumb(url){
-  if(!url) return "";
-  const id=(url.match(/v=([^&]+)/)||url.match(/youtu\.be\/([^?]+)/)||[])[1];
-  return id?`https://img.youtube.com/vi/${id}/hqdefault.jpg`:"";
+  try{
+    const u=new URL(url);
+    if(u.hostname.includes("youtu.be"))
+      return `https://img.youtube.com/vi/${u.pathname.slice(1)}/maxresdefault.jpg`;
+    if(u.searchParams.get("v"))
+      return `https://img.youtube.com/vi/${u.searchParams.get("v")}/maxresdefault.jpg`;
+  }catch{}
+  return "";
 }
 
-/* HERO */
-(async()=>{
-  const hero=document.getElementById("hero");
-  const data=await fetchSheet("HERO");
-  data.forEach((r,i)=>{
+/* ================= HERO ================= */
+async function loadHero(){
+  const d=await get("HERO");
+  const box=document.getElementById("hero");
+
+  d.forEach((r,i)=>{
     const img=document.createElement("img");
     img.src=r.image;
-    if(i==0) img.classList.add("active");
-    hero.appendChild(img);
+    if(i===0) img.classList.add("active");
+    box.appendChild(img);
   });
-})();
 
-/* NOTICE */
-(async()=>{
-  const box=document.getElementById("notice-list");
-  (await fetchSheet("NOTICE")).forEach(r=>{
-    box.appendChild(card(r.title, r.image||ytThumb(r.url), r.url));
-  });
-})();
+  const imgs=box.querySelectorAll("img");
+  let i=0;
+  setInterval(()=>{
+    imgs[i].classList.remove("active");
+    i=(i+1)%imgs.length;
+    imgs[i].classList.add("active");
+  },4000);
+}
 
-/* YOUTUBE */
-(async()=>{
-  const box=document.getElementById("youtube-list");
-  (await fetchSheet("YOUTUBE")).forEach(r=>{
-    box.appendChild(card(r.title, ytThumb(r.url), r.url));
-  });
-})();
+/* ================= GENERIC CARDS ================= */
+async function loadList(sheet,id){
+  const d=await get(sheet);
+  const box=document.getElementById(id);
 
-/* SPOTIFY */
-(async()=>{
-  const box=document.getElementById("spotify-list");
-  (await fetchSheet("SPOTIFY")).forEach(r=>{
+  d.forEach(r=>{
+    const thumb=ytThumb(r.url)||r.image||"";
+
     const div=document.createElement("div");
     div.className="card";
-    div.innerHTML=`<iframe src="${r.url}" width="100%" height="352" style="border:none;border-radius:16px;"></iframe>`;
-    box.appendChild(div);
-  });
-})();
 
-/* APPLE */
-(async()=>{
-  const box=document.getElementById("apple-list");
-  (await fetchSheet("APPLE")).forEach(r=>{
-    const div=document.createElement("div");
-    div.className="card";
-    div.innerHTML=`<iframe src="${r.url}" width="100%" height="352" style="border:none;border-radius:16px;"></iframe>`;
-    box.appendChild(div);
-  });
-})();
+    div.innerHTML=`
+      <img class="thumb" src="${thumb}">
+      <div class="content">
+        <div class="title">${r.title||""}</div>
+      </div>
+    `;
 
-/* NEWS */
-(async()=>{
-  const box=document.getElementById("news-list");
-  (await fetchSheet("NEWS")).forEach(r=>{
-    const div=document.createElement("div");
-    div.className="news-item";
-    div.innerHTML=r.url;
     div.onclick=()=>window.open(r.url);
     box.appendChild(div);
   });
-})();
+}
+
+/* ================= APPLE ================= */
+async function loadApple(){
+  const d=await get("APPLE");
+  const box=document.getElementById("apple-list");
+
+  d.forEach(r=>{
+    const div=document.createElement("div");
+    div.className="card";
+    div.innerHTML=r.embed;
+    box.appendChild(div);
+  });
+}
+
+/* ================= NEWS ================= */
+async function fetchTitle(url){
+  try{
+    const res=await fetch(`https://api.allorigins.win/raw?url=${encodeURIComponent(url)}`);
+    const text=await res.text();
+    const m=text.match(/<title>(.*?)<\/title>/i);
+    return m?m[1]:url;
+  }catch{
+    return url;
+  }
+}
+
+async function loadNews(){
+  const d=await get("NEWS");
+  const box=document.getElementById("news-list");
+
+  d.forEach(async r=>{
+    const title=await fetchTitle(r.url);
+
+    const div=document.createElement("div");
+    div.className="news-item";
+    div.textContent=title;
+    div.onclick=()=>window.open(r.url);
+    box.appendChild(div);
+  });
+}
+
+/* ================= INIT ================= */
+loadHero();
+loadList("NOTICE","notice-list");
+loadList("YOUTUBE","youtube-list");
+loadList("SPOTIFY","spotify-list");
+loadApple();
+loadNews();
 </script>
+
+</body>
+</html>
