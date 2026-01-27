@@ -8,7 +8,7 @@
 
 <style>
 :root {
-  --primary: #00d4ff;
+  --primary: #a2d2ff; /* Màu Pastel Blue nhẹ nhàng */
   --bg: #0b132b;
   --card-bg: #16213e;
   --text: #ffffff;
@@ -26,29 +26,43 @@ body { background: var(--bg); color: var(--text); line-height: 1.6; overflow-x: 
   display: flex; align-items: center; justify-content: space-between;
   padding: 0 5%; z-index: 1000; transition: 0.3s;
 }
-.topbar.scrolled { background: rgba(11, 19, 43, 0.95); backdrop-filter: blur(15px); border-bottom: 1px solid rgba(0,212,255,0.1); }
-.logo { font-weight: 700; font-size: 20px; letter-spacing: 1px; }
-.nav a { color: #fff; text-decoration: none; margin-left: 20px; font-size: 13px; font-weight: 600; opacity: 0.7; transition: 0.3s; }
+.topbar.scrolled { background: rgba(11, 19, 43, 0.85); backdrop-filter: blur(10px); height: 60px; }
+.logo { font-weight: 700; font-size: 20px; letter-spacing: 1px; color: #fff; text-decoration: none; }
+.nav a { color: #fff; text-decoration: none; margin-left: 20px; font-size: 13px; font-weight: 600; opacity: 0.8; transition: 0.3s; }
 .nav a:hover { opacity: 1; color: var(--primary); }
 
-/* Hero Section */
-.hero { height: 80vh; position: relative; overflow: hidden; background: #000; }
+/* Hero Section - FULL MÀN HÌNH */
+.hero { height: 100vh; width: 100%; position: relative; overflow: hidden; background: #000; }
 .hero img { position: absolute; width: 100%; height: 100%; object-fit: cover; opacity: 0; transition: 1.5s ease-in-out; }
-.hero img.active { opacity: 0.6; }
-.hero::after { content: ''; position: absolute; bottom: 0; width: 100%; height: 50%; background: linear-gradient(to top, var(--bg), transparent); }
+.hero img.active { opacity: 0.7; }
+/* Gradient che chân ảnh nhẹ nhàng */
+.hero::after { 
+  content: ''; position: absolute; bottom: 0; width: 100%; height: 25%; 
+  background: linear-gradient(to top, var(--bg), transparent); 
+}
 
 /* Section Style */
 section { max-width: 1200px; margin: auto; padding: 80px 20px; }
-h2 { font-size: 26px; margin-bottom: 40px; display: flex; align-items: center; gap: 12px; }
-h2::before { content: ''; width: 5px; height: 26px; background: var(--primary); border-radius: 10px; }
+h2 { font-size: 24px; margin-bottom: 35px; display: flex; align-items: center; gap: 12px; font-weight: 700; }
+/* Thanh trước Section Title màu Pastel */
+h2::before { 
+  content: ''; width: 6px; height: 24px; 
+  background: var(--primary); /* Pastel Blue */
+  border-radius: 50px; 
+  box-shadow: 0 0 10px rgba(162, 210, 255, 0.3);
+}
+
+/* Notice Grid */
+.notice-grid { display: grid; gap: 20px; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); }
 
 /* Blog - Smart Scroll */
 .blog-wrapper { max-height: 450px; overflow-y: auto; padding-right: 15px; }
 .blog-wrapper::-webkit-scrollbar { width: 4px; }
 .blog-wrapper::-webkit-scrollbar-thumb { background: var(--primary); border-radius: 10px; }
-.blog-item { background: rgba(255,255,255,0.03); border: 1px solid rgba(0,212,255,0.1); border-radius: 15px; margin-bottom: 15px; transition: 0.3s; }
-.blog-header { padding: 20px; cursor: pointer; display: flex; justify-content: space-between; align-items: center; }
+.blog-item { background: rgba(255,255,255,0.03); border: 1px solid rgba(255,255,255,0.05); border-radius: 15px; margin-bottom: 15px; transition: 0.3s; }
+.blog-header { padding: 18px; cursor: pointer; display: flex; justify-content: space-between; align-items: center; }
 .blog-content { max-height: 0; overflow: hidden; transition: 0.5s ease; background: #fff; color: #333; }
+.blog-item.active { border-color: var(--primary); }
 .blog-item.active .blog-content { max-height: 2000px; }
 .blog-inner { padding: 25px; }
 
@@ -56,21 +70,22 @@ h2::before { content: ''; width: 5px; height: 26px; background: var(--primary); 
 .horizontal-scroll { display: flex; gap: 20px; overflow-x: auto; padding-bottom: 20px; scrollbar-width: none; -webkit-overflow-scrolling: touch; }
 .horizontal-scroll::-webkit-scrollbar { display: none; }
 .playlist-group { margin-bottom: 50px; }
-.playlist-label { font-size: 13px; color: var(--primary); font-weight: 700; text-transform: uppercase; margin-bottom: 15px; letter-spacing: 2px; }
+.playlist-label { font-size: 12px; color: var(--primary); font-weight: 700; text-transform: uppercase; margin-bottom: 15px; letter-spacing: 2px; opacity: 0.8; }
 
 /* Cards */
-.card { flex: 0 0 300px; background: var(--card-bg); border-radius: 18px; overflow: hidden; cursor: pointer; transition: 0.3s; border: 1px solid rgba(255,255,255,0.05); }
+.card { flex: 0 0 300px; background: var(--card-bg); border-radius: 20px; overflow: hidden; cursor: pointer; transition: 0.3s; border: 1px solid rgba(255,255,255,0.05); }
+.card.notice-card { flex: unset; width: 100%; }
 .card:hover { transform: translateY(-8px); border-color: var(--primary); }
 .thumb { width: 100%; aspect-ratio: 16/9; object-fit: cover; display: block; background: #000; }
 .card-info { padding: 15px; }
-.card-title { font-weight: 700; font-size: 14px; margin-bottom: 10px; height: 40px; overflow: hidden; display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; }
-.card-stats { display: flex; justify-content: space-between; font-size: 11px; opacity: 0.6; font-weight: 600; }
+.card-title { font-weight: 700; font-size: 14px; margin-bottom: 8px; height: 40px; overflow: hidden; display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; }
+.card-stats { display: flex; justify-content: space-between; font-size: 11px; opacity: 0.5; font-weight: 600; }
 
 /* Music Iframe */
-.embed-item { flex: 0 0 340px; border-radius: 18px; overflow: hidden; background: #000; }
+.embed-item { flex: 0 0 340px; border-radius: 20px; overflow: hidden; background: #000; box-shadow: 0 10px 20px rgba(0,0,0,0.3); }
 
 @media (max-width: 768px) {
-  .hero { height: 60vh; }
+  .hero { height: 100vh; }
   .card { flex: 0 0 260px; }
   .embed-item { flex: 0 0 280px; }
   .nav { display: none; }
@@ -80,15 +95,22 @@ h2::before { content: ''; width: 5px; height: 26px; background: var(--primary); 
 <body>
 
 <header class="topbar" id="navbar">
-  <div class="logo">PUPPYSITTER 🐾</div>
+  <a href="#" class="logo">PUPPYSITTER 🐾</a>
   <nav class="nav">
+    <a href="#notice">NOTICE</a>
     <a href="#blog">BLOG</a>
     <a href="#youtube">YOUTUBE</a>
-    <a href="#music">MUSIC</a>
+    <a href="#spotify">SPOTIFY</a>
+    <a href="#apple">APPLE</a>
   </nav>
 </header>
 
 <div class="hero" id="hero-box"></div>
+
+<section id="notice">
+  <h2>Notice</h2>
+  <div class="notice-grid" id="notice-list"></div>
+</section>
 
 <section id="blog">
   <h2>Inside My Stories</h2>
@@ -100,16 +122,20 @@ h2::before { content: ''; width: 5px; height: 26px; background: var(--primary); 
   <div id="youtube-container"></div>
 </section>
 
-<section id="music">
-  <h2>Streaming Everywhere</h2>
-  <div class="horizontal-scroll" id="music-list"></div>
+<section id="spotify">
+  <h2>Spotify</h2>
+  <div class="horizontal-scroll" id="spotify-list"></div>
+</section>
+
+<section id="apple">
+  <h2>Apple Music</h2>
+  <div class="horizontal-scroll" id="apple-list"></div>
 </section>
 
 <script>
 const SHEET_ID = "1JbONtH3RWufz3RSgs3EnMV9cYd_37xwBOHgaU2y_yCs";
 const api = s => fetch(`https://opensheet.elk.sh/${SHEET_ID}/${s}`).then(r => r.json());
 
-// Hàm quan trọng để lấy thumbnail đúng cách
 function getYoutubeID(url) {
   if (!url) return '';
   const regExp = /^.*(youtu.be\/|v\/|u\/\w\/|embed\/|watch\?v=|\&v=)([^#\&\?]*).*/;
@@ -117,6 +143,7 @@ function getYoutubeID(url) {
   return (match && match[2].length === 11) ? match[2] : null;
 }
 
+/* 1. HERO - Auto Slide */
 async function loadHero(){
   try {
     const d = await api("HERO");
@@ -128,16 +155,32 @@ async function loadHero(){
       box.appendChild(img);
     });
     let imgs = box.querySelectorAll('img'), cur = 0;
-    if(imgs.length > 1) {
-      setInterval(() => {
-        imgs[cur].classList.remove('active');
-        cur = (cur + 1) % imgs.length;
-        imgs[cur].classList.add('active');
-      }, 5000);
-    }
+    if(imgs.length > 1) setInterval(() => {
+      imgs[cur].classList.remove('active');
+      cur = (cur + 1) % imgs.length;
+      imgs[cur].classList.add('active');
+    }, 5000);
   } catch(e) {}
 }
 
+/* 2. NOTICE - Grid Layout */
+async function loadNotice() {
+  try {
+    const d = await api("NOTICE");
+    const box = document.getElementById("notice-list");
+    d.forEach(r => {
+      const vid = getYoutubeID(r.url);
+      const thumb = r.image || (vid ? `https://img.youtube.com/vi/${vid}/mqdefault.jpg` : 'https://via.placeholder.com/400x225?text=Notice');
+      const card = document.createElement("div");
+      card.className = "card notice-card";
+      card.innerHTML = `<img class="thumb" src="${thumb}"><div class="card-info"><div class="card-title">${r.title || 'Update'}</div></div>`;
+      card.onclick = () => window.open(r.url);
+      box.appendChild(card);
+    });
+  } catch(e) {}
+}
+
+/* 3. BLOG - Smart Accordion */
 async function loadBlog() {
   try {
     const d = await api("BLOG");
@@ -146,7 +189,7 @@ async function loadBlog() {
       const div = document.createElement("div");
       div.className = "blog-item";
       div.innerHTML = `
-        <div class="blog-header"><span style="font-weight:700">${r.title}</span><span style="color:var(--primary); font-size:12px">Read More +</span></div>
+        <div class="blog-header"><span style="font-weight:700">${r.title}</span><span style="color:var(--primary); font-size:11px">DETAILS +</span></div>
         <div class="blog-content"><div class="blog-inner">
           ${r.image ? `<img src="${r.image}" style="width:100%; border-radius:12px; margin-bottom:15px">` : ''}
           <p>${r.content ? r.content.replace(/\n/g, '<br>') : ''}</p>
@@ -157,12 +200,13 @@ async function loadBlog() {
   } catch(e) {}
 }
 
+/* 4. YOUTUBE - Playlist Logic */
 async function loadYoutube() {
   try {
     const d = await api("YOUTUBE");
     const container = document.getElementById("youtube-container");
     const groups = d.reduce((acc, v) => {
-      const p = v.playlist || "General";
+      const p = v.playlist || "Others";
       if(!acc[p]) acc[p] = [];
       acc[p].push(v);
       return acc;
@@ -173,16 +217,14 @@ async function loadYoutube() {
       group.className = "playlist-group";
       group.innerHTML = `<div class="playlist-label">${p}</div><div class="horizontal-scroll"></div>`;
       const scroll = group.querySelector(".horizontal-scroll");
-      
       groups[p].forEach(v => {
         const vid = getYoutubeID(v.url);
-        const thumbUrl = vid ? `https://img.youtube.com/vi/${vid}/mqdefault.jpg` : 'https://via.placeholder.com/400x225?text=No+Thumbnail';
         const card = document.createElement("div");
         card.className = "card";
         card.innerHTML = `
-          <img class="thumb" src="${thumbUrl}">
+          <img class="thumb" src="https://img.youtube.com/vi/${vid}/mqdefault.jpg">
           <div class="card-info">
-            <div class="card-title">${v.title || 'Untitled Video'}</div>
+            <div class="card-title">${v.title || 'Untitled'}</div>
             <div class="card-stats">
               <span>📅 ${v.date || ''}</span>
               <span style="color:var(--primary)">👁️ ${Number(v.views || 0).toLocaleString()}</span>
@@ -196,12 +238,12 @@ async function loadYoutube() {
   } catch(e) {}
 }
 
-async function loadMusic() {
+/* 5. MUSIC - Separated Sections */
+async function loadMusic(tab, elementId) {
   try {
-    const spot = await api("SPOTIFY");
-    const apple = await api("APPLE");
-    const box = document.getElementById("music-list");
-    [...spot, ...apple].forEach(m => {
+    const d = await api(tab);
+    const box = document.getElementById(elementId);
+    d.forEach(m => {
       if(m.iframe) {
         const div = document.createElement("div");
         div.className = "embed-item";
@@ -212,13 +254,16 @@ async function loadMusic() {
   } catch(e) {}
 }
 
+// Navbar Scroll Effect
 window.onscroll = () => document.getElementById('navbar').classList.toggle('scrolled', window.scrollY > 50);
 
-// Khởi chạy toàn bộ
+// Initialize
 loadHero();
+loadNotice();
 loadBlog();
 loadYoutube();
-loadMusic();
+loadMusic("SPOTIFY", "spotify-list");
+loadMusic("APPLE", "apple-list");
 </script>
 </body>
 </html>
