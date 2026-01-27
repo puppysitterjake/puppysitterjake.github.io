@@ -1,140 +1,92 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-<meta charset="UTF-8"/>
-<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-<title>puppysitter 🐾</title>
-<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;800&display=swap" rel="stylesheet">
-<style>
-*{margin:0;padding:0;box-sizing:border-box;font-family:Inter,sans-serif;}
-body{background:#0b132b;color:white;}
-nav{position:fixed;top:0;width:100%;display:flex;justify-content:space-between;padding:20px 5%;z-index:999;}
-.logo{font-size:24px;font-weight:800;}
-nav a{margin-left:20px;color:white;text-decoration:none;font-size:14px;}
-.hero{height:100vh;position:relative;overflow:hidden;}
-.hero img{position:absolute;width:100%;height:100%;object-fit:cover;opacity:0;transition:1s;}
-.hero img.active{opacity:1;}
-section{padding:80px 8%;margin-top:64px;}
-h2{font-size:28px;margin-bottom:20px;font-weight:700;}
-.grid{display:grid;gap:22px;grid-template-columns:repeat(auto-fill,minmax(260px,1fr));}
-.card{background:#fff;color:#111;border-radius:18px;overflow:hidden;cursor:pointer;transition:.25s;box-shadow:0 6px 20px rgba(0,0,0,.12);}
-.card:hover{transform:translateY(-6px);}
-.thumb{width:100%;height:170px;object-fit:cover;background:#ddd;}
-.content{padding:14px;}
-.title{font-weight:600;font-size:14px;}
-.news-list{display:flex;flex-direction:column;gap:14px;}
-.news-item{padding:14px 18px;background:#142044;border-radius:12px;cursor:pointer;transition:.2s;}
-.news-item:hover{background:#1d2d63;}
-.news-title{font-weight:600;font-size:15px;}
-.news-url{font-size:12px;opacity:.6;margin-top:4px;}
-</style>
-</head>
-<body>
-
-<nav>
-  <div class="logo">puppysitter 🐾</div>
-  <div>
-    <a href="#notice">Notice</a>
-    <a href="#youtube">YouTube</a>
-    <a href="#spotify">Spotify</a>
-    <a href="#apple">Apple</a>
-    <a href="#news">News</a>
-  </div>
-</nav>
-
-<div id="hero" class="hero"></div>
-
-<section id="notice"><h2>Notice</h2><div id="notice-list" class="grid"></div></section>
-<section id="youtube"><h2>YouTube</h2><div id="youtube-list" class="grid"></div></section>
-<section id="spotify"><h2>Spotify</h2><div id="spotify-list" class="grid"></div></section>
-<section id="apple"><h2>Apple Music</h2><div id="apple-list" class="grid"></div></section>
-<section id="news"><h2>News</h2><div id="news-list" class="news-list"></div></section>
-
 <script>
 const SHEET_ID="1JbONtH3RWufz3RSgs3EnMV9cYd_37xwBOHgaU2y_yCs";
-const baseAPI=s=>`https://opensheet.elk.sh/${SHEET_ID}/${s}`;
+const API=s=>`https://opensheet.elk.sh/${SHEET_ID}/${s}`;
 
-async function fetchSheet(sheet){
+async function fetchSheet(name){
   try{
-    const res=await fetch(baseAPI(sheet));
-    if(!res.ok) throw new Error("Sheet fetch error");
-    return await res.json();
-  }catch(e){
-    console.error("Error loading sheet:",sheet,e);
+    const r=await fetch(API(name));
+    return await r.json();
+  }catch{
     return [];
   }
 }
 
-function getYT(url){
-  try{const u=new URL(url);
-    if(u.hostname.includes("youtu.be")) return u.pathname.slice(1);
-    if(u.searchParams.get("v")) return u.searchParams.get("v");
-  }catch{}
-  return "";
+function card(title,img,url){
+  const div=document.createElement("div");
+  div.className="card";
+  div.innerHTML=`
+    ${img?`<img class="thumb" src="${img}">`:''}
+    <div class="content"><div class="title">${title||''}</div></div>
+  `;
+  if(url) div.onclick=()=>window.open(url);
+  return div;
 }
 
-function getThumb(url){
-  const id=getYT(url);
+function ytThumb(url){
+  if(!url) return "";
+  const id=(url.match(/v=([^&]+)/)||url.match(/youtu\.be\/([^?]+)/)||[])[1];
   return id?`https://img.youtube.com/vi/${id}/hqdefault.jpg`:"";
 }
 
-async function loadHero(){
-  const data=await fetchSheet("HERO");
+/* HERO */
+(async()=>{
   const hero=document.getElementById("hero");
+  const data=await fetchSheet("HERO");
   data.forEach((r,i)=>{
     const img=document.createElement("img");
     img.src=r.image;
-    if(i===0) img.classList.add("active");
+    if(i==0) img.classList.add("active");
     hero.appendChild(img);
   });
-  const imgs=hero.querySelectorAll("img");
-  let idx=0;
-  setInterval(()=>{
-    imgs[idx].classList.remove("active");
-    idx=(idx+1)%imgs.length;
-    imgs[idx].classList.add("active");
-  },4000);
-}
+})();
 
-async function loadGrid(sheet,id){
-  const data=await fetchSheet(sheet);
-  const box=document.getElementById(id);
-  data.forEach(r=>{
+/* NOTICE */
+(async()=>{
+  const box=document.getElementById("notice-list");
+  (await fetchSheet("NOTICE")).forEach(r=>{
+    box.appendChild(card(r.title, r.image||ytThumb(r.url), r.url));
+  });
+})();
+
+/* YOUTUBE */
+(async()=>{
+  const box=document.getElementById("youtube-list");
+  (await fetchSheet("YOUTUBE")).forEach(r=>{
+    box.appendChild(card(r.title, ytThumb(r.url), r.url));
+  });
+})();
+
+/* SPOTIFY */
+(async()=>{
+  const box=document.getElementById("spotify-list");
+  (await fetchSheet("SPOTIFY")).forEach(r=>{
     const div=document.createElement("div");
     div.className="card";
-    const thumb=getThumb(r.url)||r.image||"";
-    div.innerHTML=`<img class="thumb" src="${thumb}"><div class="content"><div class="title">${r.title||""}</div></div>`;
-    if(r.url) div.onclick=()=>window.open(r.url);
+    div.innerHTML=`<iframe src="${r.url}" width="100%" height="352" style="border:none;border-radius:16px;"></iframe>`;
     box.appendChild(div);
   });
-}
+})();
 
-async function loadNews(){
-  const data=await fetchSheet("NEWS");
+/* APPLE */
+(async()=>{
+  const box=document.getElementById("apple-list");
+  (await fetchSheet("APPLE")).forEach(r=>{
+    const div=document.createElement("div");
+    div.className="card";
+    div.innerHTML=`<iframe src="${r.url}" width="100%" height="352" style="border:none;border-radius:16px;"></iframe>`;
+    box.appendChild(div);
+  });
+})();
+
+/* NEWS */
+(async()=>{
   const box=document.getElementById("news-list");
-  for(const r of data){
-    let title=r.url;
-    try{
-      const html=await fetch(`https://api.allorigins.win/raw?url=${encodeURIComponent(r.url)}`);
-      const text=await html.text();
-      const m=text.match(/<title>(.*?)<\/title>/i);
-      if(m) title=m[1];
-    }catch{}
+  (await fetchSheet("NEWS")).forEach(r=>{
     const div=document.createElement("div");
     div.className="news-item";
-    div.innerHTML=`<div class="news-title">${title}</div><div class="news-url">${r.url}</div>`;
-    if(r.url) div.onclick=()=>window.open(r.url);
+    div.innerHTML=r.url;
+    div.onclick=()=>window.open(r.url);
     box.appendChild(div);
-  }
-}
-
-loadHero();
-loadGrid("NOTICE","notice-list");
-loadGrid("YOUTUBE","youtube-list");
-loadGrid("SPOTIFY","spotify-list");
-loadGrid("APPLE","apple-list");
-loadNews();
+  });
+})();
 </script>
-
-</body>
-</html>
