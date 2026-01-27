@@ -4,16 +4,16 @@
 <meta charset="UTF-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
 
-<title>Puppysitter Jake</title>
+<title>PUPPYSITTER CMS</title>
 
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;800&display=swap" rel="stylesheet"/>
 
 <style>
 *{
+  box-sizing:border-box;
   margin:0;
   padding:0;
-  box-sizing:border-box;
-  font-family:Inter, sans-serif;
+  font-family:Inter,sans-serif;
 }
 
 body{
@@ -21,272 +21,276 @@ body{
   color:#111;
 }
 
-/* ===== HERO SLIDER ===== */
+/* ================= HERO ================= */
 
 .hero{
-  height:70vh;
-  position:relative;
+  width:100%;
+  height:100vh;
   overflow:hidden;
+  position:relative;
 }
 
 .hero img{
-  position:absolute;
   width:100%;
   height:100%;
   object-fit:cover;
+  position:absolute;
   opacity:0;
-  transition:opacity 1s ease;
+  transition:opacity 1s;
 }
 
 .hero img.active{
   opacity:1;
 }
 
-/* ===== SECTION ===== */
+/* ================= SECTION ================= */
 
-.section{
-  max-width:1200px;
-  margin:80px auto;
-  padding:0 20px;
+section{
+  padding:70px 6%;
 }
 
-.section h2{
+h2{
   font-size:28px;
   font-weight:800;
-  margin-bottom:25px;
+  margin-bottom:30px;
 }
 
-/* ===== GRID CARDS ===== */
+/* ================= GRID ================= */
 
 .grid{
   display:grid;
+  gap:25px;
   grid-template-columns:repeat(auto-fill,minmax(260px,1fr));
-  gap:20px;
 }
 
+/* ================= CARD ================= */
+
 .card{
-  background:white;
-  border-radius:16px;
+  background:#fff;
+  border-radius:20px;
   overflow:hidden;
-  box-shadow:0 4px 16px rgba(0,0,0,.08);
+  box-shadow:0 6px 20px rgba(0,0,0,.08);
+  cursor:pointer;
+
   transition:.25s;
 }
 
 .card:hover{
   transform:translateY(-6px);
-  box-shadow:0 12px 28px rgba(0,0,0,.15);
+  box-shadow:0 12px 30px rgba(0,0,0,.15);
 }
 
-.card img{
+.thumb{
   width:100%;
-  height:160px;
+  aspect-ratio:16/9;
   object-fit:cover;
 }
 
-.card-content{
+.content{
   padding:15px;
 }
 
-.card h3{
-  font-size:15px;
-  font-weight:600;
+.title{
+  font-weight:700;
   margin-bottom:6px;
 }
 
-.card p{
-  font-size:13px;
+.desc{
+  font-size:14px;
   color:#666;
 }
 
-/* ===== IFRAME MUSIC ===== */
+/* ================= IFRAME ================= */
 
 .embed{
   border-radius:16px;
   overflow:hidden;
-  box-shadow:0 4px 18px rgba(0,0,0,.1);
-  margin-bottom:20px;
 }
 
-/* ===== FADE IN ===== */
+/* ================= ANIMATION ================= */
 
 .fade{
+  animation:fade .6s ease forwards;
   opacity:0;
-  transform:translateY(20px);
-  transition:.6s;
 }
 
-.fade.show{
-  opacity:1;
-  transform:none;
+@keyframes fade{
+  to{opacity:1}
 }
 </style>
 </head>
 
-
 <body>
 
-<!-- HERO -->
-<section class="hero" id="hero"></section>
+<div id="hero" class="hero"></div>
 
-<!-- NOTICE -->
-<section class="section fade">
-  <h2>📌 Notice Board</h2>
-  <div class="grid" id="notice"></div>
+<section>
+<h2>📢 Notice</h2>
+<div id="notice" class="grid"></div>
 </section>
 
-<!-- YOUTUBE -->
-<section class="section fade">
-  <h2>🎬 YouTube</h2>
-  <div class="grid" id="youtube"></div>
+<section>
+<h2>🎬 YouTube</h2>
+<div id="youtube" class="grid"></div>
 </section>
 
-<!-- YT MUSIC -->
-<section class="section fade">
-  <h2>🎵 YouTube Music</h2>
-  <div class="grid" id="ytmusic"></div>
+<section>
+<h2>🎵 YouTube Music</h2>
+<div id="ytmusic" class="grid"></div>
 </section>
 
-<!-- SPOTIFY -->
-<section class="section fade">
-  <h2>🟢 Spotify</h2>
-  <div id="spotify"></div>
+<section>
+<h2>🟢 Spotify</h2>
+<div id="spotify" class="grid"></div>
 </section>
 
-<!-- APPLE -->
-<section class="section fade">
-  <h2>🍎 Apple Music</h2>
-  <div id="apple"></div>
+<section>
+<h2>🍎 Apple Music</h2>
+<div id="apple" class="grid"></div>
 </section>
 
 
 <script>
-const SHEET_ID = "1JbONtH3RWufz3RSgs3EnMV9cYd_37xwBOHgaU2y_yCs";
+/* ================= CONFIG ================= */
 
-function sheet(name){
-  return `https://opensheet.elk.sh/${SHEET_ID}/${name}`;
+const SHEET_ID="1JbONtH3RWufz3RSgs3EnMV9cYd_37xwBOHgaU2y_yCs";
+const API=s=>`https://opensheet.elk.sh/${SHEET_ID}/${s}`;
+
+const get=s=>fetch(API(s)).then(r=>r.json());
+
+/* ================= HELPERS ================= */
+
+function youtubeThumb(url){
+  try{
+    const u=new URL(url);
+
+    if(u.hostname.includes("youtu.be"))
+      return `https://img.youtube.com/vi/${u.pathname.slice(1)}/hqdefault.jpg`;
+
+    if(u.searchParams.get("v"))
+      return `https://img.youtube.com/vi/${u.searchParams.get("v")}/hqdefault.jpg`;
+
+  }catch{}
+
+  return "";
 }
 
-/* ===============================
-   HERO SLIDER
-================================ */
-fetch(sheet("HERO"))
-.then(r=>r.json())
-.then(rows=>{
-  const hero=document.getElementById("hero");
+async function ogImage(url){
+  try{
+    const r=await fetch("https://api.microlink.io?url="+encodeURIComponent(url));
+    const d=await r.json();
+    return d.data.image?.url||"";
+  }catch{
+    return "";
+  }
+}
 
-  rows.forEach((r,i)=>{
+/* ================= HERO ================= */
+
+async function loadHero(){
+  const d=await get("HERO");
+  const box=document.getElementById("hero");
+
+  d.forEach((r,i)=>{
     const img=document.createElement("img");
     img.src=r.image;
     if(i===0) img.classList.add("active");
-    hero.appendChild(img);
+    box.appendChild(img);
   });
 
+  const imgs=box.querySelectorAll("img");
   let i=0;
+
   setInterval(()=>{
-    const imgs=hero.querySelectorAll("img");
     imgs[i].classList.remove("active");
     i=(i+1)%imgs.length;
     imgs[i].classList.add("active");
-  },3500);
-});
-
-
-/* ===============================
-   NOTICE
-================================ */
-fetch(sheet("NOTICE"))
-.then(r=>r.json())
-.then(rows=>{
-  const wrap=document.getElementById("notice");
-
-  rows.forEach(r=>{
-    wrap.innerHTML+=`
-      <a class="card" href="${r.url}" target="_blank">
-        <div class="card-content">
-          <h3>${r.title}</h3>
-          <p>${r.desc||""}</p>
-        </div>
-      </a>`;
-  });
-});
-
-
-/* ===============================
-   YOUTUBE (auto thumbnail)
-================================ */
-function thumb(url){
-  const id=url.match(/(?:v=|be\/)([^&]+)/)?.[1];
-  return `https://img.youtube.com/vi/${id}/hqdefault.jpg`;
+  },4000);
 }
 
-fetch(sheet("YOUTUBE"))
-.then(r=>r.json())
-.then(rows=>{
-  const wrap=document.getElementById("youtube");
+/* ================= CARD ================= */
 
-  rows.forEach(r=>{
-    wrap.innerHTML+=`
-      <a class="card" href="${r.url}" target="_blank">
-        <img src="${thumb(r.url)}">
-        <div class="card-content">
-          <h3>${r.title}</h3>
-        </div>
-      </a>`;
-  });
-});
+async function makeCard(r,auto=false){
+  const div=document.createElement("div");
+  div.className="card fade";
 
+  let img=r.image||"";
 
-/* ===============================
-   YT MUSIC
-================================ */
-fetch(sheet("YT MUSIC"))
-.then(r=>r.json())
-.then(rows=>{
-  const wrap=document.getElementById("ytmusic");
+  if(auto && r.url){
+    img=youtubeThumb(r.url);
 
-  rows.forEach(r=>{
-    wrap.innerHTML+=`
-      <a class="card" href="${r.url}" target="_blank">
-        <img src="${thumb(r.url)}">
-        <div class="card-content">
-          <h3>${r.title}</h3>
-        </div>
-      </a>`;
-  });
-});
+    if(!img){
+      img=await ogImage(r.url);
+    }
+  }
 
+  if(!img){
+    img="https://via.placeholder.com/600x400?text=No+Image";
+  }
 
-/* ===============================
-   SPOTIFY / APPLE (iframe trực tiếp)
-================================ */
-function loadIframe(sheetName, id){
-  fetch(sheet(sheetName))
-  .then(r=>r.json())
-  .then(rows=>{
-    const wrap=document.getElementById(id);
+  div.innerHTML=`
+    <img class="thumb" src="${img}">
+    <div class="content">
+      <div class="title">${r.title||""}</div>
+      <div class="desc">${r.desc||""}</div>
+    </div>
+  `;
 
-    rows.forEach(r=>{
-      wrap.innerHTML+=`
-        <div class="embed">${r.iframe}</div>
-      `;
-    });
+  if(r.url) div.onclick=()=>window.open(r.url);
+
+  return div;
+}
+
+/* ================= LOADERS ================= */
+
+async function loadNotice(){
+  const d=await get("NOTICE");
+  const box=document.getElementById("notice");
+
+  for(const r of d){
+    box.appendChild(await makeCard(r,true));
+  }
+}
+
+async function loadYoutube(){
+  const d=await get("YOUTUBE");
+  const box=document.getElementById("youtube");
+
+  for(const r of d){
+    box.appendChild(await makeCard(r,true));
+  }
+}
+
+async function loadYtMusic(){
+  const d=await get("YT MUSIC");
+  const box=document.getElementById("ytmusic");
+
+  for(const r of d){
+    box.appendChild(await makeCard(r,true));
+  }
+}
+
+async function loadIframe(sheet,id){
+  const d=await get(sheet);
+  const box=document.getElementById(id);
+
+  d.forEach(r=>{
+    const div=document.createElement("div");
+    div.className="embed fade";
+    div.innerHTML=r.iframe;
+    box.appendChild(div);
   });
 }
 
+/* ================= INIT ================= */
+
+loadHero();
+loadNotice();
+loadYoutube();
+loadYtMusic();
 loadIframe("SPOTIFY","spotify");
 loadIframe("APPLE","apple");
 
-
-/* ===============================
-   SCROLL EFFECT
-================================ */
-const observer=new IntersectionObserver(entries=>{
-  entries.forEach(e=>{
-    if(e.isIntersecting) e.target.classList.add("show");
-  });
-});
-
-document.querySelectorAll(".fade").forEach(el=>observer.observe(el));
 </script>
 
 </body>
