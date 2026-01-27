@@ -9,13 +9,12 @@
 <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@700;900&display=swap" rel="stylesheet">
 
 <style>
-/* ================= GLOBAL ================= */
 *{margin:0;padding:0;box-sizing:border-box}
 
 body{
   font-family:'Montserrat',sans-serif;
-  background:#0a0a0a;
-  color:white;
+  background:#0b0b0b;
+  color:#fff;
   overflow-x:hidden;
   scroll-behavior:smooth;
 }
@@ -25,38 +24,34 @@ nav{
   position:fixed;
   top:0;
   width:100%;
-  height:70px;
+  height:75px;
   display:flex;
   align-items:center;
   justify-content:space-between;
-  padding:0 40px;
+  padding:0 60px;
   z-index:999;
-  transition:.3s;
+  transition:.35s;
 }
 
 nav.scrolled{
-  background:rgba(0,0,0,.85);
-  backdrop-filter:blur(8px);
-  box-shadow:0 4px 20px rgba(0,0,0,.6);
+  background:rgba(0,0,0,.75);
+  backdrop-filter:blur(12px);
 }
 
 .logo{
-  font-size:22px;
   font-weight:900;
-  letter-spacing:2px;
-}
-
-.theme-btn{
-  cursor:pointer;
+  font-size:22px;
+  letter-spacing:3px;
 }
 
 /* ================= HERO ================= */
 .hero{
   height:100vh;
-  background:url("https://pbs.twimg.com/media/G-OLdVMakAA0KwK?format=jpg&name=4096x4096") center top/cover no-repeat;
+  background:url("https://pbs.twimg.com/media/G-OLdVMakAA0KwK?format=jpg&name=4096x4096") center top/cover no-repeat fixed;
   display:flex;
-  align-items:flex-end;
-  padding:120px 80px;
+  align-items:center;
+  justify-content:center;
+  text-align:center;
   position:relative;
 }
 
@@ -64,13 +59,12 @@ nav.scrolled{
   content:"";
   position:absolute;
   inset:0;
-  background:linear-gradient(to top,#000 0%,rgba(0,0,0,.2) 60%);
+  background:linear-gradient(to bottom,rgba(0,0,0,.1),#000);
 }
 
 .hero h1{
-  font-size:70px;
+  font-size:80px;
   font-weight:900;
-  position:relative;
   z-index:2;
   animation:fadeUp 1.2s ease;
 }
@@ -80,78 +74,63 @@ nav.scrolled{
   to{opacity:1;transform:translateY(0)}
 }
 
-/* ================= SECTION ================= */
-.section{
-  padding:90px 60px;
+/* ================= SECTIONS ================= */
+section{
+  padding:120px 80px;
+  max-width:1300px;
+  margin:auto;
 }
 
-.section h2{
-  margin-bottom:25px;
+h2{
+  font-size:32px;
+  margin-bottom:40px;
 }
 
-/* ================= SEARCH ================= */
-.search{
+/* ================= ABOUT ================= */
+.about{
+  text-align:center;
+  font-size:18px;
+  line-height:1.8;
+  opacity:.8;
+}
+
+/* ================= FEATURED ================= */
+.featured iframe{
   width:100%;
-  max-width:350px;
-  padding:12px 18px;
-  border-radius:30px;
-  border:none;
-  margin-bottom:35px;
-  background:#1a1a1a;
-  color:white;
+  height:600px;
+  border-radius:20px;
+  box-shadow:0 30px 70px rgba(0,0,0,.7);
 }
 
 /* ================= GRID ================= */
 .grid{
   display:grid;
-  grid-template-columns:repeat(auto-fill,minmax(300px,1fr));
-  gap:25px;
+  grid-template-columns:repeat(auto-fill,minmax(320px,1fr));
+  gap:35px;
 }
 
-/* ================= CARD ================= */
 .card{
   background:#161616;
-  border-radius:16px;
+  border-radius:20px;
   overflow:hidden;
   cursor:pointer;
-  transition:.3s;
+  transition:.35s;
 }
 
 .card:hover{
-  transform:translateY(-8px) scale(1.03);
-  box-shadow:0 15px 35px rgba(0,0,0,.6);
+  transform:translateY(-10px) scale(1.04);
+  box-shadow:0 20px 50px rgba(0,0,0,.6);
 }
 
-.thumb{
+.card img{
   width:100%;
   aspect-ratio:16/9;
   object-fit:cover;
 }
 
-.content{padding:15px}
-
-.title{
+.card .info{
+  padding:20px;
   font-size:14px;
-  margin-bottom:6px;
-}
-
-.desc{
-  font-size:12px;
-  opacity:.6;
-}
-
-/* ================= SKELETON ================= */
-.skeleton{
-  height:240px;
-  border-radius:16px;
-  background:linear-gradient(90deg,#222 25%,#333 37%,#222 63%);
-  background-size:400% 100%;
-  animation:shine 1.4s infinite;
-}
-
-@keyframes shine{
-  0%{background-position:100% 0}
-  100%{background-position:-100% 0}
 }
 
 /* ================= MODAL ================= */
@@ -167,34 +146,28 @@ nav.scrolled{
 
 .modal iframe{
   width:90%;
-  max-width:1000px;
+  max-width:1100px;
   height:70vh;
-  border-radius:12px;
 }
 
-.modal.show{
-  display:flex;
-  animation:fade .4s;
+.modal.show{display:flex}
+
+/* ================= ANIMATION ================= */
+.fade{
+  opacity:0;
+  transform:translateY(50px);
+  transition:1s;
 }
 
-@keyframes fade{
-  from{opacity:0}
-  to{opacity:1}
+.fade.show{
+  opacity:1;
+  transform:none;
 }
-
-/* ================= LIGHT MODE ================= */
-.light{
-  background:white;
-  color:black;
-}
-
-.light .card{background:#f3f3f3}
-.light .search{background:#eee;color:black}
 
 /* ================= MOBILE ================= */
 @media(max-width:768px){
-  .hero h1{font-size:40px}
-  .section{padding:70px 20px}
+  .hero h1{font-size:42px}
+  section{padding:80px 20px}
 }
 </style>
 </head>
@@ -203,109 +176,93 @@ nav.scrolled{
 
 <nav id="nav">
   <div class="logo">PUPPYSITTER JAKE</div>
-  <div class="theme-btn" onclick="toggleTheme()">🌙/☀️</div>
 </nav>
 
-<section class="hero">
+<!-- HERO -->
+<div class="hero">
   <h1>PUPPYSITTER JAKE</h1>
+</div>
+
+<!-- ABOUT -->
+<section class="about fade">
+  Professional pet care • Daily adventures • Happy puppies  
+  Follow Jake’s journey and enjoy the cutest moments.
 </section>
 
-<section class="section">
-  <h2>Latest Videos</h2>
+<!-- FEATURED -->
+<section class="featured fade">
+  <h2>Featured Video</h2>
+  <iframe id="featuredVideo" allowfullscreen></iframe>
+</section>
 
-  <input id="search" class="search" placeholder="Search videos...">
-
+<!-- VIDEOS -->
+<section class="fade">
+  <h2>All Videos</h2>
   <div id="grid" class="grid"></div>
 </section>
 
-<!-- VIDEO MODAL -->
+<!-- MODAL -->
 <div id="modal" class="modal" onclick="closeVideo()">
   <iframe id="player" allowfullscreen></iframe>
 </div>
 
 <script>
-const API_KEY = "AIzaSyAwHBUmv8E34EeXXtavaAcagdMYluNnBew";
-const PLAYLIST_ID = "PLGSPQSXq0_HqfK3Xfir3EEs_Pzy6p9mNG";
+const API_KEY="AIzaSyAwHBUmv8E34EeXXtavaAcagdMYluNnBew";
+const PLAYLIST_ID="PLGSPQSXq0_HqfK3Xfir3EEs_Pzy6p9mNG";
+const grid=document.getElementById("grid");
 
-const grid = document.getElementById("grid");
-
-/* ===== NAVBAR SCROLL ===== */
+/* NAVBAR */
 window.addEventListener("scroll",()=>{
-  nav.classList.toggle("scrolled",window.scrollY>50);
+ nav.classList.toggle("scrolled",window.scrollY>50);
 });
 
-/* ===== THEME ===== */
-function toggleTheme(){
-  document.body.classList.toggle("light");
+/* FADE ON SCROLL */
+const obs=new IntersectionObserver(e=>{
+ e.forEach(x=>{if(x.isIntersecting)x.target.classList.add("show")});
+});
+document.querySelectorAll(".fade").forEach(s=>obs.observe(s));
+
+/* LOAD VIDEOS */
+async function load(){
+ const url=`https://www.googleapis.com/youtube/v3/playlistItems?part=snippet&maxResults=50&playlistId=${PLAYLIST_ID}&key=${API_KEY}`;
+ const res=await fetch(url);
+ const data=await res.json();
+
+ const videos=data.items;
+
+ /* featured */
+ const first=videos[0].snippet.resourceId.videoId;
+ featuredVideo.src=`https://www.youtube.com/embed/${first}?autoplay=1&mute=1`;
+
+ /* grid */
+ videos.forEach(v=>{
+  const id=v.snippet.resourceId.videoId;
+
+  const card=document.createElement("div");
+  card.className="card";
+
+  card.innerHTML=`
+    <img src="${v.snippet.thumbnails.high.url}">
+    <div class="info">${v.snippet.title}</div>
+  `;
+
+  card.onclick=()=>openVideo(id);
+
+  grid.appendChild(card);
+ });
 }
 
-/* ===== SKELETON ===== */
-for(let i=0;i<8;i++){
-  const s=document.createElement("div");
-  s.className="skeleton";
-  grid.appendChild(s);
-}
-
-/* ===== LOAD VIDEOS ===== */
-let allVideos=[];
-
-async function loadVideos(){
-  const url=`https://www.googleapis.com/youtube/v3/playlistItems?part=snippet&maxResults=50&playlistId=${PLAYLIST_ID}&key=${API_KEY}`;
-  const res=await fetch(url);
-  const data=await res.json();
-
-  allVideos=data.items;
-  renderVideos(allVideos);
-}
-
-function renderVideos(list){
-  grid.innerHTML="";
-  list.forEach(v=>{
-    const id=v.snippet.resourceId.videoId;
-
-    const card=document.createElement("div");
-    card.className="card";
-
-    card.innerHTML=`
-      <img class="thumb" src="${v.snippet.thumbnails.high.url}">
-      <div class="content">
-        <div class="title">${v.snippet.title}</div>
-        <div class="desc">${v.snippet.channelTitle}</div>
-      </div>
-    `;
-
-    card.onclick=()=>openVideo(id);
-    grid.appendChild(card);
-  });
-}
-
-/* ===== SEARCH ===== */
-search.oninput=()=>{
-  const q=search.value.toLowerCase();
-  renderVideos(allVideos.filter(v=>
-    v.snippet.title.toLowerCase().includes(q)
-  ));
-};
-
-/* ===== MODAL PLAYER ===== */
 function openVideo(id){
-  player.src=`https://www.youtube.com/embed/${id}?autoplay=1`;
-  modal.classList.add("show");
+ player.src=`https://www.youtube.com/embed/${id}?autoplay=1`;
+ modal.classList.add("show");
 }
 
 function closeVideo(){
-  player.src="";
-  modal.classList.remove("show");
+ player.src="";
+ modal.classList.remove("show");
 }
 
-document.addEventListener("keydown",e=>{
-  if(e.key==="Escape") closeVideo();
-});
-
-/* ===== AUTO REFRESH PLAYLIST EVERY 10 MIN ===== */
-setInterval(loadVideos,600000);
-
-loadVideos();
+load();
 </script>
 
 </body>
