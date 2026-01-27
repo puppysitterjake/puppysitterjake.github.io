@@ -3,308 +3,343 @@
 <head>
 <meta charset="UTF-8"/>
 <meta name="viewport" content="width=device-width, initial-scale=1"/>
-<title>puppysitter 🐾 | Premium Experience</title>
-<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;600;800&display=swap" rel="stylesheet">
+<title>puppysitter 🐾</title>
+<link href="https://fonts.googleapis.com/css2?family=Quicksand:wght@400;600;700&display=swap" rel="stylesheet">
 
 <style>
 :root {
   --primary: #00d4ff;
-  --primary-glow: rgba(0, 212, 255, 0.3);
-  --bg: #050811;
-  --card-bg: rgba(255, 255, 255, 0.03);
-  --glass-border: rgba(255, 255, 255, 0.08);
-  --font: 'Plus Jakarta Sans', sans-serif;
+  --bg: #0b132b;
+  --text: #ffffff;
+  --card-bg: #ffffff;
+  --font: 'Quicksand', sans-serif;
 }
 
+/* Reset & Cơ bản */
 * { margin:0; padding:0; box-sizing:border-box; font-family: var(--font); }
-body { background: var(--bg); color: #fff; line-height: 1.6; overflow-x: hidden; }
+html { scroll-behavior: smooth; }
+body { background: var(--bg); color: var(--text); line-height: 1.6; overflow-x: hidden; }
 
 /* =========================
-   1. PREMIUM NAVBAR
+   1. NAVBAR & MOBILE MENU
 ========================= */
 .topbar {
-  position: fixed; top: 0; width: 100%; height: 80px;
+  position: fixed; top: 0; width: 100%; height: 70px;
   display: flex; align-items: center; justify-content: space-between;
-  padding: 0 8%; z-index: 1000; transition: 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+  padding: 0 5%; z-index: 1000; transition: 0.3s ease;
 }
 .topbar.scrolled { 
-  background: rgba(5, 8, 17, 0.75); 
-  backdrop-filter: blur(20px); 
-  height: 65px;
-  border-bottom: 1px solid var(--glass-border);
+  background: rgba(11, 19, 43, 0.95); 
+  backdrop-filter: blur(10px); 
+  height: 60px;
+  box-shadow: 0 4px 20px rgba(0,0,0,0.2);
 }
-.logo { font-weight: 800; font-size: 22px; letter-spacing: -0.5px; color: #fff; }
-.logo span { color: var(--primary); }
+.logo { font-weight: 700; font-size: 22px; color: var(--text); text-decoration: none; }
 
-.nav { display: flex; gap: 35px; }
+.nav { display: flex; gap: 25px; }
 .nav a { 
-  color: #fff; text-decoration: none; font-weight: 600; font-size: 13px; 
-  letter-spacing: 1px; transition: 0.3s; opacity: 0.6;
+  color: #fff; text-decoration: none; font-weight: 600; 
+  font-size: 14px; opacity: 0.8; transition: 0.3s;
 }
 .nav a:hover { opacity: 1; color: var(--primary); }
 
-.menu-btn { display: none; cursor: pointer; flex-direction: column; gap: 6px; }
-.menu-btn span { width: 28px; height: 2px; background: #fff; transition: 0.4s; }
+/* Hamburger Icon */
+.menu-btn { display: none; cursor: pointer; z-index: 1001; padding: 10px; }
+.menu-btn div { width: 25px; height: 2px; background: #fff; margin: 6px 0; transition: 0.3s; }
 
 /* =========================
-   2. CINEMATIC HERO
+   2. HERO FULL SCREEN
 ========================= */
 .hero { height: 100vh; width: 100%; position: relative; overflow: hidden; background: #000; }
 .hero img { 
-  position: absolute; width: 100%; height: 100%; object-fit: cover; 
-  opacity: 0; transition: 2s cubic-bezier(0.4, 0, 0.2, 1); transform: scale(1.1);
+  position: absolute; width: 100%; height: 100%; 
+  object-fit: cover; opacity: 0; transition: 1.5s ease-in-out; 
 }
-.hero img.active { opacity: 0.7; transform: scale(1); }
-.hero-overlay {
-  position: absolute; top: 0; left: 0; width: 100%; height: 100%;
-  background: radial-gradient(circle at center, transparent 20%, var(--bg) 95%);
-  z-index: 2;
+.hero img.active { opacity: 1; }
+.hero::after { 
+  content: ''; position: absolute; bottom: 0; left: 0; 
+  width: 100%; height: 40%; 
+  background: linear-gradient(to top, var(--bg), transparent); 
 }
 
 /* =========================
-   3. MODERN SECTIONS
+   3. CẤU TRÚC LAYOUT
 ========================= */
-section { max-width: 1300px; margin: auto; padding: 120px 30px; }
-.section-header { margin-bottom: 50px; }
-.section-header span { color: var(--primary); font-size: 12px; font-weight: 800; letter-spacing: 3px; text-transform: uppercase; }
-.section-header h2 { font-size: 42px; font-weight: 800; margin-top: 10px; letter-spacing: -1px; }
+section { max-width: 1200px; margin: auto; padding: 80px 20px; }
+h2 { 
+  font-size: 28px; margin-bottom: 35px; 
+  border-left: 5px solid var(--primary); padding-left: 15px; 
+}
 
-/* Premium Cards */
-.grid { display: grid; gap: 30px; grid-template-columns: repeat(auto-fill, minmax(320px, 1fr)); }
-.card { 
-  background: var(--card-bg); border: 1px solid var(--glass-border);
-  border-radius: 30px; overflow: hidden; cursor: pointer; 
-  transition: 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+/* Horizontal Scroll (Cho YouTube & Music) */
+.horizontal-scroll {
+  display: flex; gap: 20px; overflow-x: auto; padding-bottom: 20px;
+  scrollbar-width: none; -ms-overflow-style: none; /* Ẩn scrollbar Firefox/IE */
+  -webkit-overflow-scrolling: touch;
 }
-.card:hover { 
-  background: rgba(255, 255, 255, 0.06);
-  border-color: var(--primary);
-  transform: translateY(-12px);
-  box-shadow: 0 20px 40px rgba(0,0,0,0.4), 0 0 20px var(--primary-glow);
+.horizontal-scroll::-webkit-scrollbar { display: none; } /* Ẩn scrollbar Chrome/Safari */
+
+/* Playlist Sub-section */
+.playlist-group { margin-bottom: 45px; }
+.playlist-title { 
+  font-size: 15px; color: var(--primary); margin-bottom: 15px; 
+  font-weight: 700; text-transform: uppercase; letter-spacing: 2px;
+  display: flex; align-items: center; gap: 15px;
 }
-.thumb-wrap { width: 100%; aspect-ratio: 16/10; overflow: hidden; }
-.thumb { width: 100%; height: 100%; object-fit: cover; transition: 0.8s; }
-.card:hover .thumb { transform: scale(1.1); }
-.content { padding: 25px; }
-.title { font-weight: 700; font-size: 18px; margin-bottom: 10px; color: #fff; }
-.desc { font-size: 14px; color: rgba(255,255,255,0.5); font-weight: 400; }
+.playlist-title::after { content: ''; flex: 1; height: 1px; background: rgba(255,255,255,0.1); }
 
 /* =========================
-   4. ELEGANT BLOG
+   4. THẺ CARD (COZY STYLE)
 ========================= */
-.blog-item { 
-  background: var(--card-bg); border: 1px solid var(--glass-border); 
-  border-radius: 24px; margin-bottom: 20px; transition: 0.4s;
+.card-item { 
+  flex: 0 0 300px; /* Độ rộng thẻ YouTube */
+  background: var(--card-bg); color: #222; 
+  border-radius: 20px; overflow: hidden; 
+  cursor: pointer; transition: 0.3s ease; 
+  box-shadow: 0 10px 25px rgba(0,0,0,0.2);
 }
-.blog-header { padding: 25px 30px; cursor: pointer; display: flex; justify-content: space-between; align-items: center; }
-.blog-title { font-weight: 700; font-size: 20px; }
-.plus-icon { position: relative; width: 20px; height: 20px; }
-.plus-icon::before, .plus-icon::after { 
-  content: ''; position: absolute; background: #fff; transition: 0.4s;
+.card-item:hover { transform: translateY(-8px); }
+.thumb { width: 100%; aspect-ratio: 16/9; object-fit: cover; display: block; }
+.card-content { padding: 15px; }
+.card-title { 
+  font-weight: 700; font-size: 15px; line-height: 1.4; 
+  display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden; 
 }
-.plus-icon::before { width: 100%; height: 2px; top: 9px; left: 0; }
-.plus-icon::after { width: 2px; height: 100%; left: 9px; top: 0; }
-.blog-item.active { border-color: var(--primary); }
-.blog-item.active .plus-icon::after { transform: rotate(90deg); opacity: 0; }
 
-.blog-content { max-height: 0; overflow: hidden; transition: 0.6s cubic-bezier(0.4, 0, 0.2, 1); }
-.blog-item.active .blog-content { max-height: 5000px; }
-.blog-inner { padding: 0 30px 40px 30px; color: rgba(255,255,255,0.8); font-size: 17px; }
+/* Grid cho Notice */
+.grid-notice { display: grid; gap: 20px; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); }
 
 /* =========================
-   5. MUSIC SCROLL (PREMIUM)
+   5. BLOG & MUSIC
 ========================= */
-.music-scroll {
-  display: flex; gap: 25px; overflow-x: auto; padding-bottom: 30px;
-  scrollbar-width: none; -ms-overflow-style: none;
-}
-.music-scroll::-webkit-scrollbar { display: none; }
-.embed-item { 
-  flex: 0 0 380px; border-radius: 24px; overflow: hidden; 
-  box-shadow: 0 15px 35px rgba(0,0,0,0.5); background: #000;
-  transition: 0.4s;
-}
-.embed-item:hover { transform: scale(1.02); }
+.blog-item { background: rgba(255,255,255,0.05); border-radius: 15px; margin-bottom: 15px; overflow: hidden; border: 1px solid rgba(255,255,255,0.05); }
+.blog-header { padding: 22px; cursor: pointer; display: flex; justify-content: space-between; align-items: center; }
+.blog-header:hover { background: rgba(255,255,255,0.02); }
+.blog-content { max-height: 0; overflow: hidden; transition: 0.5s ease; background: #fff; color: #333; }
+.blog-item.active .blog-content { max-height: 3000px; }
+.blog-inner { padding: 25px; font-size: 16px; }
+
+.embed-item { flex: 0 0 350px; border-radius: 20px; overflow: hidden; background: #000; }
 
 /* =========================
-   6. MOBILE
+   6. MOBILE RESPONSIVE
 ========================= */
 @media (max-width: 768px) {
-  .topbar { padding: 0 6%; }
+  .menu-btn { display: block; }
   .nav {
-    position: fixed; top: 0; right: -100%; width: 100%; height: 100vh;
-    background: #050811; flex-direction: column; align-items: center; justify-content: center;
-    transition: 0.6s cubic-bezier(0.4, 0, 0.2, 1); gap: 40px;
+    position: fixed; top: 0; right: -100%; width: 80%; height: 100vh;
+    background: #0b132b; flex-direction: column; align-items: center; 
+    justify-content: center; transition: 0.5s cubic-bezier(0.4, 0, 0.2, 1); 
+    z-index: 1000; box-shadow: -10px 0 30px rgba(0,0,0,0.5);
   }
   .nav.open { right: 0; }
-  .nav a { font-size: 28px; }
-  .menu-btn { display: flex; z-index: 1001; }
-  .menu-btn.open span:nth-child(1) { transform: rotate(45deg) translate(6px, 6px); }
-  .menu-btn.open span:nth-child(2) { opacity: 0; }
-  .menu-btn.open span:nth-child(3) { transform: rotate(-45deg) translate(5px, -6px); }
+  .nav a { font-size: 24px; margin: 15px 0; }
   
-  .section-header h2 { font-size: 32px; }
-  .embed-item { flex: 0 0 300px; }
+  /* X cho Menu */
+  .menu-btn.open .line1 { transform: rotate(45deg) translate(5px, 6px); }
+  .menu-btn.open .line2 { opacity: 0; }
+  .menu-btn.open .line3 { transform: rotate(-45deg) translate(5px, -7px); }
+
+  .hero { height: 75vh; }
+  section { padding: 60px 20px; }
+  .card-item { flex: 0 0 260px; }
+  .embed-item { flex: 0 0 280px; }
 }
 </style>
 </head>
 <body>
 
 <header class="topbar" id="navbar">
-  <div class="logo">PUPPY<span>SITTER</span></div>
-  <div class="menu-btn" id="menu-btn"><span></span><span></span><span></span></div>
-  <nav class="nav" id="nav-links">
-    <a href="#notice" onclick="toggleMenu()">NOTICE</a>
-    <a href="#blog" onclick="toggleMenu()">BLOG</a>
-    <a href="#youtube" onclick="toggleMenu()">STUDIO</a>
-    <a href="#spotify" onclick="toggleMenu()">SOUNDS</a>
+  <a href="#" class="logo">PUPPYSITTER 🐾</a>
+  <div class="menu-btn" id="menu-toggle">
+    <div class="line1"></div><div class="line2"></div><div class="line3"></div>
+  </div>
+  <nav class="nav" id="nav-menu">
+    <a href="#notice" onclick="toggleMenu()">Notice</a>
+    <a href="#blog" onclick="toggleMenu()">Blog</a>
+    <a href="#youtube" onclick="toggleMenu()">YouTube</a>
+    <a href="#spotify" onclick="toggleMenu()">Spotify</a>
+    <a href="#apple" onclick="toggleMenu()">Apple</a>
   </nav>
 </header>
 
-<div class="hero">
-  <div id="hero-box"></div>
-  <div class="hero-overlay"></div>
-</div>
+<div class="hero" id="hero-box"></div>
 
 <section id="notice">
-  <div class="section-header">
-    <span>Latest Updates</span>
-    <h2>Notice Board</h2>
-  </div>
-  <div id="notice-list" class="grid"></div>
+  <h2>Notice</h2>
+  <div id="notice-list" class="grid-notice"></div>
 </section>
 
 <section id="blog">
-  <div class="section-header">
-    <span>Journal</span>
-    <h2>Inside Stories</h2>
-  </div>
+  <h2>Blog</h2>
   <div id="blog-list"></div>
 </section>
 
 <section id="youtube">
-  <div class="section-header">
-    <span>Visual Content</span>
-    <h2>Creative Studio</h2>
-  </div>
-  <div id="youtube-list" class="grid"></div>
+  <h2>YouTube Content</h2>
+  <div id="youtube-container"></div>
 </section>
 
 <section id="spotify">
-  <div class="section-header">
-    <span>Curation</span>
-    <h2>Spotify Vibes</h2>
-  </div>
-  <div id="spotify-list" class="music-scroll"></div>
+  <h2>Spotify</h2>
+  <div id="spotify-list" class="horizontal-scroll"></div>
 </section>
 
 <section id="apple">
-  <div class="section-header">
-    <span>Curation</span>
-    <h2>Apple Selection</h2>
-  </div>
-  <div id="apple-list" class="music-scroll"></div>
+  <h2>Apple Music</h2>
+  <div id="apple-list" class="horizontal-scroll"></div>
 </section>
 
 <script>
-const SHEET = "1JbONtH3RWufz3RSgs3EnMV9cYd_37xwBOHgaU2y_yCs";
-const get = s => fetch(`https://opensheet.elk.sh/${SHEET}/${s}`).then(r => r.json());
+const SHEET_ID = "1JbONtH3RWufz3RSgs3EnMV9cYd_37xwBOHgaU2y_yCs";
+const api = s => fetch(`https://opensheet.elk.sh/${SHEET_ID}/${s}`).then(r => r.json());
 
-/* UI LOGIC */
+/* --- UI CONTROLS --- */
+const menuToggle = document.getElementById('menu-toggle');
+const navMenu = document.getElementById('nav-menu');
+
 function toggleMenu() {
-  document.getElementById('menu-btn').classList.toggle('open');
-  document.getElementById('nav-links').classList.toggle('open');
+  menuToggle.classList.toggle('open');
+  navMenu.classList.toggle('open');
 }
-document.getElementById('menu-btn').onclick = toggleMenu;
+menuToggle.onclick = toggleMenu;
 
 window.onscroll = () => {
-  const n = document.getElementById('navbar');
-  n.classList.toggle('scrolled', window.scrollY > 80);
+  document.getElementById('navbar').classList.toggle('scrolled', window.scrollY > 50);
 };
 
-/* HERO */
+/* --- DATA LOADING --- */
+
+// 1. Load Hero
 async function loadHero(){
-  const d = await get("HERO");
-  const box = document.getElementById("hero-box");
-  d.forEach((r, i) => {
-    const img = document.createElement("img");
-    img.src = r.image;
-    if(i === 0) img.classList.add("active");
-    box.appendChild(img);
-  });
-  let imgs = box.querySelectorAll('img'), cur = 0;
-  setInterval(() => {
-    imgs[cur].classList.remove('active');
-    cur = (cur + 1) % imgs.length;
-    imgs[cur].classList.add('active');
-  }, 6000);
+  try {
+    const data = await api("HERO");
+    const box = document.getElementById("hero-box");
+    data.forEach((item, i) => {
+      const img = document.createElement("img");
+      img.src = item.image;
+      if(i === 0) img.classList.add("active");
+      box.appendChild(img);
+    });
+    let imgs = box.querySelectorAll('img'), cur = 0;
+    if(imgs.length > 1) {
+      setInterval(() => {
+        imgs[cur].classList.remove('active');
+        cur = (cur + 1) % imgs.length;
+        imgs[cur].classList.add('active');
+      }, 5000);
+    }
+  } catch(e) { console.error("Hero error:", e); }
 }
 
-/* CARDS */
-function getPreview(url, manual) {
-  if(manual) return manual;
+// 2. Helper lấy ảnh preview
+function getPreview(url, manualImg) {
+  if(manualImg && manualImg.trim() !== "") return manualImg;
   try {
     const u = new URL(url);
-    if(u.hostname.includes("youtu")) return `https://img.youtube.com/vi/${u.searchParams.get("v") || u.pathname.slice(1)}/maxresdefault.jpg`;
+    if(u.hostname.includes("youtu")) {
+      const vid = u.searchParams.get("v") || u.pathname.slice(1);
+      return `https://img.youtube.com/vi/${vid}/mqdefault.jpg`;
+    }
     return `https://api.microlink.io/?url=${encodeURIComponent(url)}&embed=image.url`;
-  } catch { return 'https://via.placeholder.com/800x500'; }
+  } catch(e) { return 'https://via.placeholder.com/400x225?text=No+Image'; }
 }
 
-async function loadCards(sheet, id) {
-  const d = await get(sheet);
-  const box = document.getElementById(id);
-  d.forEach(r => {
-    const v = document.createElement("div");
-    v.className = "card";
-    v.innerHTML = `
-      <div class="thumb-wrap"><img class="thumb" src="${getPreview(r.url, r.image)}"></div>
-      <div class="content">
-        <div class="title">${r.title || ''}</div>
-        <div class="desc">${r.desc || ''}</div>
-      </div>`;
-    v.onclick = () => window.open(r.url);
-    box.appendChild(v);
+// 3. Load Notice (Dạng Grid)
+async function loadNotice() {
+  const data = await api("NOTICE");
+  const box = document.getElementById("notice-list");
+  data.forEach(r => {
+    const card = document.createElement("div");
+    card.className = "card-item";
+    card.style.flex = "unset"; // Grid không cần flex-basis
+    card.innerHTML = `
+      <img class="thumb" src="${getPreview(r.url, r.image)}">
+      <div class="card-content"><div class="card-title">${r.title || ''}</div></div>
+    `;
+    card.onclick = () => window.open(r.url);
+    box.appendChild(card);
   });
 }
 
-/* BLOG */
+// 4. Load Blog (Dạng Collapse)
 async function loadBlog() {
-  const d = await get("BLOG");
+  const data = await api("BLOG");
   const box = document.getElementById("blog-list");
-  d.forEach(r => {
-    const i = document.createElement("div");
-    i.className = "blog-item";
-    i.innerHTML = `
+  data.forEach(r => {
+    const item = document.createElement("div");
+    item.className = "blog-item";
+    item.innerHTML = `
       <div class="blog-header">
-        <div class="blog-title">${r.title}</div>
-        <div class="plus-icon"></div>
+        <div class="blog-title" style="font-weight:600">${r.title}</div>
+        <span style="font-size:20px">+</span>
       </div>
       <div class="blog-content">
         <div class="blog-inner">
-          ${r.image ? `<img src="${r.image}" style="width:100%;border-radius:20px;margin-bottom:25px;border:1px solid var(--glass-border)">` : ''}
-          <p>${r.content.replace(/\n/g, '<br>')}</p>
+          ${r.image ? `<img src="${r.image}" style="width:100%;border-radius:12px;margin-bottom:20px">` : ''}
+          <p>${r.content ? r.content.replace(/\n/g, '<br>') : ''}</p>
         </div>
       </div>`;
-    i.querySelector('.blog-header').onclick = () => i.classList.toggle('active');
-    box.appendChild(i);
+    item.querySelector('.blog-header').onclick = () => item.classList.toggle('active');
+    box.appendChild(item);
   });
 }
 
-async function loadMusic(sheet, id) {
-  const d = await get(sheet);
-  const box = document.getElementById(id);
-  d.forEach(r => { if(r.iframe) {
-    const v = document.createElement("div");
-    v.className = "embed-item";
-    v.innerHTML = r.iframe;
-    box.appendChild(v);
-  }});
+// 5. Load YouTube (Chia Playlist & Cuộn ngang)
+async function loadYoutube() {
+  const data = await api("YOUTUBE");
+  const container = document.getElementById("youtube-container");
+  
+  // Nhóm theo playlist (Album, Vlog, Show...)
+  const groups = data.reduce((acc, vid) => {
+    const p = vid.playlist || "Others";
+    if (!acc[p]) acc[p] = [];
+    acc[p].push(vid);
+    return acc;
+  }, {});
+
+  for (const pName in groups) {
+    const groupDiv = document.createElement("div");
+    groupDiv.className = "playlist-group";
+    groupDiv.innerHTML = `
+      <div class="playlist-title">${pName}</div>
+      <div class="horizontal-scroll"></div>
+    `;
+    const scrollBox = groupDiv.querySelector(".horizontal-scroll");
+
+    groups[pName].forEach(r => {
+      const card = document.createElement("div");
+      card.className = "card-item";
+      card.innerHTML = `
+        <img class="thumb" src="${getPreview(r.url, r.image)}">
+        <div class="card-content"><div class="card-title">${r.title || ''}</div></div>
+      `;
+      card.onclick = () => window.open(r.url);
+      scrollBox.appendChild(card);
+    });
+    container.appendChild(groupDiv);
+  }
 }
 
+// 6. Load Music Iframe (Spotify & Apple)
+async function loadMusic(sheet, id) {
+  const data = await api(sheet);
+  const box = document.getElementById(id);
+  data.forEach(r => { 
+    if(r.iframe) {
+      const div = document.createElement("div");
+      div.className = "embed-item";
+      div.innerHTML = r.iframe;
+      box.appendChild(div);
+    }
+  });
+}
+
+/* --- INIT --- */
 loadHero();
-loadCards("NOTICE", "notice-list");
+loadNotice();
 loadBlog();
-loadCards("YOUTUBE", "youtube-list");
+loadYoutube();
 loadMusic("SPOTIFY", "spotify-list");
 loadMusic("APPLE", "apple-list");
 </script>
