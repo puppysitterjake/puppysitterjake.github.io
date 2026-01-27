@@ -4,25 +4,79 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>PuppySitter Jake</title>
+<title>Puppysitter Jake</title>
 
 <style>
-/* ====== GENERAL ====== */
+:root{
+  --bg:#0f0f0f;
+  --text:white;
+  --card:#1a1a1a;
+}
+
+.light{
+  --bg:#ffffff;
+  --text:#111;
+  --card:#f2f2f2;
+}
+
 body{
   margin:0;
-  font-family: Arial, sans-serif;
-  background:#0f0f0f;
-  color:white;
+  font-family:system-ui;
+  background:var(--bg);
+  color:var(--text);
+  transition:.3s;
 }
 
-h1{
+/* ===== HERO ===== */
+.hero{
+  height:50vh;
+  background:url("https://images.unsplash.com/photo-1548199973-03cce0bbc87b") center/cover;
+  display:flex;
+  flex-direction:column;
+  justify-content:center;
+  align-items:center;
   text-align:center;
-  padding:25px 10px;
-  font-size:28px;
-  letter-spacing:1px;
 }
 
-/* ====== GRID GALLERY ====== */
+.hero h1{
+  font-size:40px;
+  margin:10px 0;
+}
+
+.logo{
+  font-size:60px;
+}
+
+/* ===== THEME BTN ===== */
+.theme-btn{
+  position:fixed;
+  top:15px;
+  right:15px;
+  cursor:pointer;
+  font-size:22px;
+}
+
+/* ===== SLIDER ===== */
+.slider{
+  display:flex;
+  overflow-x:auto;
+  gap:15px;
+  padding:20px;
+  scroll-snap-type:x mandatory;
+}
+
+.slide{
+  flex:0 0 85%;
+  scroll-snap-align:center;
+  cursor:pointer;
+}
+
+.slide img{
+  width:100%;
+  border-radius:14px;
+}
+
+/* ===== GRID ===== */
 .grid{
   display:grid;
   grid-template-columns:repeat(auto-fill,minmax(260px,1fr));
@@ -31,114 +85,137 @@ h1{
 }
 
 .card{
+  background:var(--card);
+  padding:10px;
+  border-radius:14px;
   cursor:pointer;
   transition:.25s;
 }
 
 .card:hover{
-  transform:scale(1.05);
+  transform:translateY(-5px);
 }
 
 .card img{
   width:100%;
-  border-radius:14px;
-  box-shadow:0 4px 12px rgba(0,0,0,.6);
+  border-radius:10px;
 }
 
-/* ====== MODAL PLAYER ====== */
+.title{
+  font-weight:bold;
+  margin-top:8px;
+}
+
+.desc{
+  font-size:13px;
+  opacity:.7;
+}
+
+/* ===== MODAL ===== */
 .modal{
   position:fixed;
   inset:0;
-  background:rgba(0,0,0,.95);
   display:none;
+  background:rgba(0,0,0,.95);
   justify-content:center;
   align-items:center;
-  z-index:999;
 }
 
 .modal iframe{
   width:90%;
   max-width:900px;
   aspect-ratio:16/9;
-  border-radius:12px;
 }
 
 .close{
   position:absolute;
   top:20px;
-  right:35px;
-  font-size:42px;
+  right:30px;
+  font-size:40px;
   cursor:pointer;
-}
-
-/* mobile */
-@media(max-width:600px){
-  h1{font-size:20px;}
 }
 </style>
 </head>
 
 <body>
 
-<h1>PuppySitter Jake</h1>
+<div class="theme-btn" onclick="toggleTheme()">🌙</div>
 
+<!-- HERO -->
+<section class="hero">
+  <div class="logo">🐶</div>
+  <h1>PuppySitter Jake</h1>
+  <p>Fun • Care • Play • Love</p>
+</section>
+
+<!-- AUTOPLAY SLIDER -->
+<div class="slider" id="slider"></div>
+
+<!-- VIDEO GRID -->
 <div class="grid" id="videos"></div>
 
+<!-- MODAL -->
 <div class="modal" id="modal">
   <span class="close" onclick="closeVideo()">✕</span>
   <iframe id="player" allowfullscreen></iframe>
 </div>
 
-
 <script>
-/* =========================
-   👉 DÁN API KEY VÀO ĐÂY
-========================= */
+/* ========= PASTE API KEY ========= */
 const API_KEY = "AIzaSyAwHBUmv8E34EeXXtavaAcagdMYluNnBew";
-
-/* playlist của bạn */
 const PLAYLIST = "PLGSPQSXq0_HqfK3Xfir3EEs_Pzy6p9mNG";
 
+const grid = document.getElementById("videos");
+const slider = document.getElementById("slider");
 
 async function loadVideos(){
-
-  let nextPage = "";
-  const container = document.getElementById("videos");
+  let next = "";
 
   do{
     const url =
-      `https://www.googleapis.com/youtube/v3/playlistItems` +
-      `?part=snippet&maxResults=50` +
-      `&playlistId=${PLAYLIST}` +
-      `&pageToken=${nextPage}` +
-      `&key=${API_KEY}`;
+      `https://www.googleapis.com/youtube/v3/playlistItems?part=snippet&maxResults=50&playlistId=${PLAYLIST}&pageToken=${next}&key=${API_KEY}`;
 
     const res = await fetch(url);
     const data = await res.json();
 
-    data.items.forEach(v=>{
-      if(!v.snippet.resourceId.videoId) return;
+    data.items.forEach((v,i)=>{
 
       const id = v.snippet.resourceId.videoId;
+      if(!id) return;
+
       const thumb = v.snippet.thumbnails.medium.url;
+      const title = v.snippet.title;
+      const desc = v.snippet.description.slice(0,80)+"...";
 
-      const div = document.createElement("div");
-      div.className = "card";
-      div.innerHTML = `<img src="${thumb}">`;
-      div.onclick = () => openVideo(id);
+      /* slider 5 video đầu */
+      if(i < 5){
+        const s = document.createElement("div");
+        s.className="slide";
+        s.innerHTML=`<img src="${thumb}">`;
+        s.onclick=()=>openVideo(id);
+        slider.appendChild(s);
+      }
 
-      container.appendChild(div);
+      /* grid */
+      const card = document.createElement("div");
+      card.className="card";
+      card.innerHTML=
+      `<img src="${thumb}">
+       <div class="title">${title}</div>
+       <div class="desc">${desc}</div>`;
+      card.onclick=()=>openVideo(id);
+
+      grid.appendChild(card);
     });
 
-    nextPage = data.nextPageToken;
+    next = data.nextPageToken;
 
-  }while(nextPage);
+  }while(next);
 }
-
 
 function openVideo(id){
   document.getElementById("modal").style.display="flex";
-  document.getElementById("player").src =
+  document.getElementById("player").src=
     `https://www.youtube.com/embed/${id}?autoplay=1`;
 }
 
@@ -146,6 +223,16 @@ function closeVideo(){
   document.getElementById("modal").style.display="none";
   document.getElementById("player").src="";
 }
+
+/* theme */
+function toggleTheme(){
+  document.body.classList.toggle("light");
+}
+
+/* autoplay slider */
+setInterval(()=>{
+  slider.scrollBy({left:350,behavior:"smooth"});
+},3000);
 
 loadVideos();
 </script>
