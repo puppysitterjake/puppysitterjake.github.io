@@ -1,48 +1,293 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>PuppySitter Jake</title>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
 
-  <link rel="stylesheet" href="style.css" />
+<title>Puppysitter Jake</title>
+
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;800&display=swap" rel="stylesheet"/>
+
+<style>
+*{
+  margin:0;
+  padding:0;
+  box-sizing:border-box;
+  font-family:Inter, sans-serif;
+}
+
+body{
+  background:#f6f7f9;
+  color:#111;
+}
+
+/* ===== HERO SLIDER ===== */
+
+.hero{
+  height:70vh;
+  position:relative;
+  overflow:hidden;
+}
+
+.hero img{
+  position:absolute;
+  width:100%;
+  height:100%;
+  object-fit:cover;
+  opacity:0;
+  transition:opacity 1s ease;
+}
+
+.hero img.active{
+  opacity:1;
+}
+
+/* ===== SECTION ===== */
+
+.section{
+  max-width:1200px;
+  margin:80px auto;
+  padding:0 20px;
+}
+
+.section h2{
+  font-size:28px;
+  font-weight:800;
+  margin-bottom:25px;
+}
+
+/* ===== GRID CARDS ===== */
+
+.grid{
+  display:grid;
+  grid-template-columns:repeat(auto-fill,minmax(260px,1fr));
+  gap:20px;
+}
+
+.card{
+  background:white;
+  border-radius:16px;
+  overflow:hidden;
+  box-shadow:0 4px 16px rgba(0,0,0,.08);
+  transition:.25s;
+}
+
+.card:hover{
+  transform:translateY(-6px);
+  box-shadow:0 12px 28px rgba(0,0,0,.15);
+}
+
+.card img{
+  width:100%;
+  height:160px;
+  object-fit:cover;
+}
+
+.card-content{
+  padding:15px;
+}
+
+.card h3{
+  font-size:15px;
+  font-weight:600;
+  margin-bottom:6px;
+}
+
+.card p{
+  font-size:13px;
+  color:#666;
+}
+
+/* ===== IFRAME MUSIC ===== */
+
+.embed{
+  border-radius:16px;
+  overflow:hidden;
+  box-shadow:0 4px 18px rgba(0,0,0,.1);
+  margin-bottom:20px;
+}
+
+/* ===== FADE IN ===== */
+
+.fade{
+  opacity:0;
+  transform:translateY(20px);
+  transition:.6s;
+}
+
+.fade.show{
+  opacity:1;
+  transform:none;
+}
+</style>
 </head>
+
 
 <body>
 
-  <!-- HERO -->
-  <section id="hero"></section>
+<!-- HERO -->
+<section class="hero" id="hero"></section>
 
-  <!-- NOTICE -->
-  <section class="section">
-    <h2>📢 Notice</h2>
-    <div id="notice-list" class="grid"></div>
-  </section>
+<!-- NOTICE -->
+<section class="section fade">
+  <h2>📌 Notice Board</h2>
+  <div class="grid" id="notice"></div>
+</section>
 
-  <!-- YOUTUBE -->
-  <section class="section">
-    <h2>🎬 YouTube</h2>
-    <div id="youtube-list" class="grid"></div>
-  </section>
+<!-- YOUTUBE -->
+<section class="section fade">
+  <h2>🎬 YouTube</h2>
+  <div class="grid" id="youtube"></div>
+</section>
 
-  <!-- YTMUSIC -->
-  <section class="section">
-    <h2>🎵 YouTube Music</h2>
-    <div id="ytmusic-list" class="grid"></div>
-  </section>
+<!-- YT MUSIC -->
+<section class="section fade">
+  <h2>🎵 YouTube Music</h2>
+  <div class="grid" id="ytmusic"></div>
+</section>
 
-  <!-- SPOTIFY -->
-  <section class="section">
-    <h2>🟢 Spotify</h2>
-    <div id="spotify-list" class="embed-list"></div>
-  </section>
+<!-- SPOTIFY -->
+<section class="section fade">
+  <h2>🟢 Spotify</h2>
+  <div id="spotify"></div>
+</section>
 
-  <!-- APPLE -->
-  <section class="section">
-    <h2>🍎 Apple Music</h2>
-    <div id="apple-list" class="embed-list"></div>
-  </section>
+<!-- APPLE -->
+<section class="section fade">
+  <h2>🍎 Apple Music</h2>
+  <div id="apple"></div>
+</section>
 
-  <script src="script.js"></script>
+
+<script>
+const SHEET_ID = "1JbONtH3RWufz3RSgs3EnMV9cYd_37xwBOHgaU2y_yCs";
+
+function sheet(name){
+  return `https://opensheet.elk.sh/${SHEET_ID}/${name}`;
+}
+
+/* ===============================
+   HERO SLIDER
+================================ */
+fetch(sheet("HERO"))
+.then(r=>r.json())
+.then(rows=>{
+  const hero=document.getElementById("hero");
+
+  rows.forEach((r,i)=>{
+    const img=document.createElement("img");
+    img.src=r.image;
+    if(i===0) img.classList.add("active");
+    hero.appendChild(img);
+  });
+
+  let i=0;
+  setInterval(()=>{
+    const imgs=hero.querySelectorAll("img");
+    imgs[i].classList.remove("active");
+    i=(i+1)%imgs.length;
+    imgs[i].classList.add("active");
+  },3500);
+});
+
+
+/* ===============================
+   NOTICE
+================================ */
+fetch(sheet("NOTICE"))
+.then(r=>r.json())
+.then(rows=>{
+  const wrap=document.getElementById("notice");
+
+  rows.forEach(r=>{
+    wrap.innerHTML+=`
+      <a class="card" href="${r.url}" target="_blank">
+        <div class="card-content">
+          <h3>${r.title}</h3>
+          <p>${r.desc||""}</p>
+        </div>
+      </a>`;
+  });
+});
+
+
+/* ===============================
+   YOUTUBE (auto thumbnail)
+================================ */
+function thumb(url){
+  const id=url.match(/(?:v=|be\/)([^&]+)/)?.[1];
+  return `https://img.youtube.com/vi/${id}/hqdefault.jpg`;
+}
+
+fetch(sheet("YOUTUBE"))
+.then(r=>r.json())
+.then(rows=>{
+  const wrap=document.getElementById("youtube");
+
+  rows.forEach(r=>{
+    wrap.innerHTML+=`
+      <a class="card" href="${r.url}" target="_blank">
+        <img src="${thumb(r.url)}">
+        <div class="card-content">
+          <h3>${r.title}</h3>
+        </div>
+      </a>`;
+  });
+});
+
+
+/* ===============================
+   YT MUSIC
+================================ */
+fetch(sheet("YT MUSIC"))
+.then(r=>r.json())
+.then(rows=>{
+  const wrap=document.getElementById("ytmusic");
+
+  rows.forEach(r=>{
+    wrap.innerHTML+=`
+      <a class="card" href="${r.url}" target="_blank">
+        <img src="${thumb(r.url)}">
+        <div class="card-content">
+          <h3>${r.title}</h3>
+        </div>
+      </a>`;
+  });
+});
+
+
+/* ===============================
+   SPOTIFY / APPLE (iframe trực tiếp)
+================================ */
+function loadIframe(sheetName, id){
+  fetch(sheet(sheetName))
+  .then(r=>r.json())
+  .then(rows=>{
+    const wrap=document.getElementById(id);
+
+    rows.forEach(r=>{
+      wrap.innerHTML+=`
+        <div class="embed">${r.iframe}</div>
+      `;
+    });
+  });
+}
+
+loadIframe("SPOTIFY","spotify");
+loadIframe("APPLE","apple");
+
+
+/* ===============================
+   SCROLL EFFECT
+================================ */
+const observer=new IntersectionObserver(entries=>{
+  entries.forEach(e=>{
+    if(e.isIntersecting) e.target.classList.add("show");
+  });
+});
+
+document.querySelectorAll(".fade").forEach(el=>observer.observe(el));
+</script>
+
 </body>
 </html>
