@@ -1,58 +1,50 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
-<meta charset="UTF-8"/>
-<meta name="viewport" content="width=device-width, initial-scale=1"/>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
 
 <title>puppysitter 🐾</title>
 
-<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;800&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700&display=swap" rel="stylesheet">
 
 <style>
 *{
   margin:0;
   padding:0;
   box-sizing:border-box;
-  font-family:Inter,sans-serif;
+  font-family:Poppins,sans-serif;
 }
 
 body{
-  background:#0b132b;
+  background:linear-gradient(180deg,#071a36,#0c2146 60%,#0e244d);
   color:white;
 }
 
-/* ======================
-   NAVBAR
-====================== */
-
-.topbar{
-  position:absolute;
+/* ================= NAVBAR ================= */
+nav{
+  position:fixed;
   top:0;
   width:100%;
-  height:70px;
   display:flex;
-  align-items:center;
   justify-content:space-between;
-  padding:0 7%;
-  z-index:100;
+  padding:22px 60px;
+  z-index:999;
 }
 
 .logo{
-  font-weight:800;
-  font-size:22px;
+  font-size:26px;
+  font-weight:700;
 }
 
-.nav a{
-  margin-left:24px;
+nav a{
+  margin-left:28px;
   color:white;
   text-decoration:none;
-  font-size:14px;
+  font-weight:500;
 }
 
-/* ======================
-   HERO
-====================== */
-
+/* ================= HERO ================= */
 .hero{
   height:100vh;
   position:relative;
@@ -65,161 +57,137 @@ body{
   height:100%;
   object-fit:cover;
   opacity:0;
-  transition:1s;
+  transition:1.4s;
 }
 
 .hero img.active{
   opacity:1;
 }
 
-/* ======================
-   SECTIONS
-====================== */
-
+/* ================= SECTIONS ================= */
 section{
-  max-width:1100px;
-  margin:auto;
-  padding:90px 20px;
+  padding:90px 70px;
 }
 
 h2{
-  font-size:30px;
-  margin-bottom:30px;
+  font-size:32px;
+  margin-bottom:28px;
 }
 
-/* ======================
-   GRID CARD
-====================== */
-
+/* ================= GRID CARDS ================= */
 .grid{
   display:grid;
-  gap:25px;
-  grid-template-columns:repeat(auto-fill,minmax(280px,1fr));
+  grid-template-columns:repeat(auto-fill,minmax(260px,1fr));
+  gap:26px;
 }
 
 .card{
   background:white;
-  color:#111;
-  border-radius:18px;
+  color:black;
+  border-radius:22px;
   overflow:hidden;
   cursor:pointer;
-  transition:.2s;
+  transition:.3s;
+  box-shadow:0 12px 25px rgba(0,0,0,.25);
 }
 
 .card:hover{
-  transform:translateY(-6px);
+  transform:translateY(-8px);
 }
 
 .thumb{
   width:100%;
-  aspect-ratio:16/9;
+  height:180px;
   object-fit:cover;
 }
 
 .content{
-  padding:14px;
+  padding:14px 18px;
 }
 
 .title{
-  font-weight:700;
-}
-
-.desc{
+  font-weight:600;
   font-size:14px;
-  color:#666;
-  margin-top:6px;
 }
 
-/* ======================
-   NEWS LIST (NEW)
-====================== */
-
-.news-list{
-  display:flex;
-  flex-direction:column;
-  gap:14px;
+/* ================= APPLE MUSIC ================= */
+.apple iframe{
+  border-radius:18px;
+  width:100%;
+  height:160px;
 }
 
+/* ================= NEWS ================= */
 .news-item{
-  padding:14px 18px;
-  background:#142044;
-  border-radius:12px;
+  background:white;
+  color:black;
+  padding:16px 20px;
+  border-radius:18px;
+  margin-bottom:16px;
   cursor:pointer;
-  transition:.15s;
+  transition:.2s;
 }
 
 .news-item:hover{
-  background:#1d2d63;
-}
-
-.news-title{
-  font-weight:600;
-  font-size:15px;
-}
-
-.news-url{
-  font-size:12px;
-  opacity:.6;
-  margin-top:4px;
+  transform:translateX(6px);
 }
 </style>
 </head>
 
-
 <body>
 
-<header class="topbar">
-  <div class="logo"> puppysitter 🐾 </div>
-  <nav class="nav">
+<!-- NAV -->
+<nav>
+  <div class="logo">puppysitter 🐾</div>
+  <div>
     <a href="#notice">Notice</a>
     <a href="#youtube">YouTube</a>
     <a href="#spotify">Spotify</a>
     <a href="#apple">Apple</a>
     <a href="#news">News</a>
-  </nav>
-</header>
+  </div>
+</nav>
 
+<!-- HERO -->
+<div class="hero" id="hero"></div>
 
-<div id="hero" class="hero"></div>
-
-
+<!-- NOTICE -->
 <section id="notice">
-<h2>Notice</h2>
-<div id="notice-list" class="grid"></div>
+<h2>📢 Notice</h2>
+<div class="grid" id="notice-list"></div>
 </section>
 
+<!-- YOUTUBE -->
 <section id="youtube">
-<h2>YouTube</h2>
-<div id="youtube-list" class="grid"></div>
+<h2>▶ YouTube</h2>
+<div class="grid" id="youtube-list"></div>
 </section>
 
+<!-- SPOTIFY -->
 <section id="spotify">
-<h2>Spotify</h2>
-<div id="spotify-list"></div>
+<h2>🎵 Spotify</h2>
+<div class="grid" id="spotify-list"></div>
 </section>
 
+<!-- APPLE -->
 <section id="apple">
-<h2>Apple Music</h2>
-<div id="apple-list"></div>
+<h2>🍎 Apple Music</h2>
+<div class="grid apple" id="apple-list"></div>
 </section>
 
-
-<!-- NEW SECTION -->
+<!-- NEWS -->
 <section id="news">
-<h2>News</h2>
-<div id="news-list" class="news-list"></div>
+<h2>📰 News</h2>
+<div id="news-list"></div>
 </section>
-
-
 
 <script>
-const SHEET="1JbONtH3RWufz3RSgs3EnMV9cYd_37xwBOHgaU2y_yCs";
+/* ================= CONFIG ================= */
+const SHEET="YOUR_SHEET_ID";
 const API=s=>`https://opensheet.elk.sh/${SHEET}/${s}`;
 const get=s=>fetch(API(s)).then(r=>r.json());
 
-/* ======================
-   YT THUMB
-====================== */
+/* ================= YOUTUBE THUMB ================= */
 function ytThumb(url){
   try{
     const u=new URL(url);
@@ -231,9 +199,7 @@ function ytThumb(url){
   return "";
 }
 
-/* ======================
-   HERO
-====================== */
+/* ================= HERO ================= */
 async function loadHero(){
   const d=await get("HERO");
   const box=document.getElementById("hero");
@@ -247,7 +213,6 @@ async function loadHero(){
 
   const imgs=box.querySelectorAll("img");
   let i=0;
-
   setInterval(()=>{
     imgs[i].classList.remove("active");
     i=(i+1)%imgs.length;
@@ -255,23 +220,21 @@ async function loadHero(){
   },4000);
 }
 
-/* ======================
-   CARD
-====================== */
+/* ================= GENERIC CARDS ================= */
 async function loadList(sheet,id){
   const d=await get(sheet);
   const box=document.getElementById(id);
 
   d.forEach(r=>{
-    const thumb=ytThumb(r.url)||r.image;
+    const thumb=ytThumb(r.url)||r.image||"";
 
     const div=document.createElement("div");
     div.className="card";
+
     div.innerHTML=`
       <img class="thumb" src="${thumb}">
       <div class="content">
         <div class="title">${r.title||""}</div>
-        <div class="desc">${r.desc||""}</div>
       </div>
     `;
 
@@ -280,23 +243,33 @@ async function loadList(sheet,id){
   });
 }
 
-/* ======================
-   NEWS AUTO TITLE
-====================== */
+/* ================= APPLE ================= */
+async function loadApple(){
+  const d=await get("APPLE");
+  const box=document.getElementById("apple-list");
 
+  d.forEach(r=>{
+    const div=document.createElement("div");
+    div.className="card";
+    div.innerHTML=r.embed;
+    box.appendChild(div);
+  });
+}
+
+/* ================= NEWS ================= */
 async function fetchTitle(url){
   try{
     const res=await fetch(`https://api.allorigins.win/raw?url=${encodeURIComponent(url)}`);
     const text=await res.text();
-    const match=text.match(/<title>(.*?)<\/title>/i);
-    return match ? match[1] : url;
+    const m=text.match(/<title>(.*?)<\/title>/i);
+    return m?m[1]:url;
   }catch{
     return url;
   }
 }
 
 async function loadNews(){
-  const d=await get("NEWS"); // sheet name NEWS
+  const d=await get("NEWS");
   const box=document.getElementById("news-list");
 
   d.forEach(async r=>{
@@ -304,23 +277,18 @@ async function loadNews(){
 
     const div=document.createElement("div");
     div.className="news-item";
-    div.innerHTML=`
-      <div class="news-title">${title}</div>
-      <div class="news-url">${r.url}</div>
-    `;
-
+    div.textContent=title;
     div.onclick=()=>window.open(r.url);
     box.appendChild(div);
   });
 }
 
-/* ======================
-   INIT
-====================== */
-
+/* ================= INIT ================= */
 loadHero();
 loadList("NOTICE","notice-list");
 loadList("YOUTUBE","youtube-list");
+loadList("SPOTIFY","spotify-list");
+loadApple();
 loadNews();
 </script>
 
