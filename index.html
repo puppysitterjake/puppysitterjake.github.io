@@ -16,23 +16,29 @@
   font-family:Inter,sans-serif;
 }
 
+/* =========================
+   BODY
+========================= */
+
 body{
   background:#0b132b;
   color:white;
 }
 
-/* ======================
-   NAVBAR
-====================== */
+/* =========================
+   NAVBAR (OVER HERO)
+========================= */
 
 .topbar{
   position:absolute;
   top:0;
   width:100%;
   height:70px;
+
   display:flex;
   align-items:center;
   justify-content:space-between;
+
   padding:0 7%;
   z-index:100;
 }
@@ -43,15 +49,15 @@ body{
 }
 
 .nav a{
-  margin-left:24px;
+  margin-left:25px;
   color:white;
   text-decoration:none;
   font-size:14px;
 }
 
-/* ======================
+/* =========================
    HERO
-====================== */
+========================= */
 
 .hero{
   height:100vh;
@@ -72,12 +78,12 @@ body{
   opacity:1;
 }
 
-/* ======================
-   SECTIONS
-====================== */
+/* =========================
+   SECTION
+========================= */
 
 section{
-  max-width:1100px;
+  max-width:1200px;
   margin:auto;
   padding:90px 20px;
 }
@@ -87,15 +93,19 @@ h2{
   margin-bottom:30px;
 }
 
-/* ======================
-   GRID CARD
-====================== */
+/* =========================
+   GRID CENTERED
+========================= */
 
 .grid{
   display:grid;
   gap:25px;
   grid-template-columns:repeat(auto-fill,minmax(280px,1fr));
 }
+
+/* =========================
+   CARD
+========================= */
 
 .card{
   background:white;
@@ -114,6 +124,7 @@ h2{
   width:100%;
   aspect-ratio:16/9;
   object-fit:cover;
+  background:#ddd;
 }
 
 .content{
@@ -130,41 +141,16 @@ h2{
   margin-top:6px;
 }
 
-/* ======================
-   NEWS LIST (NEW)
-====================== */
+/* =========================
+   EMBED
+========================= */
 
-.news-list{
-  display:flex;
-  flex-direction:column;
-  gap:14px;
-}
-
-.news-item{
-  padding:14px 18px;
-  background:#142044;
-  border-radius:12px;
-  cursor:pointer;
-  transition:.15s;
-}
-
-.news-item:hover{
-  background:#1d2d63;
-}
-
-.news-title{
-  font-weight:600;
-  font-size:15px;
-}
-
-.news-url{
-  font-size:12px;
-  opacity:.6;
-  margin-top:4px;
+.embed{
+  border-radius:16px;
+  overflow:hidden;
 }
 </style>
 </head>
-
 
 <body>
 
@@ -175,7 +161,6 @@ h2{
     <a href="#youtube">YouTube</a>
     <a href="#spotify">Spotify</a>
     <a href="#apple">Apple</a>
-    <a href="#news">News</a>
   </nav>
 </header>
 
@@ -195,21 +180,13 @@ h2{
 
 <section id="spotify">
 <h2>Spotify</h2>
-<div id="spotify-list"></div>
+<div id="spotify-list" class="grid"></div>
 </section>
 
 <section id="apple">
 <h2>Apple Music</h2>
-<div id="apple-list"></div>
+<div id="apple-list" class="grid"></div>
 </section>
-
-
-<!-- NEW SECTION -->
-<section id="news">
-<h2>News</h2>
-<div id="news-list" class="news-list"></div>
-</section>
-
 
 
 <script>
@@ -217,9 +194,8 @@ const SHEET="1JbONtH3RWufz3RSgs3EnMV9cYd_37xwBOHgaU2y_yCs";
 const API=s=>`https://opensheet.elk.sh/${SHEET}/${s}`;
 const get=s=>fetch(API(s)).then(r=>r.json());
 
-/* ======================
-   YT THUMB
-====================== */
+
+/* YOUTUBE THUMB */
 function ytThumb(url){
   try{
     const u=new URL(url);
@@ -231,9 +207,8 @@ function ytThumb(url){
   return "";
 }
 
-/* ======================
-   HERO
-====================== */
+
+/* HERO */
 async function loadHero(){
   const d=await get("HERO");
   const box=document.getElementById("hero");
@@ -255,15 +230,14 @@ async function loadHero(){
   },4000);
 }
 
-/* ======================
-   CARD
-====================== */
-async function loadList(sheet,id){
+
+/* CARD LIST */
+async function loadList(sheet,id,useYT=true){
   const d=await get(sheet);
   const box=document.getElementById(id);
 
   d.forEach(r=>{
-    const thumb=ytThumb(r.url)||r.image;
+    const thumb= useYT ? (ytThumb(r.url)||r.image) : r.image;
 
     const div=document.createElement("div");
     div.className="card";
@@ -280,49 +254,21 @@ async function loadList(sheet,id){
   });
 }
 
-/* ======================
-   NEWS AUTO TITLE
-====================== */
 
-async function fetchTitle(url){
-  try{
-    const res=await fetch(`https://api.allorigins.win/raw?url=${encodeURIComponent(url)}`);
-    const text=await res.text();
-    const match=text.match(/<title>(.*?)<\/title>/i);
-    return match ? match[1] : url;
-  }catch{
-    return url;
-  }
-}
-
-async function loadNews(){
-  const d=await get("NEWS"); // sheet name NEWS
-  const box=document.getElementById("news-list");
-
-  d.forEach(async r=>{
-    const title=await fetchTitle(r.url);
-
+/* IFRAME */
+async function loadIframe(sheet,id){
+  const d=await get(sheet);
+  const box=document.getElementById(id);
+  d.forEach(r=>{
     const div=document.createElement("div");
-    div.className="news-item";
-    div.innerHTML=`
-      <div class="news-title">${title}</div>
-      <div class="news-url">${r.url}</div>
-    `;
-
-    div.onclick=()=>window.open(r.url);
+    div.className="embed";
+    div.innerHTML=r.iframe;
     box.appendChild(div);
   });
 }
 
-/* ======================
-   INIT
-====================== */
 
+/* INIT */
 loadHero();
 loadList("NOTICE","notice-list");
-loadList("YOUTUBE","youtube-list");
-loadNews();
-</script>
-
-</body>
-</html>
+loadList("YOUTUBE","youtube
