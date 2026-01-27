@@ -1,108 +1,187 @@
-// =====================
-// CONFIG
-// =====================
-
 const SHEET_ID = "1JbONtH3RWufz3RSgs3EnMV9cYd_37xwBOHgaU2y_yCs";
-const SHEET_NAME = "CONTENT";
 
-const API = `https://opensheet.elk.sh/${SHEET_ID}/${SHEET_NAME}`;
-
-const slider = document.getElementById("slider");
-const board = document.getElementById("noticeBoard");
-
-
-// =====================
-// LOAD DATA
-// =====================
-
-fetch(API)
-  .then(res => res.json())
-  .then(data => {
-
-    data.forEach(row => {
-
-      const type = (row.type || "").toLowerCase();
-      const title = row.title || "";
-      const url = row.url || "";
-      const desc = row.desc || "";
+const heroAPI    = `https://opensheet.elk.sh/${SHEET_ID}/HERO`;
+const noticeAPI  = `https://opensheet.elk.sh/${SHEET_ID}/NOTICE`;
+const youtubeAPI = `https://opensheet.elk.sh/${SHEET_ID}/YOUTUBE`;
+const spotifyAPI = `https://opensheet.elk.sh/${SHEET_ID}/SPOTIFY`;
+const appleAPI   = `https://opensheet.elk.sh/${SHEET_ID}/APPLE`;
+const ytmAPI     = `https://opensheet.elk.sh/${SHEET_ID}/YTMUSIC`;
 
 
-      // ========= HERO =========
-      if(type === "hero"){
-        const slide = document.createElement("div");
-        slide.className = "slide";
-        slide.innerHTML = `<img src="${url}">`;
-        slider.appendChild(slide);
-      }
+// load all
+loadHero();
+loadNotice();
+loadYoutube();
+loadEmbed(spotifyAPI,"spotifyBoard");
+loadEmbed(appleAPI,"appleBoard");
+loadEmbed(ytmAPI,"ytmusicBoard");
 
 
-      // ========= NOTICE (youtube thumbnail auto) =========
-      else if(type === "notice"){
-        const id = getYoutubeID(url);
-        const thumb = `https://img.youtube.com/vi/${id}/hqdefault.jpg`;
 
-        board.innerHTML += `
-          <a class="card" href="${url}" target="_blank">
-            <img src="${thumb}">
-            <div class="card-body">
-              <h3>${title}</h3>
-              <p>${desc}</p>
-            </div>
-          </a>
-        `;
-      }
+// ================= HERO =================
 
+function loadHero(){
+  fetch(heroAPI)
+  .then(r=>r.json())
+  .then(data=>{
 
-      // ========= SPOTIFY (iframe directly) =========
-      else if(type === "spotify"){
-        board.innerHTML += `
-          <div class="card">
-            ${url}
-          </div>
-        `;
-      }
+    const slider=document.getElementById("slider");
 
-
-      // ========= APPLE / ANY EMBED =========
-      else if(type === "apple" || type === "embed"){
-        board.innerHTML += `
-          <div class="card">
-            ${url}
-          </div>
-        `;
-      }
-
+    data.forEach(row=>{
+      slider.innerHTML+=`
+        <div class="slide">
+          <img src="${row.image}">
+        </div>
+      `;
     });
 
     startSlider();
-
   });
-
-
-// =====================
-// YOUTUBE HELPER
-// =====================
-
-function getYoutubeID(link){
-  const reg = /(?:youtube\.com.*v=|youtu\.be\/)([^&]+)/;
-  const match = link.match(reg);
-  return match ? match[1] : "";
 }
 
 
-// =====================
-// SIMPLE SLIDER
-// =====================
+
+// ================= NOTICE =================
+
+function loadNotice(){
+  fetch(noticeAPI)
+  .then(r=>r.json())
+  .then(data=>{
+
+    const box=document.getElementById("noticeBoard");
+
+    data.forEach(row=>{
+      const id=getYoutubeID(row.url);
+      const thumb=`https://img.youtube.com/vi/${id}/hqdefault.jpg`;
+
+      box.innerHTML+=card(thumb,row.title,row.desc,row.url);
+    });
+
+    reveal();
+  });
+}
+
+
+
+// ================= YOUTUBE =================
+
+function loadYoutube(){
+  fetch(youtubeAPI)
+  .then(r=>r.json())
+  .then(data=>{
+
+    const box=document.getElementById("youtubeBoard");
+
+    data.forEach(row=>{
+      const id=getYoutubeID(row.url);
+      const thumb=`https://img.youtube.com/vi/${id}/hqdefault.jpg`;
+
+      box.innerHTML+=card(thumb,row.title,"",row.url);
+    });
+
+    reveal();
+  });
+}
+
+
+
+// ================= EMBED =================
+
+function loadEmbed(api,target){
+  fetch(api)
+  .then(r=>r.json())
+  .then(data=>{
+
+    const box=document.getElementById(target);
+
+    data.forEach(row=>{
+      box.innerHTML+=`
+        <div class="card reveal">${row.embed}</div>
+      `;
+    });
+
+    reveal();
+  });
+}
+
+
+
+// ================= COMPONENTS =================
+
+function card(img,title,desc,link){
+  return `
+    <a class="card reveal" href="${link}" target="_blank">
+      <img src="${img}">
+      <div class="card-body">
+        <h3>${title}</h3>
+        <p>${desc||""}</p>
+      </div>
+    </a>
+  `;
+}
+
+
+
+function getYoutubeID(link){
+  const reg=/(?:youtube\.com.*v=|youtu\.be\/)([^&]+)/;
+  const m=link.match(reg);
+  return m?m[1]:"";
+}
+
+
+
+// ================= SLIDER =================
 
 function startSlider(){
-  const slides = document.querySelectorAll(".slide");
-  let i = 0;
 
-  slides[0].style.display = "block";
+  const slides=document.querySelectorAll(".slide");
+  if(!slides.length) return;
 
-  setInterval(()=>{
-    slides.forEach(s => s.style.display="none");
-    slides[i].style.display="block";
-    i = (i+1) % slides.length;
-  },3000);
+  let index=0;
+
+  slides[0].classList.add("active");
+
+  const dots=document.createElement("div");
+  dots.className="dots";
+
+  slides.forEach((_,i)=>{
+    const d=document.createElement("div");
+    d.className="dot";
+    d.onclick=()=>show(i);
+    dots.appendChild(d);
+  });
+
+  document.getElementById("slider").appendChild(dots);
+
+  function show(i){
+    slides.forEach(s=>s.classList.remove("active"));
+    dots.children[index].classList.remove("active");
+
+    slides[i].classList.add("active");
+    dots.children[i].classList.add("active");
+
+    index=i;
+  }
+
+  setInterval(()=>show((index+1)%slides.length),4000);
+
+  show(0);
+}
+
+
+
+// ================= SCROLL ANIMATION =================
+
+function reveal(){
+  const els=document.querySelectorAll(".reveal");
+
+  const obs=new IntersectionObserver(entries=>{
+    entries.forEach(e=>{
+      if(e.isIntersecting){
+        e.target.classList.add("show");
+      }
+    });
+  },{threshold:.15});
+
+  els.forEach(el=>obs.observe(el));
 }
