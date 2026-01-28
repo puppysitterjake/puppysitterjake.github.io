@@ -8,7 +8,7 @@
 
 <style>
 :root {
-  --primary: #a2d2ff; /* Màu Pastel Blue nhẹ nhàng */
+  --primary: #a2d2ff; /* Pastel Blue */
   --bg: #0b132b;
   --card-bg: #16213e;
   --text: #ffffff;
@@ -27,68 +27,65 @@ body { background: var(--bg); color: var(--text); line-height: 1.6; overflow-x: 
   padding: 0 5%; z-index: 1000; transition: 0.3s;
 }
 .topbar.scrolled { background: rgba(11, 19, 43, 0.85); backdrop-filter: blur(10px); height: 60px; }
-.logo { font-weight: 700; font-size: 20px; letter-spacing: 1px; color: #fff; text-decoration: none; }
+.logo { font-weight: 700; font-size: 20px; color: #fff; text-decoration: none; }
 .nav a { color: #fff; text-decoration: none; margin-left: 20px; font-size: 13px; font-weight: 600; opacity: 0.8; transition: 0.3s; }
 .nav a:hover { opacity: 1; color: var(--primary); }
 
-/* Hero Section - FULL MÀN HÌNH */
+/* Hero Section */
 .hero { height: 100vh; width: 100%; position: relative; overflow: hidden; background: #000; }
 .hero img { position: absolute; width: 100%; height: 100%; object-fit: cover; opacity: 0; transition: 1.5s ease-in-out; }
 .hero img.active { opacity: 0.7; }
-/* Gradient che chân ảnh nhẹ nhàng */
 .hero::after { 
   content: ''; position: absolute; bottom: 0; width: 100%; height: 25%; 
   background: linear-gradient(to top, var(--bg), transparent); 
 }
 
-/* Section Style */
-section { max-width: 1200px; margin: auto; padding: 80px 20px; }
+/* Section Common Style */
+section { max-width: 1200px; margin: auto; padding: 60px 20px; }
 h2 { font-size: 24px; margin-bottom: 35px; display: flex; align-items: center; gap: 12px; font-weight: 700; }
-/* Thanh trước Section Title màu Pastel */
-h2::before { 
-  content: ''; width: 6px; height: 24px; 
-  background: var(--primary); /* Pastel Blue */
-  border-radius: 50px; 
-  box-shadow: 0 0 10px rgba(162, 210, 255, 0.3);
-}
+h2::before { content: ''; width: 6px; height: 24px; background: var(--primary); border-radius: 50px; }
 
 /* Notice Grid */
 .notice-grid { display: grid; gap: 20px; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); }
 
-/* Blog - Smart Scroll */
-.blog-wrapper { max-height: 450px; overflow-y: auto; padding-right: 15px; }
-.blog-wrapper::-webkit-scrollbar { width: 4px; }
-.blog-wrapper::-webkit-scrollbar-thumb { background: var(--primary); border-radius: 10px; }
-.blog-item { background: rgba(255,255,255,0.03); border: 1px solid rgba(255,255,255,0.05); border-radius: 15px; margin-bottom: 15px; transition: 0.3s; }
-.blog-header { padding: 18px; cursor: pointer; display: flex; justify-content: space-between; align-items: center; }
-.blog-content { max-height: 0; overflow: hidden; transition: 0.5s ease; background: #fff; color: #333; }
-.blog-item.active { border-color: var(--primary); }
-.blog-item.active .blog-content { max-height: 2000px; }
-.blog-inner { padding: 25px; }
+/* Blog Slider */
+.blog-slider { display: flex; gap: 20px; overflow-x: auto; padding-bottom: 20px; scrollbar-width: none; }
+.blog-slider::-webkit-scrollbar { display: none; }
+.blog-card { flex: 0 0 320px; background: var(--card-bg); border-radius: 20px; padding: 20px; cursor: pointer; border: 1px solid rgba(255,255,255,0.05); transition: 0.3s; }
+.blog-card:hover { border-color: var(--primary); transform: translateY(-5px); }
+.blog-card img { width: 100%; height: 180px; object-fit: cover; border-radius: 12px; margin-bottom: 15px; }
+.blog-card h3 { font-size: 16px; margin-bottom: 10px; color: var(--primary); }
+.blog-card p { font-size: 13px; opacity: 0.7; display: -webkit-box; -webkit-line-clamp: 3; -webkit-box-orient: vertical; overflow: hidden; }
 
-/* Horizontal Scroll */
-.horizontal-scroll { display: flex; gap: 20px; overflow-x: auto; padding-bottom: 20px; scrollbar-width: none; -webkit-overflow-scrolling: touch; }
+/* Modal Popup (Tông màu tối ngầu) */
+.modal { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.8); backdrop-filter: blur(8px); display: none; justify-content: center; align-items: center; z-index: 9999; padding: 20px; }
+.modal-content { background: var(--card-bg); color: #fff; max-width: 700px; width: 100%; max-height: 85vh; border-radius: 25px; position: relative; overflow-y: auto; border: 1px solid rgba(162, 210, 255, 0.2); animation: popIn 0.3s ease; }
+@keyframes popIn { from { transform: scale(0.9); opacity: 0; } to { transform: scale(1); opacity: 1; } }
+.modal-inner { padding: 40px; }
+.modal-inner img { width: 100%; border-radius: 15px; margin-bottom: 20px; border: 1px solid rgba(255,255,255,0.1); }
+.modal-inner h2 { color: var(--primary); margin-bottom: 15px; border: none; }
+.modal-inner h2::before { display: none; }
+.close-btn { position: absolute; top: 20px; right: 25px; font-size: 30px; cursor: pointer; color: var(--primary); z-index: 10; }
+
+/* YouTube & Music Horizontal Scroll */
+.horizontal-scroll { display: flex; gap: 20px; overflow-x: auto; padding-bottom: 20px; scrollbar-width: none; }
 .horizontal-scroll::-webkit-scrollbar { display: none; }
-.playlist-group { margin-bottom: 50px; }
+.playlist-group { margin-bottom: 40px; }
 .playlist-label { font-size: 12px; color: var(--primary); font-weight: 700; text-transform: uppercase; margin-bottom: 15px; letter-spacing: 2px; opacity: 0.8; }
 
-/* Cards */
-.card { flex: 0 0 300px; background: var(--card-bg); border-radius: 20px; overflow: hidden; cursor: pointer; transition: 0.3s; border: 1px solid rgba(255,255,255,0.05); }
-.card.notice-card { flex: unset; width: 100%; }
+.card { flex: 0 0 300px; background: var(--card-bg); border-radius: 20px; overflow: hidden; border: 1px solid rgba(255,255,255,0.05); cursor: pointer; transition: 0.3s; }
 .card:hover { transform: translateY(-8px); border-color: var(--primary); }
-.thumb { width: 100%; aspect-ratio: 16/9; object-fit: cover; display: block; background: #000; }
+.thumb { width: 100%; aspect-ratio: 16/9; object-fit: cover; background: #000; }
 .card-info { padding: 15px; }
 .card-title { font-weight: 700; font-size: 14px; margin-bottom: 8px; height: 40px; overflow: hidden; display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; }
 .card-stats { display: flex; justify-content: space-between; font-size: 11px; opacity: 0.5; font-weight: 600; }
 
-/* Music Iframe */
-.embed-item { flex: 0 0 340px; border-radius: 20px; overflow: hidden; background: #000; box-shadow: 0 10px 20px rgba(0,0,0,0.3); }
+.embed-item { flex: 0 0 340px; border-radius: 20px; overflow: hidden; background: #000; }
 
 @media (max-width: 768px) {
-  .hero { height: 100vh; }
-  .card { flex: 0 0 260px; }
-  .embed-item { flex: 0 0 280px; }
   .nav { display: none; }
+  .blog-card { flex: 0 0 280px; }
+  .modal-inner { padding: 25px; }
 }
 </style>
 </head>
@@ -113,12 +110,19 @@ h2::before {
 </section>
 
 <section id="blog">
-  <h2>Blog</h2>
-  <div class="blog-wrapper" id="blog-list"></div>
+  <h2>Inside My Stories</h2>
+  <div class="blog-slider" id="blog-list"></div>
 </section>
 
+<div class="modal" id="blogModal">
+  <div class="modal-content">
+    <span class="close-btn">&times;</span>
+    <div class="modal-inner" id="modalData"></div>
+  </div>
+</div>
+
 <section id="youtube">
-  <h2>Youtube</h2>
+  <h2>Creative Studio</h2>
   <div id="youtube-container"></div>
 </section>
 
@@ -143,7 +147,6 @@ function getYoutubeID(url) {
   return (match && match[2].length === 11) ? match[2] : null;
 }
 
-/* 1. HERO - Auto Slide */
 async function loadHero(){
   try {
     const d = await api("HERO");
@@ -163,7 +166,6 @@ async function loadHero(){
   } catch(e) {}
 }
 
-/* 2. NOTICE - Grid Layout */
 async function loadNotice() {
   try {
     const d = await api("NOTICE");
@@ -173,40 +175,51 @@ async function loadNotice() {
       const thumb = r.image || (vid ? `https://img.youtube.com/vi/${vid}/mqdefault.jpg` : 'https://via.placeholder.com/400x225?text=Notice');
       const card = document.createElement("div");
       card.className = "card notice-card";
-      card.innerHTML = `<img class="thumb" src="${thumb}"><div class="card-info"><div class="card-title">${r.title || 'Update'}</div></div>`;
+      card.style.flex = "unset"; card.style.width = "100%";
+      card.innerHTML = `<img class="thumb" src="${thumb}"><div class="card-info"><div class="card-title">${r.title || 'Notification'}</div></div>`;
       card.onclick = () => window.open(r.url);
       box.appendChild(card);
     });
   } catch(e) {}
 }
 
-/* 3. BLOG - Smart Accordion */
 async function loadBlog() {
   try {
     const d = await api("BLOG");
     const box = document.getElementById("blog-list");
+    const modal = document.getElementById("blogModal");
+    const modalData = document.getElementById("modalData");
+
     d.forEach(r => {
-      const div = document.createElement("div");
-      div.className = "blog-item";
-      div.innerHTML = `
-        <div class="blog-header"><span style="font-weight:700">${r.title}</span><span style="color:var(--primary); font-size:11px">DETAILS +</span></div>
-        <div class="blog-content"><div class="blog-inner">
-          ${r.image ? `<img src="${r.image}" style="width:100%; border-radius:12px; margin-bottom:15px">` : ''}
-          <p>${r.content ? r.content.replace(/\n/g, '<br>') : ''}</p>
-        </div></div>`;
-      div.onclick = () => div.classList.toggle('active');
-      box.appendChild(div);
+      const card = document.createElement("div");
+      card.className = "blog-card";
+      card.innerHTML = `
+        ${r.image ? `<img src="${r.image}">` : ''}
+        <h3>${r.title}</h3>
+        <p>${r.content}</p>`;
+      card.onclick = () => {
+        modalData.innerHTML = `
+          ${r.image ? `<img src="${r.image}">` : ''}
+          <h2>${r.title}</h2>
+          <div style="line-height:1.8; color:rgba(255,255,255,0.8)">${r.content.replace(/\n/g, '<br>')}</div>`;
+        modal.style.display = "flex";
+        document.body.style.overflow = "hidden";
+      };
+      box.appendChild(card);
     });
+
+    modal.onclick = (e) => { if(e.target == modal) closeModal(); };
+    document.querySelector(".close-btn").onclick = closeModal;
+    function closeModal() { modal.style.display = "none"; document.body.style.overflow = "auto"; }
   } catch(e) {}
 }
 
-/* 4. YOUTUBE - Playlist Logic */
 async function loadYoutube() {
   try {
     const d = await api("YOUTUBE");
     const container = document.getElementById("youtube-container");
     const groups = d.reduce((acc, v) => {
-      const p = v.playlist || "Others";
+      const p = v.playlist || "General";
       if(!acc[p]) acc[p] = [];
       acc[p].push(v);
       return acc;
@@ -238,7 +251,6 @@ async function loadYoutube() {
   } catch(e) {}
 }
 
-/* 5. MUSIC - Separated Sections */
 async function loadMusic(tab, elementId) {
   try {
     const d = await api(tab);
@@ -254,10 +266,8 @@ async function loadMusic(tab, elementId) {
   } catch(e) {}
 }
 
-// Navbar Scroll Effect
 window.onscroll = () => document.getElementById('navbar').classList.toggle('scrolled', window.scrollY > 50);
 
-// Initialize
 loadHero();
 loadNotice();
 loadBlog();
